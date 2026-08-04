@@ -233,7 +233,11 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
   .site-header { width: min(calc(100% - 28px), var(--shell)); grid-template-columns: 1fr auto; }
   .site-header nav { display: none; }
   .hero { width: min(calc(100% - 28px), var(--shell)); grid-template-columns: 1fr; padding-top: 48px; }
-  .hero h1 { font-size: clamp(3.25rem, 15vw, 5.4rem); }
+  .hero h1 {
+    font-size: clamp(3.2rem, 13vw, 5.1rem);
+    line-height: 1.04;
+    letter-spacing: -.055em;
+  }
   .instrument-readout { grid-template-columns: 93px 1fr; }
   .status-stack { grid-column: 1 / -1; grid-template-columns: repeat(3, 1fr); }
   .stat-ribbon { grid-template-columns: repeat(2, 1fr); }
@@ -262,6 +266,10 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
 @media (max-width: 520px) {
   .header-cta { padding-inline: 13px; }
   .hero { padding-bottom: 55px; }
+  .hero h1 {
+    font-size: clamp(3.05rem, 13vw, 4.25rem);
+    line-height: 1.06;
+  }
   .hero-instrument { padding: 9px; border-radius: 17px; }
   .trace-panel canvas { height: 210px; }
   .instrument-topline { font-size: .55rem; }
