@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="GAUGE is a measurement-grounded benchmark for physical fidelity in simulation engines and video world models." />
+    <meta name="theme-color" content="#f7f6f2" />
+    <title>GAUGE — Measurement-Grounded Physical Fidelity</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header" id="top">
+      <a class="wordmark" href="#top" aria-label="GAUGE home">
+        <span class="wordmark-mark" aria-hidden="true"></span>
+        GAUGE
+      </a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span></span><span></span>
+        <span class="sr-only">Toggle navigation</span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="Primary navigation">
+        <a href="#overview">Overview</a>
+        <a href="#tasks">Tasks</a>
+        <a href="#evaluation">Evaluation</a>
+        <a href="#explorer">Explorer</a>
+        <a href="#findings">Findings</a>
+        <a href="#citation">Citation</a>
+      </nav>
+      <a class="button button-quiet header-paper" href="gauge.pdf">Paper <span aria-hidden="true">↗</span></a>
+    </header>
+
+    <main id="main">
+      <section class="hero section-shell" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <h1 id="hero-title">
+            <span class="hero-title-kicker">GAUGE</span>
+            <span class="hero-title-main">A Measurement-Grounded Benchmark for Physical Fidelity</span>
+            <span class="hero-title-sub">in Simulation Engines and Video World Models</span>
+          </h1>
+          <p class="hero-lede">Measure physical fidelity against the real world — not visual plausibility.</p>
+          <p class="authors">Shuai Wang · Yaxin Feng · Xuekun Jiang · Shihan Tian · Ningyu Yan · Xing Shen · Chaoyang Lyu · Hui Wang · Yunsong Zhou · Hanqing Wang · Jiangmiao Pang · Yang Xiang · Xing Gao<sup>#</sup> · Chunhua Shen · Weinan Zhang</p>
+          <p class="affiliations">Shanghai Artificial Intelligence Laboratory · HKUST · Shanghai Jiao Tong University · Zhejiang University</p>
+          <div class="resource-actions" aria-label="Project resources">
+            <a class="button button-primary" href="gauge.pdf">Read the paper <span aria-hidden="true">↗</span></a>
+            <span class="button button-disabled" aria-disabled="true">Code · Coming soon</span>
+            <span class="button button-disabled" aria-disabled="true">Dataset · Coming soon</span>
+          </div>
+        </div>
+
+        <figure class="hero-visual hero-framework">
+          <a class="framework-image" href="assets/figures/gauge-framework.pdf" aria-label="Open the full GAUGE benchmark framework figure as a PDF">
+            <img src="assets/figures/gauge-framework.png" alt="GAUGE benchmark framework connecting real-world measurements to simulation-engine and video-world-model evaluation tracks" />
+          </a>
+          <figcaption>
+            <span><strong>Benchmark framework</strong> &middot; real-world ground truth anchors both evaluation tracks.</span>
+            <a href="assets/figures/gauge-framework.pdf">Open full figure <span aria-hidden="true">&nearr;</span></a>
+          </figcaption>
+        </figure>
+
+        <div class="hero-stats" aria-label="Benchmark scale">
+          <div><strong>22</strong><span>Task families</span></div>
+          <div><strong>≈1,560</strong><span>Real trials</span></div>
+          <div><strong>4</strong><span>Physical regimes</span></div>
+          <div><strong>2</strong><span>Evaluation tracks</span></div>
+        </div>
+      </section>
+
+      <section class="section-shell section-block" id="overview" aria-labelledby="overview-title">
+        <div class="section-heading split-heading">
+          <div><span class="section-number">01</span><span class="section-label">What is GAUGE</span></div>
+          <h2 id="overview-title">A diagnostic instrument for physical fidelity.</h2>
+        </div>
+        <div class="principles">
+          <article>
+            <span class="principle-index">01</span>
+            <h3>Measurement-grounded</h3>
+            <p>Sixteen infrared cameras capture motion at 180 Hz. Repeated real-world trials provide millimeter-level trajectories, calibrated metadata, and uncertainty estimates.</p>
+          </article>
+          <article>
+            <span class="principle-index">02</span>
+            <h3>Cross-regime</h3>
+            <p>One benchmark spans rigid bodies, flexible cables, textiles, and volumetric soft bodies—from collision and friction to self-contact and large deformation.</p>
+          </article>
+          <article>
+            <span class="principle-index">03</span>
+            <h3>Diagnostic evaluation</h3>
+            <p>Trajectory error, equation form, physical parameters, and temporal stability are assessed separately so a plausible video cannot hide incorrect dynamics.</p>
+          </article>
+        </div>
+        <ol class="process-rail" aria-label="GAUGE evaluation process">
+          <li><span>01</span>Real experiment</li>
+          <li><span>02</span>Calibrated metadata + repeated trajectories</li>
+          <li><span>03</span>Engine / world-model evaluation</li>
+          <li><span>04</span>Failure diagnosis</li>
+        </ol>
+      </section>
+
+      <section class="taxonomy section-block" id="taxonomy" aria-labelledby="taxonomy-title">
+        <div class="section-shell">
+          <div class="section-heading">
+            <div><span class="section-number">02</span><span class="section-label">Task Taxonomy</span></div>
+            <h2 id="taxonomy-title">Twenty-two controlled tasks. Four physical regimes.</h2>
+          </div>
+          <div class="taxonomy-grid">
+            <article class="taxon taxon-blue">
+              <div><h3>Rigid Body</h3><strong>8</strong></div>
+              <p>Collision · Friction · Momentum · Oscillation</p>
+            </article>
+            <article class="taxon taxon-purple">
+              <div><h3>Flexible Cable</h3><strong>1</strong></div>
+              <p>Self-contact · Stretch modulus</p>
+            </article>
+            <article class="taxon taxon-green">
+              <div><h3>Textile</h3><strong>6</strong></div>
+              <p>Curvature · Strain · Rapid motion · Friction</p>
+            </article>
+            <article class="taxon taxon-blue">
+              <div><h3>Volumetric Soft Body</h3><strong>7</strong></div>
+              <p>Large deformation · Shear · Bending · Coupling</p>
+            </article>
+          </div>
+          <section class="paper-results task-matrix" aria-labelledby="task-matrix-title">
+            <div class="results-heading">
+              <div>
+                <span class="table-number">Paper Table 2</span>
+                <h3 id="task-matrix-title">Complete task and material matrix</h3>
+              </div>
+              <p>All 22 task families, their diagnostic target, condition count, and physical material instantiations.</p>
+            </div>
+            <div class="table-scroll" role="region" aria-label="GAUGE task family table" tabindex="0">
+              <table class="paper-table task-family-table">
+                <thead>
+                  <tr><th scope="col">Task</th><th scope="col">Experiment</th><th scope="col">Diagnostic target</th><th scope="col">Variants</th><th scope="col">Materials</th></tr>
+                </thead>
+                <tbody>
+                  <tr class="table-group group-rigid"><th colspan="5" scope="colgroup">Rigid body <span>8 task families</span></th></tr>
+                  <tr><th scope="row">Slope contact</th><td>Fall of a trirectangular tetrahedron</td><td>Slope collisions</td><td>1</td><td>Wood, plastic</td></tr>
+                  <tr><th scope="row">Nonsmooth contact</th><td>Fall of wedges and pyramids</td><td>Codimensional collisions</td><td>3</td><td>Wood, plastic</td></tr>
+                  <tr><th scope="row">Slope slider</th><td>Cube sliding on a slope</td><td>Static and kinetic friction</td><td>3</td><td>Wood, plastic, metal</td></tr>
+                  <tr><th scope="row">Turntable</th><td>Cube sliding on a turntable</td><td>Friction in a non-inertial frame</td><td>3</td><td>Wood, plastic, metal</td></tr>
+                  <tr><th scope="row">Bouncing ball</th><td>Ball falling and bouncing</td><td>Rapid impact</td><td>1</td><td>Rubber</td></tr>
+                  <tr><th scope="row">Newton&rsquo;s cradle</th><td>Collision of closely fitted balls</td><td>Momentum transfer</td><td>1</td><td>Metal</td></tr>
+                  <tr><th scope="row">Wall breaking</th><td>Wrecking ball colliding with a wall</td><td>Large-scale dense collisions</td><td>1</td><td>Wood</td></tr>
+                  <tr><th scope="row">Pendulum</th><td>Oscillation of a ball</td><td>Periodic motion</td><td>1</td><td>Metal</td></tr>
+                  <tr class="table-group group-cable"><th colspan="5" scope="colgroup">Flexible cable <span>1 task family</span></th></tr>
+                  <tr><th scope="row">Rope winding</th><td>Winding of a rope</td><td>Self-collision and stretch modulus</td><td>1</td><td>Rubber</td></tr>
+                  <tr class="table-group group-textile"><th colspan="5" scope="colgroup">Textile <span>6 task families</span></th></tr>
+                  <tr><th scope="row">Textile stretching</th><td>Tensile deformation of a textile</td><td>Stretch modulus</td><td>1</td><td>R, S, U, O, L, N</td></tr>
+                  <tr><th scope="row">Textile bending</th><td>Natural sagging of a textile</td><td>Bending modulus</td><td>1</td><td>R, S, U, O, L, N</td></tr>
+                  <tr><th scope="row">Textile flinging</th><td>Fluttering of a textile</td><td>Locally high-acceleration motion</td><td>1</td><td>R, S, U, O, L, N</td></tr>
+                  <tr><th scope="row">Funnel</th><td>Textile passing through a hole</td><td>Collision and friction</td><td>1</td><td>R, S, U, O, L, N</td></tr>
+                  <tr><th scope="row">Rotating ball</th><td>Textile driven by a rotating ball</td><td>Static and kinetic friction</td><td>1</td><td>R, S, U</td></tr>
+                  <tr><th scope="row">Tablecloth pulling</th><td>Textile pulled beneath rigid objects</td><td>Static and kinetic friction</td><td>1</td><td>Wood, plastic, metal</td></tr>
+                  <tr class="table-group group-soft"><th colspan="5" scope="colgroup">Volumetric soft body <span>7 task families</span></th></tr>
+                  <tr><th scope="row">Foam stretching</th><td>Stretching an elastic cuboid</td><td>Stretching modulus</td><td>1</td><td>Soft, hard</td></tr>
+                  <tr><th scope="row">Foam compressing</th><td>Compressing an elastic cuboid</td><td>Compression modulus</td><td>1</td><td>Soft, hard</td></tr>
+                  <tr><th scope="row">Foam shearing</th><td>Shearing an elastic cuboid</td><td>Shear modulus</td><td>1</td><td>Soft, hard</td></tr>
+                  <tr><th scope="row">Foam twisting</th><td>Twisting an elastic cuboid</td><td>Twisting modulus</td><td>1</td><td>Soft, hard</td></tr>
+                  <tr><th scope="row">Foam bending</th><td>Bending an elastic cuboid</td><td>Bending modulus</td><td>1</td><td>Soft, hard</td></tr>
+                  <tr><th scope="row">Stick-stack</th><td>Elastic rod sliding on a plane</td><td>Static and kinetic friction</td><td>1</td><td>Soft, hard</td></tr>
+                  <tr><th scope="row">Cantilever beam</th><td>Free-hanging elastic cantilever beam</td><td>Coupling with a large stiffness ratio</td><td>1</td><td>Soft, hard</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="table-note"><strong>Material key:</strong> R = rayon, S = satin, U = uniform cloth, O = Oxford fabric, L = synthetic leather, N = nylon taslan.</p>
+          </section>
+        </div>
+      </section>
+
+      <section class="section-shell section-block task-showcase" id="tasks" aria-labelledby="tasks-title">
+        <div class="section-heading showcase-heading">
+          <div>
+            <div><span class="section-number">03</span><span class="section-label">Real-world Task Showcase</span></div>
+            <h2 id="tasks-title">Physics, observed — not inferred.</h2>
+          </div>
+          <p>Every card shows a canonical real-world trial. Videos load only as they approach the viewport.</p>
+        </div>
+        <div class="task-controls">
+          <div class="filter-tabs" id="category-filters" role="group" aria-label="Filter tasks by category"></div>
+          <label class="search-control">
+            <span class="sr-only">Search task names</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16.5 16.5 4 4"></path></svg>
+            <input id="task-search" type="search" placeholder="Search tasks" autocomplete="off" />
+          </label>
+          <output id="task-count" aria-live="polite"></output>
+        </div>
+        <div class="task-grid" id="task-grid"></div>
+      </section>
+
+      <section class="evaluation section-block" id="evaluation" aria-labelledby="evaluation-title">
+        <div class="section-shell">
+          <div class="section-heading split-heading">
+            <div><span class="section-number">04</span><span class="section-label">Two Evaluation Tracks</span></div>
+            <h2 id="evaluation-title">One real-world foundation. Two diagnostic lenses.</h2>
+          </div>
+          <div class="evaluation-grid">
+            <article class="evaluation-track engine-eval">
+              <div class="eval-title"><span class="eval-icon cube-icon" aria-hidden="true"></span><div><h3>Simulation-engine track</h3><p>How accurately does a numerical simulator reproduce measured outcomes?</p></div></div>
+              <ol>
+                <li><span>01</span><strong>Reconstruct</strong><small>Match real initial states, geometry, and calibrated parameters.</small></li>
+                <li><span>02</span><strong>Simulate</strong><small>Run Isaac Sim, Genesis, and Newton on 14 task families.</small></li>
+                <li><span>03</span><strong>Compare</strong><small>Measure generalized trajectory error with RMSE, DTW, and task-specific metrics.</small></li>
+              </ol>
+            </article>
+            <article class="evaluation-track world-eval">
+              <div class="eval-title"><span class="eval-icon play-icon" aria-hidden="true"></span><div><h3>Video world-model track</h3><p>Does generated motion obey the right laws at the right physical scale?</p></div></div>
+              <ol>
+                <li><span>01</span><strong>Condition</strong><small>Provide a shared first frame and the verified task prompt.</small></li>
+                <li><span>02</span><strong>Generate</strong><small>Evaluate six image-to-video models on five rigid-body tasks.</small></li>
+                <li><span>03</span><strong>Diagnose</strong><small>Recover SAM3 trajectories and test law form, parameters, and timing.</small></li>
+              </ol>
+            </article>
+          </div>
+          <section class="paper-results engine-results" aria-labelledby="engine-results-title">
+            <div class="results-heading">
+              <div>
+                <span class="table-number">Paper Table 3</span>
+                <h3 id="engine-results-title">Physical fidelity across simulation engines</h3>
+              </div>
+              <p>Simulator scores are normalized by the real-world baseline mean. Highlighted cells mark the best valid result for each metric row.</p>
+            </div>
+            <div class="metric-legend" aria-label="Metric interpretation">
+              <span><i class="legend-low"></i> RMSE / DTW: lower is better</span>
+              <span><i class="legend-close"></i> LSD / MTE / PD: closer to 1 is better</span>
+              <span><i class="legend-zero"></i> EL: closer to 0 is better</span>
+            </div>
+            <div class="table-scroll" role="region" aria-label="Simulation engine physical fidelity results" tabindex="0">
+              <table class="paper-table result-table engine-table">
+                <thead><tr><th scope="col">Task</th><th scope="col">Material</th><th scope="col">Frames</th><th scope="col">Metric</th><th scope="col">Real baseline</th><th scope="col">Isaac Sim</th><th scope="col">Genesis</th><th scope="col">Newton</th></tr></thead>
+                <tbody>
+                  <tr><th scope="rowgroup" rowspan="2">Slope contact</th><td rowspan="2">Plastic</td><td rowspan="2">10</td><td>RMSE</td><td>12.31 <span class="uncertainty">(7.62)</span></td><td class="best">1.26</td><td>1.60</td><td>1.75</td></tr>
+                  <tr><td>DTW</td><td>5.30 <span class="uncertainty">(1.84)</span></td><td class="best">1.83</td><td>2.57</td><td>3.07</td></tr>
+                  <tr><th scope="rowgroup" rowspan="2">Nonsmooth contact</th><td rowspan="2">Plastic</td><td rowspan="2">20</td><td>RMSE</td><td>17.67 <span class="uncertainty">(6.19)</span></td><td class="best">1.53</td><td>10.04</td><td>6.05</td></tr>
+                  <tr><td>DTW</td><td>8.92 <span class="uncertainty">(2.44)</span></td><td class="best">1.90</td><td>14.37</td><td>8.01</td></tr>
+                  <tr><th scope="rowgroup" rowspan="2">Slope slider</th><td rowspan="2">Metal</td><td rowspan="2">60</td><td>RMSE</td><td>38.01 <span class="uncertainty">(28.53)</span></td><td>0.61</td><td class="best">0.58</td><td>1.95</td></tr>
+                  <tr><td>DTW</td><td>9.54 <span class="uncertainty">(8.52)</span></td><td>0.71</td><td class="best">0.69</td><td>2.93</td></tr>
+                  <tr><th scope="rowgroup" rowspan="2">Turntable</th><td rowspan="2">Metal</td><td rowspan="2">95</td><td>RMSE</td><td>13.26 <span class="uncertainty">(7.43)</span></td><td class="best">0.17</td><td>0.57</td><td>20.04</td></tr>
+                  <tr><td>DTW</td><td>3.33 <span class="uncertainty">(0.81)</span></td><td class="best">0.61</td><td>2.01</td><td>66.72</td></tr>
+                  <tr><th scope="rowgroup" rowspan="2">Bouncing ball</th><td rowspan="2">Rubber</td><td rowspan="2">18</td><td>RMSE</td><td>5.29 <span class="uncertainty">(3.60)</span></td><td class="best">15.63</td><td>22.50</td><td>22.71</td></tr>
+                  <tr><td>DTW</td><td>4.23 <span class="uncertainty">(2.87)</span></td><td class="best">5.58</td><td>14.58</td><td>14.89</td></tr>
+                  <tr><th scope="rowgroup" rowspan="2">Newton&rsquo;s cradle</th><td rowspan="2">Metal</td><td rowspan="2">1,027</td><td>LSD</td><td>0.38 <span class="uncertainty">(0.015)</span></td><td class="best">0.00</td><td>&mdash;</td><td class="best">0.00</td></tr>
+                  <tr><td>MTE</td><td>93.02 <span class="uncertainty">(2.47)</span></td><td>0.20</td><td>&mdash;</td><td class="best">0.26</td></tr>
+                  <tr><th scope="rowgroup" rowspan="2">Pendulum</th><td rowspan="2">Metal</td><td>300</td><td>PD</td><td>1.14 <span class="uncertainty">(0.066)</span></td><td>1.10</td><td>2.47</td><td class="best">1.09</td></tr>
+                  <tr><td>3,000</td><td>EL</td><td>0.00</td><td>11.01</td><td class="best">&minus;1.67</td><td>6.87</td></tr>
+                  <tr><th scope="rowgroup" rowspan="2">Textile stretching</th><td rowspan="2">Satin</td><td rowspan="2">380</td><td>RMSE</td><td>0.21 <span class="uncertainty">(0.42)</span></td><td class="best">0.73</td><td>1.51</td><td class="best">0.73</td></tr>
+                  <tr><td>DTW</td><td>0.21 <span class="uncertainty">(0.42)</span></td><td>0.76</td><td>1.56</td><td class="best">0.75</td></tr>
+                  <tr><th scope="rowgroup" rowspan="2">Textile bending</th><td rowspan="2">Satin</td><td rowspan="2">335</td><td>RMSE</td><td>1.92 <span class="uncertainty">(0.69)</span></td><td class="best">7.94</td><td>11.73</td><td>19.90</td></tr>
+                  <tr><td>DTW</td><td>1.20 <span class="uncertainty">(0.17)</span></td><td class="best">11.78</td><td>17.35</td><td>18.82</td></tr>
+                  <tr><th scope="rowgroup" rowspan="2">Textile flinging</th><td rowspan="2">Satin</td><td rowspan="2">562</td><td>RMSE</td><td>0.016 <span class="uncertainty">(0.0056)</span></td><td>128.26</td><td class="best">8.54</td><td>9.25</td></tr>
+                  <tr><td>DTW</td><td>0.012 <span class="uncertainty">(0.0014)</span></td><td>167.31</td><td class="best">11.27</td><td>12.12</td></tr>
+                  <tr><th scope="rowgroup" rowspan="2">Foam stretching</th><td rowspan="2">Soft</td><td rowspan="2">30</td><td>RMSE</td><td>8.72 <span class="uncertainty">(6.94)</span></td><td>16.15</td><td class="best">10.05</td><td>15.46</td></tr>
+                  <tr><td>DTW</td><td>8.19 <span class="uncertainty">(6.93)</span></td><td>17.18</td><td class="best">10.65</td><td>16.45</td></tr>
+                  <tr><th scope="rowgroup" rowspan="2">Foam shearing</th><td rowspan="2">Soft</td><td rowspan="2">37</td><td>RMSE</td><td>5.60 <span class="uncertainty">(0.70)</span></td><td>26.13</td><td class="best">15.26</td><td>26.57</td></tr>
+                  <tr><td>DTW</td><td>5.07 <span class="uncertainty">(0.59)</span></td><td>28.85</td><td class="best">16.74</td><td>29.34</td></tr>
+                  <tr><th scope="rowgroup" rowspan="2">Foam twisting</th><td rowspan="2">Soft</td><td rowspan="2">65</td><td>RMSE</td><td>8.07 <span class="uncertainty">(0.53)</span></td><td>17.14</td><td class="best">10.86</td><td>16.78</td></tr>
+                  <tr><td>DTW</td><td>7.48 <span class="uncertainty">(0.39)</span></td><td>18.47</td><td class="best">11.67</td><td>18.07</td></tr>
+                  <tr><th scope="rowgroup" rowspan="2">Foam bending</th><td rowspan="2">Soft</td><td rowspan="2">35</td><td>RMSE</td><td>7.00 <span class="uncertainty">(4.39)</span></td><td>10.71</td><td>14.43</td><td class="best">10.37</td></tr>
+                  <tr><td>DTW</td><td>3.52 <span class="uncertainty">(1.05)</span></td><td>21.28</td><td>27.51</td><td class="best">20.53</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="table-note">Baseline cells report the real-world mean with standard deviation in parentheses. The pendulum EL row is unnormalized because its real baseline is zero.</p>
+          </section>
+        </div>
+      </section>
+
+      <section class="explorer section-block" id="explorer" aria-labelledby="explorer-title">
+        <div class="section-shell">
+          <div class="section-heading explorer-heading">
+            <div><span class="section-number">05</span><span class="section-label">World Model Explorer</span></div>
+            <h2 id="explorer-title">Compare generated motion against measured physics.</h2>
+            <p>Select a scene, material, and prompt condition. The six outputs share the same input frame; unavailable interfaces are marked explicitly.</p>
+          </div>
+          <div class="explorer-toolbar">
+            <div><span class="control-label">Scene</span><div class="segmented" id="scene-tabs"></div></div>
+            <div id="material-control"><span class="control-label">Material</span><div class="segmented" id="material-tabs"></div></div>
+            <div><span class="control-label">Prompt condition</span><div class="segmented" id="mode-tabs"></div></div>
+            <div class="playback-controls" aria-label="Synchronized video controls">
+              <button type="button" data-playback="play">Play all</button>
+              <button type="button" data-playback="pause">Pause all</button>
+              <button type="button" data-playback="restart">Restart</button>
+            </div>
+          </div>
+          <div class="explorer-workbench">
+            <aside class="input-panel" id="input-panel"></aside>
+            <div class="model-grid" id="model-grid"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-shell section-block findings" id="findings" aria-labelledby="findings-title">
+        <div class="section-heading">
+          <div><span class="section-number">06</span><span class="section-label">Findings</span></div>
+          <h2 id="findings-title">Physical fidelity is mechanism-specific.</h2>
+        </div>
+        <ol class="finding-list">
+          <li><span>01</span><p>No physics engine is uniformly faithful across regimes.</p></li>
+          <li><span>02</span><p>Dynamic contact, rapid cloth motion, and volumetric deformation remain the largest sim-to-real gaps.</p></li>
+          <li><span>03</span><p>Video world models often recover equation form while missing physical scale and timing.</p></li>
+        </ol>
+        <div class="evidence-strip">
+          <article>
+            <span class="evidence-task">Slope Slider</span>
+            <h3>Best law form ≠ best acceleration</h3>
+            <p>On wood, the lowest QFI is <strong>13.61</strong>, while the closest generated acceleration is <strong>2.06 m/s²</strong> against a <strong>2.58 m/s²</strong> real baseline.</p>
+            <small>QFI: lower is better · acceleration: closer to baseline</small>
+          </article>
+          <article>
+            <span class="evidence-task">Pendulum</span>
+            <h3>A clean sinusoid can run at the wrong clock</h3>
+            <p>Two outputs reach <strong>R² = 0.99</strong>, yet their periods are <strong>1.93 s</strong> and <strong>1.90 s</strong> versus the <strong>1.06 s</strong> real period.</p>
+            <small>R²: higher is better · period: closer to baseline</small>
+          </article>
+          <article>
+            <span class="evidence-task">Bouncing Ball</span>
+            <h3>Free-fall shape without gravitational scale</h3>
+            <p>The lowest reported QFI is <strong>12.50</strong>, but its fitted acceleration is only <strong>0.088 m/s²</strong> versus the <strong>9.81 m/s²</strong> baseline.</p>
+            <small>QFI: lower is better · acceleration: closer to baseline</small>
+          </article>
+        </div>
+        <section class="paper-results world-results" aria-labelledby="world-results-title">
+          <div class="results-heading">
+            <div>
+              <span class="table-number">Paper Table 4</span>
+              <h3 id="world-results-title">Physical consistency of video world models</h3>
+            </div>
+            <p>Five rigid-body tasks expose a gap between visually plausible motion, the form of a physical law, and its recovered scale.</p>
+          </div>
+          <div class="metric-legend" aria-label="World model metric interpretation">
+            <span><i class="legend-low"></i> QFI / DE: lower is better</span>
+            <span><i class="legend-close"></i> a / MTE / PD: closer to baseline</span>
+            <span><i class="legend-high"></i> R<sup>2</sup>: higher is better</span>
+          </div>
+          <div class="table-scroll table-scroll-wide" role="region" aria-label="Video world model physical consistency results" tabindex="0">
+            <table class="paper-table result-table world-model-table">
+              <thead>
+                <tr>
+                  <th rowspan="2" scope="col">Task</th><th rowspan="2" scope="col">Material</th><th rowspan="2" scope="col">Metric</th><th rowspan="2" scope="col">Baseline</th>
+                  <th colspan="2" scope="colgroup">Cosmos3-Nano</th><th colspan="2" scope="colgroup">Cosmos3-Super</th><th colspan="2" scope="colgroup">Wan-2.2</th><th colspan="2" scope="colgroup">Wan-2.7</th><th scope="col">Seedance 2</th><th scope="col">Genie3</th>
+                </tr>
+                <tr><th scope="col">w/o</th><th scope="col">w</th><th scope="col">w/o</th><th scope="col">w</th><th scope="col">w/o</th><th scope="col">w</th><th scope="col">w/o</th><th scope="col">w</th><th scope="col">w/o</th><th scope="col">w/o</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="rowgroup" rowspan="6">Slope slider</th><td rowspan="2">Wood</td><td>QFI</td><td>0.00</td><td>64.89</td><td>26.65</td><td class="best">13.61</td><td>569.36</td><td>393.00</td><td>15.74</td><td>1201.08</td><td>558.97</td><td>781.51</td><td>40.11</td></tr>
+                <tr><td>a</td><td>2.58</td><td class="best">2.06</td><td>0.90</td><td>0.13</td><td>0.12</td><td>0.43</td><td>0.091</td><td>0.061</td><td>0.038</td><td>0.23</td><td>0.62</td></tr>
+                <tr><td rowspan="2">Plastic</td><td>QFI</td><td>0.00</td><td>129.76</td><td>276.49</td><td>25.60</td><td>330.31</td><td>14.24</td><td>40.12</td><td>1164.59</td><td>942.08</td><td class="best">8.69</td><td>67.07</td></tr>
+                <tr><td>a</td><td>2.57</td><td>0.58</td><td>0.22</td><td>0.36</td><td>0.030</td><td class="best">0.75</td><td>0.16</td><td>0.055</td><td>0.063</td><td>0.20</td><td>0.58</td></tr>
+                <tr><td rowspan="2">Metal</td><td>QFI</td><td>0.00</td><td class="best">4.41</td><td>184.09</td><td>1266.40</td><td>924.39</td><td>116.64</td><td>6.96</td><td>60.70</td><td>1145.94</td><td>730.22</td><td>70.37</td></tr>
+                <tr><td>a</td><td>2.67</td><td>0.36</td><td>0.15</td><td>0.056</td><td>0.068</td><td>0.24</td><td>0.40</td><td>0.046</td><td>0.038</td><td>0.074</td><td class="best">0.43</td></tr>
+                <tr><th scope="rowgroup" rowspan="3">Turntable</th><td>Wood</td><td>DE</td><td>0.00</td><td>0.078</td><td>0.10</td><td>0.092</td><td class="best">0.00</td><td class="best">0.00</td><td class="best">0.00</td><td>0.18</td><td>0.00037</td><td class="best">0.00</td><td class="best">0.00</td></tr>
+                <tr><td>Plastic</td><td>DE</td><td>0.00</td><td>0.11</td><td>0.17</td><td>0.0029</td><td>0.11</td><td class="best">0.00</td><td class="best">0.00</td><td>0.032</td><td>0.050</td><td class="best">0.00</td><td class="best">0.00</td></tr>
+                <tr><td>Metal</td><td>DE</td><td>0.00</td><td>0.0064</td><td>0.19</td><td>0.040</td><td>0.25</td><td>0.00048</td><td class="best">0.00</td><td>0.12</td><td>0.78</td><td>0.0024</td><td class="best">0.00</td></tr>
+                <tr><th scope="rowgroup" rowspan="2">Bouncing ball</th><td rowspan="2">Rubber</td><td>QFI</td><td>0.00</td><td>2620.05</td><td>1125.36</td><td>270.69</td><td class="best">12.50</td><td>428.39</td><td>38.72</td><td>59.49</td><td>16.08</td><td>65.16</td><td>88.70</td></tr>
+                <tr><td>a</td><td>9.81</td><td>0.45</td><td>0.33</td><td>0.076</td><td>0.088</td><td>0.051</td><td>0.064</td><td>0.16</td><td>0.15</td><td class="best">1.84</td><td>&minus;0.052</td></tr>
+                <tr><th scope="row">Newton&rsquo;s cradle</th><td>Metal</td><td>MTE</td><td>&sim;1</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td class="best">0.76</td><td>0.55</td><td>0.48</td><td>0.24</td><td>&mdash;</td></tr>
+                <tr><th scope="rowgroup" rowspan="2">Pendulum</th><td rowspan="2">Metal</td><td>R<sup>2</sup></td><td>1.00</td><td>0.86</td><td>0.66</td><td>0.50</td><td>0.92</td><td>0.98</td><td class="best">0.99</td><td>0.71</td><td>0.72</td><td>0.96</td><td class="best">0.99</td></tr>
+                <tr><td>PD</td><td>1.06</td><td>2.36</td><td>2.93</td><td>17.95</td><td>2.34</td><td>6.03</td><td>1.93</td><td class="best">1.83</td><td>1.87</td><td>3.13</td><td>1.90</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="table-note"><strong>w/o</strong> and <strong>w</strong> denote generation without and with the negative prompt. Acceleration a is in m/s<sup>2</sup>; PD is in seconds. Dashes indicate unavailable generations.</p>
+        </section>
+      </section>
+
+      <section class="citation section-block" id="citation" aria-labelledby="citation-title">
+        <div class="section-shell citation-grid">
+          <div>
+            <div class="section-heading">
+              <div><span class="section-number">07</span><span class="section-label">Resources and Citation</span></div>
+              <h2 id="citation-title">Build on GAUGE.</h2>
+            </div>
+            <div class="resource-list">
+              <a href="gauge.pdf"><span>Paper</span><small>Local PDF ↗</small></a>
+              <span><span>Code</span><small>Coming soon</small></span>
+              <span><span>Dataset</span><small>Coming soon</small></span>
+              <span><span>License</span><small>Coming soon</small></span>
+            </div>
+            <p class="citation-authors">Shuai Wang, Yaxin Feng, Xuekun Jiang, Shihan Tian, Ningyu Yan, Xing Shen, Chaoyang Lyu, Hui Wang, Yunsong Zhou, Hanqing Wang, Jiangmiao Pang, Yang Xiang, Xing Gao, Chunhua Shen, and Weinan Zhang.</p>
+          </div>
+          <div class="bibtex-wrap">
+            <div class="bibtex-head"><span>BibTeX</span><button id="copy-citation" type="button">Copy</button></div>
+            <pre id="bibtex"><code>@article{wang2026gauge,
+  title   = {GAUGE: A Measurement-Grounded Benchmark for Physical Fidelity in Simulation Engines and Video World Models},
+  author  = {Wang, Shuai and Feng, Yaxin and Jiang, Xuekun and Tian, Shihan and Yan, Ningyu and Shen, Xing and Lyu, Chaoyang and Wang, Hui and Zhou, Yunsong and Wang, Hanqing and Pang, Jiangmiao and Xiang, Yang and Gao, Xing and Shen, Chunhua and Zhang, Weinan},
+  year    = {2026},
+  note    = {Manuscript}
+}</code></pre>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div><a class="wordmark wordmark-footer" href="#top"><span class="wordmark-mark" aria-hidden="true"></span>GAUGE</a><p>Measurement-grounded physical fidelity for simulation and video world models.</p></div>
+      <p>© 2026 Shanghai Artificial Intelligence Laboratory. Media for research presentation.</p>
+    </footer>
+
+    <dialog class="detail-dialog" id="task-dialog">
+      <button class="dialog-close" type="button" aria-label="Close task details">Close</button>
+      <div id="task-dialog-content"></div>
+    </dialog>
+
+    <dialog class="video-dialog" id="video-dialog">
+      <button class="dialog-close" type="button" aria-label="Close enlarged video">Close</button>
+      <div id="video-dialog-content"></div>
+    </dialog>
+
+    <script src="data.js" defer></script>
+    <script src="app.js" defer></script>
+  </body>
+</html>
