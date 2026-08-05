@@ -24,7 +24,12 @@ test("server-renders the GAUGE research demo", async () => {
   const html = await response.text();
   assert.match(html, /<title>GAUGE \| Measuring Physical Fidelity<\/title>/i);
   assert.match(html, /Does it move right/);
-  assert.match(html, /<strong>22<\/strong><span>controlled task families<\/span>/);
+  assert.match(html, /<strong>22<\/strong><span>task families<\/span>/);
+  assert.match(html, /Complete task &amp; material index/);
+  assert.match(html, /Complete engine result ledger/);
+  assert.match(html, /Rope Winding/);
+  assert.match(html, /Cantilever Beam/);
+  assert.doesNotMatch(html, /Paper Table|Search tasks/i);
   assert.match(html, /No single engine/);
   assert.match(html, /http:\/\/localhost(?::3000)?\/og\.png/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
