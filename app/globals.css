@@ -1375,6 +1375,39 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
 .site-footer > span { font-size: .74rem; }
 .site-footer p { font-size: .82rem; }
 
+/* World-model opener: balanced editorial columns and intentional line breaks. */
+.world-models {
+  grid-template-columns: minmax(0, .95fr) minmax(0, 1.25fr);
+  gap: clamp(48px, 6vw, 88px);
+  align-items: center;
+}
+.world-copy { max-width: 560px; }
+.world-copy h2 {
+  max-width: none;
+  font-size: clamp(3.15rem, 4.2vw, 4.1rem);
+  font-weight: 500;
+  letter-spacing: -.045em;
+  line-height: 1.01;
+}
+.world-copy h2 span { display: block; }
+.world-copy > p {
+  max-width: 42ch;
+  margin: 28px 0 30px;
+  font-size: 1.04rem;
+  line-height: 1.66;
+}
+
+@media (max-width: 1120px) {
+  .world-models { grid-template-columns: 1fr; }
+  .world-copy { max-width: 760px; }
+}
+
+@media (max-width: 620px) {
+  .world-copy h2 { font-size: clamp(2.7rem, 12vw, 3.35rem); }
+  .world-copy h2 span { display: inline; }
+  .world-copy h2 span:not(:last-child)::after { content: " "; }
+}
+
 @media (max-width: 780px) {
   .task-data-table td::before,
   .engine-data-table td::before,
