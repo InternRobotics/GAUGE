@@ -468,13 +468,13 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
 }
 .paper-cta .eyebrow { color: var(--orange-dark); }
 .paper-cta h2 { max-width: none; font-size: clamp(3rem, 5vw, 4.8rem); white-space: nowrap; }
-.paper-cta-copy { display: grid; grid-template-columns: minmax(300px, .78fr) minmax(500px, 1.22fr); gap: 22px 36px; padding-bottom: 0 !important; }
+.paper-cta-copy { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 38px; align-items: start; padding-bottom: 0 !important; }
 .paper-cta .paper-cta-copy > p { max-width: 43ch; margin: 0; color: #4f5967; font-size: 1.08rem; }
-.conclusion-list { margin: 0; padding: 0; border-top: 1px solid #c7c2b8; list-style: none; }
+.conclusion-list { grid-column: 1; grid-row: 1 / span 2; margin: 0; padding: 0; border-top: 1px solid #c7c2b8; list-style: none; }
 .conclusion-list li { display: grid; grid-template-columns: 34px 1fr; gap: 10px; padding: 14px 0; border-bottom: 1px solid #c7c2b8; }
 .conclusion-list li > span { padding-top: 4px; color: var(--orange-dark); font-family: var(--mono); font-size: .72rem; font-weight: 800; }
 .conclusion-list p { margin: 0; color: #46515f; font-family: var(--serif); font-size: 1rem; line-height: 1.48; }
-.paper-cta-actions { grid-column: 1; display: flex; flex-wrap: wrap; gap: 9px; }
+.paper-cta-actions { grid-column: 2; grid-row: 2; display: flex; flex-wrap: wrap; gap: 9px; }
 .paper-cta-actions .button.secondary { background: rgba(255,255,255,.42); }
 .citation-box { grid-column: 2; grid-row: 1; align-self: start; height: max-content; padding: 20px; border: 1px solid #c7c2b8; border-radius: 12px; background: rgba(255,255,255,.32); }
 .citation-head { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
@@ -506,6 +506,7 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
   .paper-cta { grid-template-columns: 1fr; }
   .paper-cta h2 { font-size: clamp(2.7rem, 10vw, 4rem); white-space: normal; }
   .paper-cta-copy { grid-template-columns: 1fr; }
+  .conclusion-list,
   .paper-cta-actions,
   .citation-box { grid-column: auto; grid-row: auto; }
   .site-footer { grid-template-columns: 1fr; align-items: start; padding-block: 34px; }
