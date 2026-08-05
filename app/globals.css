@@ -1408,6 +1408,93 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
   .world-copy h2 span:not(:last-child)::after { content: " "; }
 }
 
+/* Conclusion and citation are separate, full-width editorial sections. */
+.paper-cta {
+  min-height: auto;
+  gap: 38px;
+  padding-block: clamp(76px, 8vw, 112px);
+}
+.paper-cta-copy {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+}
+.conclusion-list {
+  grid-column: auto;
+  grid-row: auto;
+  width: 100%;
+}
+.conclusion-list li {
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 18px;
+  padding: 20px 0;
+}
+.conclusion-list p { max-width: 68ch; font-size: 1.08rem; }
+.paper-cta-actions {
+  grid-column: auto;
+  grid-row: auto;
+}
+
+.citation-section {
+  padding: clamp(76px, 8vw, 112px) max(24px, calc((100vw - var(--shell)) / 2));
+  border-top: 1px solid var(--line);
+  background: #eae6de;
+  color: var(--ink);
+}
+.citation-shell { width: min(1120px, 100%); margin: 0 auto; }
+.citation-intro .eyebrow {
+  margin: 0 0 17px;
+  color: var(--orange-dark);
+  font-family: var(--mono);
+  font-size: .74rem;
+  font-weight: 800;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+.citation-intro h2 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(3.6rem, 6vw, 5.6rem);
+  font-weight: 500;
+  letter-spacing: -.055em;
+  line-height: .95;
+}
+.citation-intro > p:last-child {
+  max-width: 60ch;
+  margin: 24px 0 0;
+  color: #4f5967;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.citation-section .citation-box {
+  width: 100%;
+  grid-column: auto;
+  grid-row: auto;
+  margin-top: 32px;
+  padding: clamp(22px, 3vw, 32px);
+  border-radius: 16px;
+  background: rgba(255,255,255,.68);
+  box-shadow: 0 20px 55px rgba(23,33,45,.08);
+}
+.citation-section .citation-head button {
+  padding: 9px 14px;
+  border: 1px solid #c7c2b8;
+  border-radius: 999px;
+  background: #f8f6f0;
+}
+.citation-section .citation-box pre {
+  max-width: 100%;
+  margin-top: 22px;
+  overflow-x: auto;
+  white-space: pre;
+  overflow-wrap: normal;
+}
+
+@media (max-width: 700px) {
+  .citation-section .citation-box { padding: 18px; }
+  .citation-section .citation-box pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+}
+
 @media (max-width: 780px) {
   .task-data-table td::before,
   .engine-data-table td::before,

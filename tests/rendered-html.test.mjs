@@ -66,6 +66,8 @@ test("server-renders the GAUGE research demo", async () => {
   assert.doesNotMatch(html, /https:\/\/github\.com\/NINGYURICHARD\/gauge-web/);
   assert.match(html, /\/world-models\/slope-slider\.mp4/);
   assert.match(html, /BibTeX/);
+  assert.match(html, /class="citation-section"/);
+  assert.match(html, /GAUGE \/ Conclusion/);
   assert.match(html, /@article\{wang2026gauge/);
   assert.match(html, /GitHub repository coming soon/);
   assert.match(html, /octicon-mark-github/);
