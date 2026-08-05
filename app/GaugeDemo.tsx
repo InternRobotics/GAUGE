@@ -156,6 +156,8 @@ const citationText = `@article{wang2026gauge,
 
 const taskVariants = (task: TrialTask) => task.id >= 2 && task.id <= 4 ? 3 : 1;
 const taskObservable = (task: TrialTask) => task.category === "rigid" ? "6-DoF position P(t)" : task.category === "textile" || task.category === "cable" ? "Gaussian curvature K(t)" : "Triangle area A(t)";
+// Restore this after the gallery previews are replaced with higher-quality sources.
+const ENABLE_TRIAL_GALLERY_DETAILS = false;
 
 const heroEngineNames = ["Isaac Sim", "Genesis", "Newton"] as const;
 const heroEngineColors = ["#7652c8", "#7185a3", "#d46a3a"] as const;
@@ -382,15 +384,12 @@ function TrialVideo({ task, controls = false }: { task: TrialTask; controls?: bo
 }
 
 function TaskCard({ task, onOpen }: { task: TrialTask; onOpen: (task: TrialTask) => void }) {
+  const media = <><TrialVideo task={task} /><span className="trial-badge">Real trial · {String(task.id).padStart(2, "0")}</span>{ENABLE_TRIAL_GALLERY_DETAILS && <span className="trial-open">Details <i>↗</i></span>}</>;
   return (
     <article className="trial-card">
-      <button className="trial-media" onClick={() => onOpen(task)} aria-label={`Open ${task.title} trial`}>
-        <TrialVideo task={task} />
-        <span className="trial-badge">Real trial · {String(task.id).padStart(2, "0")}</span>
-        <span className="trial-open">Details <i>↗</i></span>
-      </button>
+      {ENABLE_TRIAL_GALLERY_DETAILS ? <button className="trial-media" onClick={() => onOpen(task)} aria-label={`Open ${task.title} trial`}>{media}</button> : <div className="trial-media trial-media-static" aria-label={`${task.title} trial preview`}>{media}</div>}
       <div className="trial-meta"><span>{categoryLabels[task.category]}</span><span>{taskVariants(task)} {taskVariants(task) === 1 ? "subtask" : "subtasks"}</span></div>
-      <h3><button onClick={() => onOpen(task)}>{task.title}</button></h3>
+      <h3>{ENABLE_TRIAL_GALLERY_DETAILS ? <button onClick={() => onOpen(task)}>{task.title}</button> : task.title}</h3>
       <p>{task.description}</p>
       <div className="physics-tags">{task.physics.map((tag) => <span key={tag}>{tag}</span>)}<span>{task.materials}</span></div>
     </article>

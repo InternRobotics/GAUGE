@@ -40,6 +40,8 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /Four physical regimes/);
   assert.match(html, /Approximately 1,560 real trials/);
   assert.match(html, /Gallery/);
+  assert.match(html, /class="trial-media trial-media-static"/);
+  assert.doesNotMatch(html, /Open Slope Contact trial|class="trial-open"/);
   assert.match(html, /Physical fidelity is/);
   assert.match(html, /No engine stays uniformly faithful/);
   assert.match(html, /16 cameras/);
