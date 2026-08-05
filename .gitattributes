@@ -1,1 +1,2 @@
 public/world-model-results/**/*.mp4 filter=lfs diff=lfs merge=lfs -text
+world-model-results/**/*.mp4 filter=lfs diff=lfs merge=lfs -text
