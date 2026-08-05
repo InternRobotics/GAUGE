@@ -66,7 +66,7 @@ img { max-width: 100%; display: block; }
   margin: 0 auto;
   padding: 66px 0 78px;
 }
-.eyebrow { margin: 0; color: var(--orange-dark); font-family: var(--mono); font-size: .75rem; font-weight: 750; letter-spacing: .105em; text-transform: uppercase; }
+.eyebrow { margin: 0; color: var(--orange-dark); font-family: var(--mono); font-size: clamp(.82rem, .84vw, .94rem); font-weight: 800; letter-spacing: .095em; text-transform: uppercase; }
 .eyebrow span { color: var(--ink); }
 .hero h1 { max-width: 670px; margin: 17px 0 27px; font-family: var(--serif); font-size: clamp(3.5rem, 6.4vw, 6.8rem); font-weight: 500; letter-spacing: -.055em; line-height: 1.03; }
 .hero h1 > span { display: block; white-space: nowrap; }
@@ -135,7 +135,7 @@ img { max-width: 100%; display: block; }
 .stat-ribbon span { max-width: 15ch; color: var(--muted); font-size: .75rem; font-weight: 700; line-height: 1.35; text-transform: uppercase; }
 
 .section { padding: clamp(84px, 10vw, 144px) max(24px, calc((100vw - var(--shell)) / 2)); }
-.section-kicker { margin-bottom: 24px; color: var(--orange-dark); font-family: var(--mono); font-size: .71rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.section-kicker { margin-bottom: 24px; color: var(--orange-dark); font-family: var(--mono); font-size: clamp(.82rem, .84vw, .94rem); font-weight: 800; letter-spacing: .105em; line-height: 1.45; text-transform: uppercase; }
 .section-kicker.light { color: #a78de0; }
 .section-title-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(330px, .6fr); align-items: end; gap: 60px; }
 .section h2, .paper-cta h2 { margin: 0; font-family: var(--serif); font-size: clamp(3rem, 5.4vw, 5.7rem); font-weight: 500; letter-spacing: -.057em; line-height: .96; }
@@ -1459,7 +1459,7 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
   margin: 0 0 17px;
   color: var(--orange-dark);
   font-family: var(--mono);
-  font-size: .74rem;
+  font-size: clamp(.84rem, .88vw, .98rem);
   font-weight: 800;
   letter-spacing: .11em;
   text-transform: uppercase;

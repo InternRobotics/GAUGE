@@ -32,8 +32,11 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /class="composition-ring task-ring"/);
   assert.match(html, /class="capture-apparatus"/);
   assert.doesNotMatch(html, /capture-ring/);
+  assert.match(html, /Shared real-world foundation/);
+  assert.match(html, /both evaluation tracks share the same real-world experimental foundation/);
+  assert.doesNotMatch(html, /One empirical anchor|anchors both evaluation tracks/);
   assert.match(html, /<strong>22<\/strong><span>task families<\/span>/);
-  assert.match(html, /22 task families/);
+  assert.match(html, /22 task families across/);
   assert.match(html, /Four physical regimes/);
   assert.match(html, /Approximately 1,560 real trials/);
   assert.match(html, /Gallery/);
@@ -49,6 +52,7 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /can look plausible/);
   assert.match(html, /yet still predict/);
   assert.match(html, /the wrong physics/);
+  assert.ok(html.indexOf("02 / Measurement language") < html.indexOf("03 / Benchmark task demonstrations"), "measurement language should precede the task atlas and results");
   assert.match(html, /Physical fidelity is/);
   assert.match(html, /Dynamic contact, rapid cloth motion, and volumetric deformation/);
   assert.match(html, /recover equation form while still missing the correct physical scale and timing/);
