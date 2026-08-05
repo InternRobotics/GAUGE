@@ -89,7 +89,7 @@ test("server-renders the GAUGE research demo", async () => {
   assert.doesNotMatch(html, /Question answered:/);
   assert.match(html, /Physical fidelity is/);
   assert.match(html, /Dynamic contact, rapid cloth motion, and volumetric deformation/);
-  assert.match(html, /recover equation form while still missing the correct physical scale and timing/);
+  assert.match(html, /recover equation form while still missing the correct physical parameters/);
   assert.match(html, /Rope Winding/);
   assert.match(html, /successive collisions/);
   assert.match(html, /A flexible rope winds while repeatedly making self-contact/);
