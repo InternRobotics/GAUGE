@@ -53,6 +53,7 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /world-model-results\/slope-slider\/standard\/cosmos3-nano\.mp4/);
   assert.match(html, /Prompt used/);
   assert.match(html, /Exact reported values/);
+  assert.doesNotMatch(html, />Reading<\/th>/);
   assert.match(html, /Complete material readings/);
   assert.match(html, /Slope slider across materials/);
   assert.match(html, /129\.76 · 0\.58/);

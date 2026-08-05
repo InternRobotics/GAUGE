@@ -985,7 +985,7 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
 .prompt-switch button { padding: 7px 10px; border: 1px solid #46566a; border-radius: 999px; background: transparent; color: #8f9dae; cursor: pointer; font-size: .58rem; }
 .prompt-switch button.active { border-color: #f3f0e9; background: #f3f0e9; color: #151b26; }
 .world-table-panel { min-width: 0; overflow: hidden; border: 1px solid #3a4757; border-top: 0; border-radius: 0 0 10px 10px; }
-.world-data-table th:nth-child(1) { width: 24%; }.world-data-table th:nth-child(2) { width: 18%; }.world-data-table th:nth-child(3), .world-data-table th:nth-child(4) { width: 16%; }.world-data-table th:nth-child(5) { width: 26%; }
+.world-data-table th:nth-child(1) { width: 30%; }.world-data-table th:nth-child(2) { width: 24%; }.world-data-table th:nth-child(3), .world-data-table th:nth-child(4) { width: 23%; }
 .world-data-table tbody tr { border-top: 1px solid #334153; }
 .world-data-table td { padding: 14px 11px; color: #a4b0bf; font-family: var(--mono); font-size: .62rem; overflow-wrap: anywhere; }
 .world-data-table td strong { color: #e3e8ed; font-family: var(--serif); font-size: .88rem; font-weight: 600; }
@@ -1030,8 +1030,8 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
   .prompt-switch { align-items: flex-start; flex-direction: column; }
   .world-data-table tbody tr { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 12px; }
   .world-data-table td { padding: 7px; }
-  .world-data-table td:first-child, .world-data-table td:last-child { grid-column: 1 / -1; }
-  .world-data-table td:nth-child(2)::before { content: "Condition"; }.world-data-table td:nth-child(3)::before { content: "Primary metric"; }.world-data-table td:nth-child(4)::before { content: "Parameter"; }.world-data-table td:nth-child(5)::before { content: "Reading"; }
+  .world-data-table td:first-child { grid-column: 1 / -1; }
+  .world-data-table td:nth-child(2)::before { content: "Condition"; }.world-data-table td:nth-child(3)::before { content: "Primary metric"; }.world-data-table td:nth-child(4)::before { content: "Parameter"; }
 }
 
 @media (max-width: 520px) {
