@@ -29,6 +29,8 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /Corresponding author/);
   assert.ok(html.indexOf('class="academic-hero"') < html.indexOf('class="benchmark-composition"'), "the academic paper header should precede benchmark statistics");
   assert.match(html, /class="academic-framework"/);
+  assert.match(html, /<svg class="mini-mark"/);
+  assert.doesNotMatch(html, /mini-mark" style="background-image/);
   assert.match(html, /class="composition-ring task-ring"/);
   assert.match(html, /class="capture-apparatus"/);
   assert.doesNotMatch(html, /capture-ring/);

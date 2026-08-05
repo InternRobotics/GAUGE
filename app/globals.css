@@ -42,7 +42,7 @@ img { max-width: 100%; display: block; }
 }
 .site-header::before { content: ""; position: absolute; z-index: -1; inset: 0 calc(50% - 50vw); border-bottom: 1px solid rgba(180,176,168,.72); background: rgba(247,245,240,.91); backdrop-filter: blur(18px); }
 .brand { display: inline-flex; align-items: center; gap: 11px; font-family: var(--serif); font-size: 1.25rem; font-weight: 800; letter-spacing: .09em; text-decoration: none; }
-.mini-mark { width: 34px; height: 34px; display: block; flex: 0 0 auto; background-position: center; background-repeat: no-repeat; background-size: contain; }
+.mini-mark { width: 34px; height: 34px; display: block; flex: 0 0 auto; overflow: visible; }
 .site-header nav { display: flex; gap: clamp(18px, 3vw, 38px); }
 .site-header nav a { color: #495261; font-size: .84rem; font-weight: 700; text-decoration: none; }
 .site-header nav a:hover { color: var(--orange-dark); }

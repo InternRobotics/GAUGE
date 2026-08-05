@@ -495,7 +495,7 @@ function metricScore(value: number | null, target: EngineMetric["target"]) {
 }
 
 function MiniMark() {
-  return <span className="mini-mark" style={{ backgroundImage: `url(${assetUrl("favicon.svg")})` }} aria-hidden="true" />;
+  return <svg className="mini-mark" viewBox="0 0 64 64" aria-hidden="true"><rect x="27" y="4" width="10" height="8" rx="3" fill="currentColor" /><path d="M13 20l-5-5M51 20l5-5" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" /><circle cx="32" cy="36" r="21" fill="none" stroke="currentColor" strokeWidth="4" /><path d="M19 39a14 14 0 0 1 26 0" fill="none" stroke="#8d6bd8" strokeWidth="4" strokeLinecap="round" /><path d="M32 36l9-12" fill="none" stroke="#8d6bd8" strokeWidth="4" strokeLinecap="round" /><circle cx="32" cy="36" r="4" fill="currentColor" /></svg>;
 }
 
 export function GaugeDemo() {
