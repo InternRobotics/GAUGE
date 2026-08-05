@@ -1098,6 +1098,94 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
   .evidence-stack .law-callout { grid-column: auto; }
 }
 
+/* Readability floor: auxiliary copy remains legible on high-density displays. */
+.authors p { font-size: .78rem; }
+.authors span { font-size: .74rem; }
+.instrument-topline,
+.trace-labels,
+.readout-copy > span,
+.status-stack span { font-size: .72rem; }
+.axis,
+.dial small { font-size: .68rem; }
+.readout-copy p { font-size: .78rem; }
+.paper-overview figcaption,
+.metric-chip,
+.legend-note,
+.diagnostic-footer,
+.law-index,
+.law-callout span { font-size: .72rem; }
+.micro { font-size: .76rem; }
+
+.principle-grid article > span,
+.track-steps b { font-size: .7rem; }
+.track-steps p { font-size: .78rem; }
+.view-switch button,
+.task-filter button,
+.task-filter button b,
+.filter-status { font-size: .72rem; }
+.trial-badge,
+.trial-open,
+.trial-meta,
+.physics-tags span,
+.video-fallback small { font-size: .7rem; }
+
+.table-toolbar > p,
+.table-toolbar > div > span,
+.table-toolbar button { font-size: .7rem; }
+.task-data-table th,
+.engine-data-table th,
+.world-data-table th { font-size: .69rem; }
+.task-data-table td,
+.engine-data-table td,
+.world-data-table td { font-size: .75rem; line-height: 1.5; }
+.task-data-table td:first-child span { font-size: .68rem; }
+.engine-data-table td small,
+.engine-data-table td:last-child span { font-size: .69rem; }
+
+.paper-detail-cards span,
+.paper-detail-cards small,
+.paper-detail-copy dt,
+.paper-detail-copy > small,
+.modal-copy dt { font-size: .72rem; }
+.paper-detail-copy dd,
+.modal-copy dd { font-size: .82rem; }
+.result-filter-bar button,
+.result-filter-bar button span,
+.result-filter-bar label,
+.result-filter-bar select,
+.metric-switch button small,
+.bar-item.best .bar-meta i,
+.result-workbench .diagnostic-footer button { font-size: .71rem; }
+
+.world-video-label,
+.evidence-stack .world-video-label { font-size: .7rem; }
+.evidence-stack .world-video-reading p,
+.evidence-stack .world-video-reading p span { font-size: .72rem; }
+.world-scene-tabs button small,
+.world-scene-summary > div p,
+.world-scene-summary > div span,
+.world-scene-summary > button,
+.prompt-switch > span,
+.prompt-switch button { font-size: .72rem; }
+.world-data-table td .valid,
+.world-data-table td .invalid { font-size: .7rem; }
+.model-roster > span { font-size: .72rem; }
+.model-roster p { font-size: .82rem; line-height: 1.5; }
+.model-roster small { font-size: .74rem; line-height: 1.6; }
+
+.observable-icon > b,
+.citation-head span,
+.citation-head button,
+.citation-box pre,
+.site-footer > span { font-size: .74rem; }
+.site-footer p { font-size: .82rem; }
+
+@media (max-width: 780px) {
+  .task-data-table td::before,
+  .engine-data-table td::before,
+  .world-data-table td::before { font-size: .67rem; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
