@@ -368,18 +368,19 @@ export function GaugeDemo() {
           <figcaption>The complete GAUGE pipeline: real-world measurements anchor both diagnostic tracks.</figcaption>
         </figure>
         <div className="principle-grid">
-          <article><span>01</span><h3>Measurement-grounded</h3><p>Sixteen infrared cameras capture motion at 180 Hz. Repeated trials yield millimeter-level trajectories and uncertainty estimates.</p></article>
-          <article><span>02</span><h3>Cross-regime</h3><p>One benchmark spans rigid bodies, flexible cables, textiles, and volumetric soft bodies.</p></article>
-          <article><span>03</span><h3>Diagnostic by design</h3><p>Trajectory error, equation form, physical parameters, and temporal stability remain separate signals.</p></article>
+          <article><div className="principle-meta"><span>Principle 01</span><b>Ground truth</b></div><h3>Measurement-grounded</h3><p>Sixteen infrared cameras capture motion at 180 Hz. Repeated trials yield millimeter-level trajectories and uncertainty estimates.</p></article>
+          <article><div className="principle-meta"><span>Principle 02</span><b>Coverage</b></div><h3>Cross-regime</h3><p>One benchmark spans rigid bodies, flexible cables, textiles, and volumetric soft bodies.</p></article>
+          <article><div className="principle-meta"><span>Principle 03</span><b>Readout</b></div><h3>Diagnostic by design</h3><p>Trajectory error, equation form, physical parameters, and temporal stability remain separate signals.</p></article>
         </div>
+        <div className="track-map-intro"><span>Two evaluation tracks</span><p>Both begin with the same measured real-world foundation. Track A evaluates numerical simulation; Track B evaluates generated video.</p></div>
         <div className="track-overview">
           <article className="track-column engine-track">
-            <header><span>◇</span><div><h3>Simulation-engine track</h3><p>How accurately does a numerical simulator reproduce measured outcomes?</p></div></header>
-            <div className="track-steps"><div><b>01</b><h4>Reconstruct</h4><p>Match real initial states, geometry, materials, and calibrated parameters.</p></div><div><b>02</b><h4>Simulate</h4><p>Run Isaac Sim, Genesis, and Newton on fourteen representative task families.</p></div><div><b>03</b><h4>Compare</h4><p>Measure generalized trajectory error with RMSE, DTW, and task-specific metrics.</p></div></div>
+            <header><span className="track-badge">Track A</span><div><h3>Simulation-engine track</h3><p>How accurately does a numerical simulator reproduce measured outcomes?</p></div></header>
+            <div className="track-steps"><div><b>A1</b><h4>Reconstruct</h4><p>Match real initial states, geometry, materials, and calibrated parameters.</p></div><div><b>A2</b><h4>Simulate</h4><p>Run Isaac Sim, Genesis, and Newton on fourteen representative task families.</p></div><div><b>A3</b><h4>Compare</h4><p>Measure generalized trajectory error with RMSE, DTW, and task-specific metrics.</p></div></div>
           </article>
           <article className="track-column world-track">
-            <header><span>▶</span><div><h3>Video world-model track</h3><p>Does generated motion obey the right law at the right physical scale?</p></div></header>
-            <div className="track-steps"><div><b>01</b><h4>Condition</h4><p>Provide a shared first frame and a verified task prompt.</p></div><div><b>02</b><h4>Generate</h4><p>Evaluate six video models on five rigid-body tasks.</p></div><div><b>03</b><h4>Diagnose</h4><p>Recover SAM3 trajectories and test law form, parameters, and timing.</p></div></div>
+            <header><span className="track-badge">Track B</span><div><h3>Video world-model track</h3><p>Does generated motion obey the right law at the right physical scale?</p></div></header>
+            <div className="track-steps"><div><b>B1</b><h4>Condition</h4><p>Provide a shared first frame and a verified task prompt.</p></div><div><b>B2</b><h4>Generate</h4><p>Evaluate six video models on five rigid-body tasks.</p></div><div><b>B3</b><h4>Diagnose</h4><p>Recover SAM3 trajectories and test law form, parameters, and timing.</p></div></div>
           </article>
         </div>
       </section>
