@@ -18,6 +18,11 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+        location.replace("/preview");
+      }
+    </script>
     <script type="module" src="/main.tsx"></script>
   </body>
 </html>
