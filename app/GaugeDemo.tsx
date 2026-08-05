@@ -338,8 +338,9 @@ export function GaugeDemo() {
       <section className="hero" id="top">
         <div className="hero-copy">
           <p className="eyebrow"><span>Measurement-grounded</span> physical fidelity</p>
-          <h1>Does it move right,<br />or just <em>look</em> right?</h1>
+          <h1 aria-label="Does it move right, or just look right?"><span>Does it</span><span>move right,</span><span>or just <em>look</em></span><span>right?</span></h1>
           <p className="hero-deck">GAUGE diagnoses how simulation engines and video world models reproduce—or violate—real-world physics.</p>
+          <div className="paper-identity"><span>Paper title</span><p><strong>GAUGE</strong> — A Measurement-Grounded Benchmark for Physical Fidelity in Simulation Engines and Video World Models</p></div>
           <div className="hero-actions"><a className="button primary" href="#results">Open the diagnostic</a><a className="button secondary" href="#benchmark">Explore 22 tasks <span>↓</span></a><span className="button code-link code-disabled" aria-label="Code release coming soon"><b>Code</b><small>Coming soon</small></span></div>
           <div className="authors"><p>Shuai Wang · Yaxin Feng · Xuekun Jiang · Shihan Tian · Ningyu Yan · Xing Shen · Chaoyang Lyu · Hui Wang · Yunsong Zhou · Hanqing Wang · Jiangmiao Pang · Yang Xiang · Xing Gao · Chunhua Shen · Weinan Zhang</p><span>Shanghai AI Laboratory · HKUST · Shanghai Jiao Tong University · Zhejiang University</span></div>
         </div>
