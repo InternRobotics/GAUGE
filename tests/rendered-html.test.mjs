@@ -25,6 +25,7 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /<title>GAUGE \| Measuring Physical Fidelity<\/title>/i);
   assert.match(html, /Does it move right, or just look right/);
   assert.match(html, /A Measurement-Grounded Benchmark for Physical Fidelity in Simulation Engines and Video World Models/);
+  assert.ok(html.indexOf("A Measurement-Grounded Benchmark") < html.indexOf("GAUGE diagnoses how simulation engines"), "the paper title should precede the diagnosis summary");
   assert.match(html, /<strong>22<\/strong><span>task families<\/span>/);
   assert.match(html, /Physics,/);
   assert.match(html, /Gallery/);
