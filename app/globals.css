@@ -83,7 +83,8 @@ img { max-width: 100%; display: block; }
 .button.code-link { padding-inline: 13px; border: 0; color: #5c6572; }
 .button.code-link span { color: var(--orange-dark); }
 .hero-footer { grid-column: 1 / -1; display: grid; gap: 16px; padding-top: 25px; border-top: 1px solid var(--line); text-align: center; }
-.hero-diagnosis { max-width: 850px; margin: 0 auto; color: #4d5664; font-family: var(--serif); font-size: 1.06rem; line-height: 1.55; }
+.hero-paper-title { max-width: 1040px; margin: 0 auto; color: #4d5664; font-family: var(--serif); font-size: clamp(1.18rem, 1.55vw, 1.48rem); line-height: 1.48; }
+.hero-paper-title strong { color: var(--ink); font-weight: 700; }
 .authors { max-width: 1080px; margin: 0 auto; }
 .authors p { margin: 0; color: #4f5968; font-size: .78rem; font-weight: 650; line-height: 1.7; }
 .authors span { display: block; margin-top: 7px; color: #7a8290; font-size: .74rem; letter-spacing: .04em; }

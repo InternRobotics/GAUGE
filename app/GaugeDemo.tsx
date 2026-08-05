@@ -339,7 +339,7 @@ export function GaugeDemo() {
         <div className="hero-copy">
           <p className="eyebrow"><span>Measurement-grounded</span> physical fidelity</p>
           <h1 aria-label="Does it move right, or just look right?"><span>Does it</span><span>move right,</span><span>or just <em>look</em></span><span>right?</span></h1>
-          <p className="hero-deck"><strong>GAUGE</strong> — A Measurement-Grounded Benchmark for Physical Fidelity in Simulation Engines and Video World Models</p>
+          <p className="hero-deck">GAUGE diagnoses how simulation engines and video world models reproduce—or violate—real-world physics.</p>
           <div className="hero-actions"><a className="button primary" href="#results">Open the diagnostic</a><a className="button secondary" href="#benchmark">Explore 22 tasks <span>↓</span></a><span className="button code-link code-disabled" aria-label="Code release coming soon"><b>Code</b><small>Coming soon</small></span></div>
         </div>
         <div className="hero-instrument" aria-label="Physical fidelity diagnostic preview">
@@ -351,7 +351,7 @@ export function GaugeDemo() {
             <div className="status-stack"><span>PD <b>2.47 s</b></span><span>REAL <b>1.14 s</b></span><span>Δ <b className="warn">+1.33 s</b></span></div>
           </div>
         </div>
-        <div className="hero-footer"><p className="hero-diagnosis">GAUGE diagnoses how simulation engines and video world models reproduce—or violate—real-world physics.</p><div className="authors"><p>Shuai Wang · Yaxin Feng · Xuekun Jiang · Shihan Tian · Ningyu Yan · Xing Shen · Chaoyang Lyu · Hui Wang · Yunsong Zhou · Hanqing Wang · Jiangmiao Pang · Yang Xiang · Xing Gao · Chunhua Shen · Weinan Zhang</p><span>Shanghai AI Laboratory · HKUST · Shanghai Jiao Tong University · Zhejiang University</span></div></div>
+        <div className="hero-footer"><p className="hero-paper-title"><strong>GAUGE</strong> — A Measurement-Grounded Benchmark for Physical Fidelity in Simulation Engines and Video World Models</p><div className="authors"><p>Shuai Wang · Yaxin Feng · Xuekun Jiang · Shihan Tian · Ningyu Yan · Xing Shen · Chaoyang Lyu · Hui Wang · Yunsong Zhou · Hanqing Wang · Jiangmiao Pang · Yang Xiang · Xing Gao · Chunhua Shen · Weinan Zhang</p><span>Shanghai AI Laboratory · HKUST · Shanghai Jiao Tong University · Zhejiang University</span></div></div>
       </section>
 
       <section className="stat-ribbon" aria-label="Benchmark statistics">
