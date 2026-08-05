@@ -40,8 +40,8 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /Four physical regimes/);
   assert.match(html, /Approximately 1,560 real trials/);
   assert.match(html, /Gallery/);
-  assert.match(html, /class="trial-media trial-media-static"/);
-  assert.doesNotMatch(html, /Open Slope Contact trial|class="trial-open"/);
+  assert.match(html, /class="trial-media"/);
+  assert.match(html, /Open Slope Contact trial|class="trial-open"/);
   assert.match(html, /Physical fidelity is/);
   assert.match(html, /No engine stays uniformly faithful/);
   assert.match(html, /16 cameras/);
@@ -55,6 +55,10 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /yet still predict/);
   assert.match(html, /the wrong physics/);
   assert.ok(html.indexOf("02 / Measurement language") < html.indexOf("03 / Benchmark task demonstrations"), "measurement language should precede the task atlas and results");
+  assert.match(html, /Rigid marker frame/);
+  assert.match(html, /Object-centre position/);
+  assert.match(html, /Generalized trajectory/);
+  assert.doesNotMatch(html, /Question answered:/);
   assert.match(html, /Physical fidelity is/);
   assert.match(html, /Dynamic contact, rapid cloth motion, and volumetric deformation/);
   assert.match(html, /recover equation form while still missing the correct physical scale and timing/);
