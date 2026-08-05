@@ -70,7 +70,12 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /class="paper-cta" id="conclusion"/);
   assert.match(html, /Coming soon/);
   assert.doesNotMatch(html, /https:\/\/github\.com\/NINGYURICHARD\/gauge-web/);
-  assert.match(html, /\/world-models\/slope-slider\.mp4/);
+  assert.match(html, /world-model-results\/slope-slider\/standard\/cosmos3-super-i2v\.mp4/);
+  assert.match(html, /world-model-results\/pendulum\/physics\/wan-2-2\.mp4/);
+  assert.match(html, /world-model-results\/bouncing-ball\/physics\/cosmos3-super-i2v\.mp4/);
+  assert.match(html, /The slide accelerates, but at the wrong rate/);
+  assert.match(html, /The swing trend fits, but the period is wrong/);
+  assert.match(html, /Recovered free-fall acceleration · Real: 9\.81 m\/s² · QFI: 12\.50/);
   assert.match(html, /BibTeX/);
   assert.match(html, /class="citation-section"/);
   assert.match(html, /GAUGE \/ Conclusion/);
