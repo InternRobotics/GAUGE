@@ -45,7 +45,7 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /world-model-results\/slope-slider\/standard\/cosmos3-nano\.mp4/);
   assert.match(html, /Prompt used/);
   assert.match(html, /Exact reported values/);
-  assert.match(html, /Video models can look plausible and still predict the wrong physics/);
+  assert.match(html, /Generated videos can look plausible yet still predict the wrong physics/);
   assert.match(html, /Physical fidelity is/);
   assert.match(html, /Dynamic contact, rapid cloth motion, and volumetric deformation/);
   assert.match(html, /recover equation form while still missing the correct physical scale and timing/);
