@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { MarkGithubIcon } from "@primer/octicons-react";
 
 type TaskCategory = "rigid" | "cable" | "textile" | "soft";
 type TaskFilter = "all" | TaskCategory;
@@ -331,7 +332,7 @@ export function GaugeDemo() {
       <header className="site-header">
         <a className="brand" href="#top" aria-label="GAUGE home"><MiniMark /><span>GAUGE</span></a>
         <nav aria-label="Primary navigation"><a href="#protocol">Protocol</a><a href="#benchmark">Benchmark</a><a href="#results">Results</a><a href="#paper">Paper</a></nav>
-        <div className="header-actions"><span className="github-coming" role="img" aria-label="GitHub repository coming soon" title="GitHub repository coming soon"><i aria-hidden="true" /></span><a className="header-cta" href="/gauge.pdf" target="_blank" rel="noreferrer">Read paper <span>↗</span></a></div>
+        <div className="header-actions"><a className="header-cta" href="/gauge.pdf" target="_blank" rel="noreferrer">Read paper <span>↗</span></a><a className="github-link" href="#github-coming-soon" aria-disabled="true" aria-label="GitHub repository coming soon" title="GitHub repository coming soon" onClick={(event) => event.preventDefault()}><MarkGithubIcon size={24} /></a></div>
       </header>
 
       <section className="hero" id="top">

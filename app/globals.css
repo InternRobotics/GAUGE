@@ -51,11 +51,9 @@ img { max-width: 100%; display: block; }
 .site-header nav { display: flex; gap: clamp(18px, 3vw, 38px); }
 .site-header nav a { color: #495261; font-size: .84rem; font-weight: 700; text-decoration: none; }
 .site-header nav a:hover { color: var(--orange-dark); }
-.header-cta { justify-self: end; display: inline-flex; align-items: center; gap: 16px; padding: 9px 14px 9px 17px; border: 1px solid var(--ink); border-radius: 999px; font-size: .82rem; font-weight: 750; text-decoration: none; }
+.header-cta { min-height: 40px; justify-self: end; display: inline-flex; align-items: center; gap: 16px; padding: 9px 14px 9px 17px; border: 1px solid var(--ink); border-radius: 999px; font-size: .82rem; font-weight: 750; text-decoration: none; }
 .header-cta span { color: var(--orange-dark); }
 .header-actions { justify-self: end; display: flex; align-items: center; gap: 9px; }
-.header-actions > a:first-child { display: inline-flex; align-items: center; gap: 8px; padding: 9px 12px; color: #525c69; font-size: .78rem; font-weight: 750; text-decoration: none; }
-.header-actions > a:first-child span { color: var(--orange-dark); }
 
 .hero {
   width: min(calc(100% - 48px), var(--shell));
@@ -318,25 +316,9 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
 .code-disabled small { color: var(--orange-dark); font-family: var(--mono); font-size: .62rem; font-weight: 800; letter-spacing: .035em; text-transform: uppercase; }
 .button.code-disabled { border: 1px dashed var(--line); background: rgba(255,255,255,.24); }
 .button.code-disabled:hover { transform: none; }
-.github-coming {
-  width: 32px;
-  height: 32px;
-  display: inline-grid;
-  place-items: center;
-  border-radius: 50%;
-  cursor: default;
-}
-.github-coming i {
-  width: 22px;
-  height: 22px;
-  display: block;
-  border-radius: 50%;
-  background-color: var(--ink);
-  background-image: url("https://github.com/favicon.ico");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-}
+.github-link { width: 40px; height: 40px; flex: 0 0 40px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; color: var(--ink); cursor: default; text-decoration: none; }
+.github-link svg { width: 24px; height: 24px; display: block; fill: currentColor; }
+.github-link[aria-disabled="true"] { opacity: .88; }
 
 .micro { font-size: .74rem; line-height: 1.35; }
 .modal-copy dt,
@@ -664,7 +646,6 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
 .engine-data-table td:last-child span { font-size: .61rem; }
 
 @media (max-width: 1050px) {
-  .header-actions > a:first-child { display: none; }
   .track-overview { grid-template-columns: 1fr; }
   .track-column:first-child { padding-right: 0; border-right: 0; border-bottom: 1px solid var(--line); }
   .track-column:last-child { padding-left: 0; }
