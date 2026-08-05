@@ -62,8 +62,7 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /Simulation-engine track/);
   assert.match(html, /Track A/);
   assert.match(html, /Track B/);
-  assert.match(html, /PAPER DATA \/ SIM-TO-REAL GAP/);
-  assert.ok(html.indexOf('id="results"') < html.indexOf("PAPER DATA / SIM-TO-REAL GAP"), "the interactive gap chart should appear in the results section");
+  assert.doesNotMatch(html, /PAPER DATA \/ SIM-TO-REAL GAP|metric-aware gap · log scale/);
   assert.doesNotMatch(html, /◇|▶/);
   assert.match(html, /<nav aria-label="Primary navigation"><a href="#protocol">Protocol<\/a><a href="#benchmark">Benchmark<\/a><a href="#results">Results<\/a><a href="#paper">Paper<\/a><\/nav>/);
   assert.match(html, /Coming soon/);

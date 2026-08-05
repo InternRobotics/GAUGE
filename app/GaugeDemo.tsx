@@ -167,7 +167,8 @@ function metricGap(value: number | null, target: EngineMetric["target"]) {
   return Math.abs(value);
 }
 
-function EngineGapChart() {
+// Retained for a future results view after complete per-task coverage is verified.
+export function EngineGapChart() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [chartMetricIndex, setChartMetricIndex] = useState<0 | 1>(0);
   const [selectedTaskIndex, setSelectedTaskIndex] = useState(9);
@@ -591,7 +592,6 @@ export function GaugeDemo() {
       <section className="section results" id="results">
         <div className="section-kicker">04 / Simulation-engine diagnosis</div>
         <div className="section-title-grid"><h2>Physical fidelity is<br />mechanism-specific</h2><p>No engine stays uniformly faithful across every regime. Dynamic contact, rapid cloth motion, and volumetric deformation expose the widest sim-to-real gaps, while the leading simulator changes from task to task.</p></div>
-        <div className="results-gap-module hero-instrument" aria-label="Interactive simulator gap diagnostic"><div className="instrument-topline"><span>PAPER DATA / SIM-TO-REAL GAP</span><span className="live-dot">TABLE 3 · 14 TASKS</span></div><EngineGapChart /></div>
         <div className="result-filter-bar">
           <div role="tablist" aria-label="Filter engine results">{([{"key":"all","label":"All","count":14},{"key":"rigid","label":"Rigid","count":7},{"key":"textile","label":"Textile","count":3},{"key":"soft","label":"Soft body","count":4}] as const).map((option) => <button key={option.key} className={engineFilter === option.key ? "active" : ""} onClick={() => { setEngineFilter(option.key); const first = option.key === "all" ? 0 : engineResults.findIndex((result) => result.category === option.key); if (first >= 0) setSelectedEngineIndex(first); }} role="tab" aria-selected={engineFilter === option.key}>{option.label} <span>{option.count}</span></button>)}</div>
           <label>Order<select value={resultSort} onChange={(event) => setResultSort(event.target.value as "order" | "regime")}><option value="order">Paper order</option><option value="regime">Physical regime</option></select></label>
