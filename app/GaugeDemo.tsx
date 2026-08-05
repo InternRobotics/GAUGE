@@ -127,8 +127,25 @@ const citationText = `@article{wang2026gauge,
 const taskVariants = (task: TrialTask) => task.id >= 2 && task.id <= 4 ? 3 : 1;
 const taskObservable = (task: TrialTask) => task.category === "rigid" ? "6-DoF position P(t)" : task.category === "textile" || task.category === "cable" ? "Gaussian curvature K(t)" : "Triangle area A(t)";
 
-function TraceCanvas() {
+const heroEngineNames = ["Isaac Sim", "Genesis", "Newton"] as const;
+const heroEngineColors = ["#7652c8", "#7185a3", "#d46a3a"] as const;
+
+function metricGap(value: number | null, target: EngineMetric["target"]) {
+  if (value === null) return null;
+  if (target === "one") return Math.abs(value - 1);
+  if (target === "zero") return Math.abs(value);
+  return Math.abs(value);
+}
+
+function EngineGapChart() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [chartMetricIndex, setChartMetricIndex] = useState<0 | 1>(0);
+  const [selectedTaskIndex, setSelectedTaskIndex] = useState(9);
+  const [visibleEngines, setVisibleEngines] = useState<[boolean, boolean, boolean]>([true, true, true]);
+  const selectedResult = engineResults[selectedTaskIndex];
+  const selectedMetric = selectedResult.metrics[chartMetricIndex];
+  const selectedGaps = selectedMetric.values.map((value) => metricGap(value, selectedMetric.target));
+  const bestGap = Math.min(...selectedGaps.filter((value): value is number => value !== null));
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -145,25 +162,93 @@ function TraceCanvas() {
       const w = rect.width;
       const h = rect.height;
       ctx.clearRect(0, 0, w, h);
-      ctx.strokeStyle = "rgba(21, 27, 38, 0.09)";
-      ctx.lineWidth = 1;
-      for (let x = 0; x <= w; x += w / 6) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
-      for (let y = 0; y <= h; y += h / 4) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
-      const traces = [
-        { color: "#151b26", width: 3, dash: [] as number[], amp: 0.3, drift: 0 },
-        { color: "#7652c8", width: 2, dash: [7, 6], amp: 0.28, drift: -0.015 },
-        { color: "#7a879d", width: 2, dash: [3, 6], amp: 0.39, drift: 0.02 },
+      const inset = { top: 16, right: 12, bottom: 14, left: 43 };
+      const plotWidth = w - inset.left - inset.right;
+      const plotHeight = h - inset.top - inset.bottom;
+      const taskX = (index: number) => inset.left + ((index + 0.5) / engineResults.length) * plotWidth;
+      const minLog = -1.3;
+      const maxLog = 2.35;
+      const gapY = (gap: number) => {
+        const log = Math.max(minLog, Math.min(maxLog, Math.log10(Math.max(gap, 0.05))));
+        return inset.top + (1 - (log - minLog) / (maxLog - minLog)) * plotHeight;
+      };
+
+      const domains = [
+        { start: 0, end: 7, fill: "rgba(118, 82, 200, .055)" },
+        { start: 7, end: 10, fill: "rgba(43, 102, 214, .045)" },
+        { start: 10, end: 14, fill: "rgba(65, 142, 58, .05)" },
       ];
-      traces.forEach((trace, index) => {
-        ctx.beginPath(); ctx.setLineDash(trace.dash); ctx.strokeStyle = trace.color; ctx.lineWidth = trace.width;
-        for (let i = 0; i <= 100; i += 1) {
-          const t = i / 100;
-          const x = 10 + t * (w - 20);
-          const decay = Math.exp(-1.45 * t);
-          const y = h * 0.51 - Math.sin(t * Math.PI * 4.25 + index * 0.08) * h * trace.amp * decay + t * h * trace.drift;
-          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-        }
+      domains.forEach((domain) => {
+        const x = inset.left + (domain.start / engineResults.length) * plotWidth;
+        const width = ((domain.end - domain.start) / engineResults.length) * plotWidth;
+        ctx.fillStyle = domain.fill;
+        ctx.fillRect(x, inset.top, width, plotHeight);
+      });
+
+      ctx.font = "11px ui-monospace, SFMono-Regular, Consolas, monospace";
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+      [0.1, 1, 10, 100].forEach((tick) => {
+        const y = gapY(tick);
+        ctx.beginPath();
+        ctx.strokeStyle = tick === 1 ? "rgba(21, 27, 38, .24)" : "rgba(21, 27, 38, .09)";
+        ctx.setLineDash(tick === 1 ? [4, 4] : []);
+        ctx.moveTo(inset.left, y);
+        ctx.lineTo(w - inset.right, y);
         ctx.stroke();
+        ctx.fillStyle = "#68717e";
+        ctx.fillText(`${tick}x`, inset.left - 7, y);
+      });
+
+      [7, 10].forEach((boundary) => {
+        const x = inset.left + (boundary / engineResults.length) * plotWidth;
+        ctx.beginPath();
+        ctx.setLineDash([]);
+        ctx.strokeStyle = "rgba(21, 27, 38, .18)";
+        ctx.moveTo(x, inset.top);
+        ctx.lineTo(x, h - inset.bottom);
+        ctx.stroke();
+      });
+
+      const selectedX = taskX(selectedTaskIndex);
+      ctx.fillStyle = "rgba(21, 27, 38, .055)";
+      ctx.fillRect(selectedX - plotWidth / engineResults.length / 2, inset.top, plotWidth / engineResults.length, plotHeight);
+      ctx.beginPath();
+      ctx.setLineDash([3, 4]);
+      ctx.strokeStyle = "rgba(21, 27, 38, .34)";
+      ctx.moveTo(selectedX, inset.top);
+      ctx.lineTo(selectedX, h - inset.bottom);
+      ctx.stroke();
+
+      heroEngineNames.forEach((_, engineIndex) => {
+        if (!visibleEngines[engineIndex]) return;
+        ctx.beginPath();
+        ctx.setLineDash([]);
+        ctx.strokeStyle = heroEngineColors[engineIndex];
+        ctx.lineWidth = engineIndex === 0 ? 2.6 : 2.2;
+        let drawing = false;
+        engineResults.forEach((result, resultIndex) => {
+          const gap = metricGap(result.metrics[chartMetricIndex].values[engineIndex], result.metrics[chartMetricIndex].target);
+          if (gap === null) { drawing = false; return; }
+          const x = taskX(resultIndex);
+          const y = gapY(gap);
+          if (drawing) ctx.lineTo(x, y); else ctx.moveTo(x, y);
+          drawing = true;
+        });
+        ctx.stroke();
+
+        engineResults.forEach((result, resultIndex) => {
+          const gap = metricGap(result.metrics[chartMetricIndex].values[engineIndex], result.metrics[chartMetricIndex].target);
+          if (gap === null) return;
+          const selected = resultIndex === selectedTaskIndex;
+          ctx.beginPath();
+          ctx.fillStyle = selected ? "#f8f7f2" : heroEngineColors[engineIndex];
+          ctx.strokeStyle = heroEngineColors[engineIndex];
+          ctx.lineWidth = selected ? 3 : 1.5;
+          ctx.arc(taskX(resultIndex), gapY(gap), selected ? 5.2 : 2.8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+        });
       });
       ctx.setLineDash([]);
     };
@@ -171,9 +256,70 @@ function TraceCanvas() {
     const observer = new ResizeObserver(draw);
     observer.observe(canvas);
     return () => observer.disconnect();
-  }, []);
+  }, [chartMetricIndex, selectedTaskIndex, visibleEngines]);
 
-  return <canvas ref={canvasRef} aria-label="Representative real and simulated trajectories" />;
+  const setTaskFromPointer = (clientX: number) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const left = 43;
+    const right = 12;
+    const plotWidth = rect.width - left - right;
+    const relative = Math.max(0, Math.min(plotWidth - 1, clientX - rect.left - left));
+    setSelectedTaskIndex(Math.floor((relative / plotWidth) * engineResults.length));
+  };
+
+  const toggleEngine = (engineIndex: number) => {
+    setVisibleEngines((current) => {
+      if (current[engineIndex] && current.filter(Boolean).length === 1) return current;
+      const next = [...current] as [boolean, boolean, boolean];
+      next[engineIndex] = !next[engineIndex];
+      return next;
+    });
+  };
+
+  const directionLabel = selectedMetric.target === "low" ? "lower is better" : selectedMetric.target === "one" ? "closer to 1 is better" : "closer to 0 is better";
+
+  return (
+    <>
+      <div className="gap-toolbar">
+        <div className="gap-metric-switch" role="tablist" aria-label="Metric set">
+          <button className={chartMetricIndex === 0 ? "active" : ""} role="tab" aria-selected={chartMetricIndex === 0} onClick={() => setChartMetricIndex(0)}>Primary metric</button>
+          <button className={chartMetricIndex === 1 ? "active" : ""} role="tab" aria-selected={chartMetricIndex === 1} onClick={() => setChartMetricIndex(1)}>Secondary metric</button>
+        </div>
+        <div className="gap-engine-switch" aria-label="Visible simulators">
+          {heroEngineNames.map((name, index) => <button key={name} className={visibleEngines[index] ? "active" : ""} aria-pressed={visibleEngines[index]} onClick={() => toggleEngine(index)}><i style={{ backgroundColor: heroEngineColors[index] }} />{name}</button>)}
+        </div>
+      </div>
+      <div className="gap-chart-panel">
+        <span className="gap-axis-label">metric-aware gap · log scale</span>
+        <canvas
+          ref={canvasRef}
+          tabIndex={0}
+          aria-label={`Simulator gap across 14 tasks. Selected ${selectedResult.task}, ${selectedMetric.label}. Use left and right arrow keys to change task.`}
+          onMouseMove={(event) => setTaskFromPointer(event.clientX)}
+          onClick={(event) => setTaskFromPointer(event.clientX)}
+          onKeyDown={(event) => {
+            if (event.key === "ArrowLeft") { event.preventDefault(); setSelectedTaskIndex((current) => Math.max(0, current - 1)); }
+            if (event.key === "ArrowRight") { event.preventDefault(); setSelectedTaskIndex((current) => Math.min(engineResults.length - 1, current + 1)); }
+          }}
+        />
+        <div className="gap-domain-axis" aria-hidden="true"><span>Rigid body · 7</span><span>Textile · 3</span><span>Soft body · 4</span></div>
+      </div>
+      <div className="gap-readout" aria-live="polite">
+        <div className="gap-task-copy"><span>{selectedResult.category} / {selectedMetric.label}</span><strong>{selectedResult.task}</strong><p>{selectedResult.note}</p><small>{directionLabel} · source: Table 3 in the manuscript</small></div>
+        <div className="gap-values">
+          {heroEngineNames.map((name, index) => {
+            const value = selectedMetric.values[index];
+            const gap = selectedGaps[index];
+            const best = gap !== null && Math.abs(gap - bestGap) < 1e-9;
+            return <div key={name} className={best ? "best" : ""}><span><i style={{ backgroundColor: heroEngineColors[index] }} />{name}</span><strong>{value === null ? "—" : value.toFixed(2)}</strong><small>{best ? "closest" : gap === null ? "no rollout" : `gap ${gap.toFixed(2)}`}</small></div>;
+          })}
+        </div>
+      </div>
+      <p className="gap-method">Gap index uses normalized RMSE/DTW directly, |score - 1| for LSD/MTE/PD, and |EL| for energy loss. Lower is better.</p>
+    </>
+  );
 }
 
 function TrialVideo({ task, controls = false }: { task: TrialTask; controls?: boolean }) {
@@ -335,53 +481,35 @@ export function GaugeDemo() {
         <div className="header-actions"><a className="header-cta" href="/gauge.pdf" target="_blank" rel="noreferrer">Read paper <span>↗</span></a><a className="github-link" href="#github-coming-soon" aria-disabled="true" aria-label="GitHub repository coming soon" title="GitHub repository coming soon" onClick={(event) => event.preventDefault()}><MarkGithubIcon size={24} /></a></div>
       </header>
 
-      <section className="hero" id="top">
-        <div className="hero-copy">
-          <p className="eyebrow"><span>Measurement-grounded</span> physical fidelity</p>
-          <h1 aria-label="Does it move right, or just look right?"><span>Does it</span><span>move right,</span><span>or just <em>look</em></span><span>right?</span></h1>
-          <p className="hero-deck">GAUGE diagnoses how simulation engines and video world models reproduce—or violate—real-world physics.</p>
-          <div className="hero-actions"><a className="button primary" href="#results">Open the diagnostic</a><a className="button secondary" href="#benchmark">Explore 22 tasks <span>↓</span></a><span className="button code-link code-disabled" aria-label="Code release coming soon"><b>Code</b><small>Coming soon</small></span></div>
-        </div>
-        <div className="hero-instrument" aria-label="Physical fidelity diagnostic preview">
-          <div className="instrument-topline"><span>LIVE DIAGNOSTIC / PENDULUM</span><span className="live-dot">REAL → SIM</span></div>
-          <div className="trace-panel"><div className="trace-labels"><span><i className="real" />Real mean</span><span><i className="isaac" />Isaac Sim</span><span><i className="genesis" />Genesis</span></div><TraceCanvas /><span className="axis axis-y">angle</span><span className="axis axis-x">time →</span></div>
-          <div className="instrument-readout">
-            <div className="dial-wrap"><div className="dial"><i /><span>0.61</span><small>FIDELITY</small></div></div>
-            <div className="readout-copy"><span>Observed deviation</span><strong>Period drift</strong><p>Shape agreement can hide an incorrect physical parameter.</p></div>
-            <div className="status-stack"><span>PD <b>2.47 s</b></span><span>REAL <b>1.14 s</b></span><span>Δ <b className="warn">+1.33 s</b></span></div>
-          </div>
-        </div>
-        <div className="hero-footer"><p className="hero-paper-title"><strong>GAUGE</strong> — A Measurement-Grounded Benchmark for Physical Fidelity in Simulation Engines and Video World Models</p><div className="authors"><p>Shuai Wang · Yaxin Feng · Xuekun Jiang · Shihan Tian · Ningyu Yan · Xing Shen · Chaoyang Lyu · Hui Wang · Yunsong Zhou · Hanqing Wang · Jiangmiao Pang · Yang Xiang · Xing Gao · Chunhua Shen · Weinan Zhang</p><span>Shanghai AI Laboratory · HKUST · Shanghai Jiao Tong University · Zhejiang University</span></div></div>
+      <section className="academic-hero" id="top">
+        <p className="academic-kicker">A measurement-grounded physical fidelity benchmark</p>
+        <h1>GAUGE</h1>
+        <h2>A Measurement-Grounded Benchmark for Physical Fidelity<br />in Simulation Engines and Video World Models</h2>
+        <p className="academic-deck">Measure physical fidelity against the real world—not visual plausibility.</p>
+        <div className="academic-authors"><p>Shuai Wang · Yaxin Feng · Xuekun Jiang · Shihan Tian · Ningyu Yan · Xing Shen · Chaoyang Lyu · Hui Wang · Yunsong Zhou · Hanqing Wang · Jiangmiao Pang · Yang Xiang · Xing Gao · Chunhua Shen · Weinan Zhang</p><span>Shanghai Artificial Intelligence Laboratory · HKUST · Shanghai Jiao Tong University · Zhejiang University</span></div>
+        <div className="academic-actions"><a className="button primary" href="/gauge.pdf" target="_blank" rel="noreferrer">Read the paper <span>↗</span></a><span className="button secondary code-disabled">Code · Coming soon</span><span className="button secondary code-disabled">Dataset · Coming soon</span></div>
+        <figure className="academic-framework">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/paper/overview.png" alt="GAUGE benchmark framework connecting real-world experiments to simulation-engine and video world-model evaluation tracks" />
+          <figcaption><span><strong>Benchmark framework</strong> · real-world ground truth anchors both evaluation tracks.</span><a href="/paper/overview.png" target="_blank" rel="noreferrer">Open full figure ↗</a></figcaption>
+        </figure>
       </section>
 
-      <section className="stat-ribbon" aria-label="Benchmark statistics">
-        <div><strong>22</strong><span>task families</span></div><div><strong>≈1,560</strong><span>real trials</span></div><div><strong>4</strong><span>physical regimes</span></div><div><strong>2</strong><span>evaluation tracks</span></div>
+      <section className="benchmark-composition" aria-labelledby="composition-title">
+        <div className="composition-intro"><p className="section-kicker">Benchmark composition</p><h2 id="composition-title">Coverage, not a scorecard.</h2><p>GAUGE combines repeated physical measurements, four material regimes, and two diagnostic tracks. The rings summarize the dataset structure without reducing the benchmark to four disconnected headline numbers.</p></div>
+        <div className="composition-grid">
+          <article><div className="composition-ring task-ring"><div><strong>22</strong><span>task families</span></div></div><div className="composition-copy"><h3>Four physical regimes</h3><ul className="ring-legend"><li><i className="rigid" />Rigid body <b>8</b></li><li><i className="cable" />Cable <b>1</b></li><li><i className="textile" />Textile <b>6</b></li><li><i className="soft" />Soft body <b>7</b></li></ul></div></article>
+          <article><div className="composition-ring capture-ring"><div><strong>≈1,560</strong><span>real trials</span></div></div><div className="composition-copy"><h3>Repeated measurement</h3><p><b>16</b> infrared cameras surround a calibrated capture volume and record motion at <b>180 Hz</b>.</p></div></article>
+          <article><div className="composition-ring track-ring"><div><strong>2</strong><span>evaluation tracks</span></div></div><div className="composition-copy"><h3>One empirical anchor</h3><ul className="ring-legend track-legend"><li><i className="engine" />Simulation engines <b>14 tasks</b></li><li><i className="world" />Video world models <b>5 tasks</b></li></ul></div></article>
+        </div>
       </section>
 
       <section className="section intro" id="protocol">
         <div className="section-kicker">01 / The protocol</div>
         <div className="section-title-grid"><h2>One ground truth.<br />Two complementary tracks.</h2><p>GAUGE starts from repeated real-world experiments, calibrated metadata, and uncertainty—not visual preference. The same foundation diagnoses numerical simulators and generative video models.</p></div>
-        <figure className="paper-overview protocol-figure">
-          {/* The framework is a local paper figure with fixed intrinsic content. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/paper/overview.png" alt="GAUGE evaluation framework from the paper" />
-          <figcaption>The complete GAUGE pipeline: real-world measurements anchor both diagnostic tracks.</figcaption>
-        </figure>
-        <div className="principle-grid">
-          <article><div className="principle-meta"><span>Principle 01</span><b>Ground truth</b></div><h3>Measurement-grounded</h3><p>Sixteen infrared cameras capture motion at 180 Hz. Repeated trials yield millimeter-level trajectories and uncertainty estimates.</p></article>
-          <article><div className="principle-meta"><span>Principle 02</span><b>Coverage</b></div><h3>Cross-regime</h3><p>One benchmark spans rigid bodies, flexible cables, textiles, and volumetric soft bodies.</p></article>
-          <article><div className="principle-meta"><span>Principle 03</span><b>Readout</b></div><h3>Diagnostic by design</h3><p>Trajectory error, equation form, physical parameters, and temporal stability remain separate signals.</p></article>
-        </div>
-        <div className="track-map-intro"><span>Two evaluation tracks</span><p>Both begin with the same measured real-world foundation. Track A evaluates numerical simulation; Track B evaluates generated video.</p></div>
-        <div className="track-overview">
-          <article className="track-column engine-track">
-            <header><span className="track-badge">Track A</span><div><h3>Simulation-engine track</h3><p>How accurately does a numerical simulator reproduce measured outcomes?</p></div></header>
-            <div className="track-steps"><div><b>A1</b><h4>Reconstruct</h4><p>Match real initial states, geometry, materials, and calibrated parameters.</p></div><div><b>A2</b><h4>Simulate</h4><p>Run Isaac Sim, Genesis, and Newton on fourteen representative task families.</p></div><div><b>A3</b><h4>Compare</h4><p>Measure generalized trajectory error with RMSE, DTW, and task-specific metrics.</p></div></div>
-          </article>
-          <article className="track-column world-track">
-            <header><span className="track-badge">Track B</span><div><h3>Video world-model track</h3><p>Does generated motion obey the right law at the right physical scale?</p></div></header>
-            <div className="track-steps"><div><b>B1</b><h4>Condition</h4><p>Provide a shared first frame and a verified task prompt.</p></div><div><b>B2</b><h4>Generate</h4><p>Evaluate six video models on five rigid-body tasks.</p></div><div><b>B3</b><h4>Diagnose</h4><p>Recover SAM3 trajectories and test law form, parameters, and timing.</p></div></div>
-          </article>
+        <div className="protocol-track-pair">
+          <article className="engine-track"><header><span>Track A</span><div><h3>Simulation-engine track</h3><p>Measured states and calibrated materials are reconstructed in Isaac Sim, Genesis, and Newton, then compared through task-specific trajectories.</p></div></header><div className="track-flow"><b>Reconstruct</b><i>→</i><b>Simulate</b><i>→</i><b>Compare</b></div><small>14 task families · generalized trajectory metrics</small></article>
+          <article className="world-track"><header><span>Track B</span><div><h3>Video world-model track</h3><p>A shared first frame and verified prompt produce rollouts whose recovered trajectories are tested for law form, scale, and timing.</p></div></header><div className="track-flow"><b>Condition</b><i>→</i><b>Generate</b><i>→</i><b>Diagnose</b></div><small>5 rigid-body tasks · 6 video models</small></article>
         </div>
       </section>
 
@@ -413,6 +541,7 @@ export function GaugeDemo() {
       <section className="section results" id="results">
         <div className="section-kicker">03 / Engine diagnosis</div>
         <div className="section-title-grid"><h2>Physical fidelity is<br />mechanism-specific.</h2><p>No engine stays uniformly faithful across every regime. Dynamic contact, rapid cloth motion, and volumetric deformation expose the widest sim-to-real gaps, while the leading simulator changes from task to task.</p></div>
+        <div className="results-gap-module hero-instrument" aria-label="Interactive simulator gap diagnostic"><div className="instrument-topline"><span>PAPER DATA / SIM-TO-REAL GAP</span><span className="live-dot">TABLE 3 · 14 TASKS</span></div><EngineGapChart /></div>
         <div className="result-filter-bar">
           <div role="tablist" aria-label="Filter engine results">{([{"key":"all","label":"All","count":14},{"key":"rigid","label":"Rigid","count":7},{"key":"textile","label":"Textile","count":3},{"key":"soft","label":"Soft body","count":4}] as const).map((option) => <button key={option.key} className={engineFilter === option.key ? "active" : ""} onClick={() => { setEngineFilter(option.key); const first = option.key === "all" ? 0 : engineResults.findIndex((result) => result.category === option.key); if (first >= 0) setSelectedEngineIndex(first); }} role="tab" aria-selected={engineFilter === option.key}>{option.label} <span>{option.count}</span></button>)}</div>
           <label>Order<select value={resultSort} onChange={(event) => setResultSort(event.target.value as "order" | "regime")}><option value="order">Paper order</option><option value="regime">Physical regime</option></select></label>

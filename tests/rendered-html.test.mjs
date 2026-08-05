@@ -23,9 +23,11 @@ test("server-renders the GAUGE research demo", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>GAUGE \| Measuring Physical Fidelity<\/title>/i);
-  assert.match(html, /Does it move right, or just look right/);
   assert.match(html, /A Measurement-Grounded Benchmark for Physical Fidelity in Simulation Engines and Video World Models/);
-  assert.ok(html.indexOf("GAUGE diagnoses how simulation engines") < html.indexOf("A Measurement-Grounded Benchmark"), "the diagnosis summary should precede the full paper title");
+  assert.match(html, /Measure physical fidelity against the real world/);
+  assert.ok(html.indexOf('class="academic-hero"') < html.indexOf('class="benchmark-composition"'), "the academic paper header should precede benchmark statistics");
+  assert.match(html, /class="academic-framework"/);
+  assert.match(html, /class="composition-ring task-ring"/);
   assert.match(html, /<strong>22<\/strong><span>task families<\/span>/);
   assert.match(html, /22 task families/);
   assert.match(html, /Four physical regimes/);
@@ -43,11 +45,11 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /Cantilever Beam/);
   assert.doesNotMatch(html, /Paper Table|Search tasks/i);
   assert.match(html, /Simulation-engine track/);
-  assert.match(html, /Principle 01/);
   assert.match(html, /Track A/);
   assert.match(html, /Track B/);
+  assert.match(html, /PAPER DATA \/ SIM-TO-REAL GAP/);
+  assert.ok(html.indexOf('id="results"') < html.indexOf("PAPER DATA / SIM-TO-REAL GAP"), "the interactive gap chart should appear in the results section");
   assert.doesNotMatch(html, /◇|▶/);
-  assert.ok(html.indexOf("protocol-figure") < html.indexOf("principle-grid"), "the overview figure should precede protocol detail cards");
   assert.match(html, /<nav aria-label="Primary navigation"><a href="#protocol">Protocol<\/a><a href="#benchmark">Benchmark<\/a><a href="#results">Results<\/a><a href="#paper">Paper<\/a><\/nav>/);
   assert.match(html, /Coming soon/);
   assert.doesNotMatch(html, /https:\/\/github\.com\/NINGYURICHARD\/gauge-web/);
