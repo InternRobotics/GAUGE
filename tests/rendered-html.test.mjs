@@ -1,8 +1,21 @@
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
+import katex from "katex";
 
 const projectRoot = new URL("../", import.meta.url);
+
+test("compiles the observable dimensions as valid LaTeX", () => {
+  const formulae = [
+    String.raw`P(t) \in \mathbb{R}^{3}`,
+    String.raw`K(t) \in \mathbb{R}^{N_m}`,
+    String.raw`A(t) \in \mathbb{R}^{N_f}`,
+  ];
+
+  for (const formula of formulae) {
+    assert.doesNotThrow(() => katex.renderToString(formula, { strict: "error", throwOnError: true }));
+  }
+});
 
 async function render() {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
@@ -29,6 +42,8 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /Corresponding author/);
   assert.ok(html.indexOf('class="academic-hero"') < html.indexOf('class="benchmark-composition"'), "the academic paper header should precede benchmark statistics");
   assert.match(html, /class="academic-framework"/);
+  assert.match(html, /paper\/overview-hd\.png/);
+  assert.match(html, /paper\/overview\.pdf/);
   assert.match(html, /<svg class="mini-mark"/);
   assert.doesNotMatch(html, /mini-mark" style="background-image/);
   assert.match(html, /class="composition-ring task-ring"/);
@@ -66,11 +81,19 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /Rigid marker frame/);
   assert.match(html, /Object-centre position/);
   assert.match(html, /Generalized trajectory/);
+  assert.match(html, /class="math-inline"/);
+  assert.match(html, /<msub><mi>N<\/mi><mi>m<\/mi><\/msub>/);
+  assert.match(html, /<msub><mi>N<\/mi><mi>f<\/mi><\/msub>/);
+  assert.doesNotMatch(html, /all Nm textile markers|all Nf mesh faces/);
   assert.doesNotMatch(html, /Question answered:/);
   assert.match(html, /Physical fidelity is/);
   assert.match(html, /Dynamic contact, rapid cloth motion, and volumetric deformation/);
   assert.match(html, /recover equation form while still missing the correct physical scale and timing/);
   assert.match(html, /Rope Winding/);
+  assert.match(html, /successive collisions/);
+  assert.match(html, /A flexible rope winds while repeatedly making self-contact/);
+  assert.match(html, /local tensile response/);
+  assert.doesNotMatch(html, /winds around supports|distributed tensile response/);
   assert.match(html, /Cantilever Beam/);
   assert.doesNotMatch(html, /Paper Table|Search tasks/i);
   assert.match(html, /Simulation-engine track/);

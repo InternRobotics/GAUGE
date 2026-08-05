@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import { MarkGithubIcon } from "@primer/octicons-react";
+import katex from "katex";
 
 type TaskCategory = "rigid" | "cable" | "textile" | "soft";
 type TaskFilter = "all" | TaskCategory;
@@ -38,9 +40,26 @@ type PaperDetail = {
   kicker: string;
   title: string;
   summary: string;
-  items: { label: string; value: string }[];
+  items: { label: string; value: ReactNode }[];
   footnote?: string;
 };
+
+const observableFormula = {
+  position: String.raw`P(t) \in \mathbb{R}^{3}`,
+  curvature: String.raw`K(t) \in \mathbb{R}^{N_m}`,
+  area: String.raw`A(t) \in \mathbb{R}^{N_f}`,
+} as const;
+
+function InlineMath({ tex, label }: { tex: string; label?: string }) {
+  const html = katex.renderToString(tex, {
+    displayMode: false,
+    output: "htmlAndMathml",
+    strict: "error",
+    throwOnError: true,
+  });
+
+  return <span className="math-inline" aria-label={label} dangerouslySetInnerHTML={{ __html: html }} />;
+}
 
 const assetUrl = (path: string) =>
   `${import.meta.env.BASE_URL}${path.replace(/^\/+/, "")}`;
@@ -55,19 +74,19 @@ const categoryLabels: Record<TaskCategory, string> = {
 const tasks: TrialTask[] = [
   { id: 1, slug: "slope-contact", category: "rigid", title: "Slope Contact", description: "A tri-rectangular tetrahedron falls and collides along a sloped contact surface.", physics: ["Slope collision"], materials: "Wood · Plastic" },
   { id: 2, slug: "nonsmooth-contact", category: "rigid", title: "Nonsmooth Contact", description: "Wedges and pyramids fall into groove-shaped bases with nonsmooth geometry.", physics: ["Codimensional collision"], materials: "Wood · Plastic" },
-  { id: 3, slug: "slope-slider", category: "rigid", title: "Slope Slider", description: "A cube slides down an inclined wooden plane under controlled friction.", physics: ["Static friction", "Kinetic friction"], materials: "Wood · Plastic · Metal" },
-  { id: 4, slug: "turntable", category: "rigid", title: "Turntable", description: "An off-center cube moves on a rotating platform in a non-inertial frame.", physics: ["Friction", "Non-inertial frame"], materials: "Wood · Plastic · Metal" },
+  { id: 3, slug: "slope-slider", category: "rigid", title: "Slope Slider", description: "A cube slides down an inclined wooden plane under different conditions.", physics: ["Static friction", "Kinetic friction"], materials: "Wood · Plastic · Metal" },
+  { id: 4, slug: "turntable", category: "rigid", title: "Turntable", description: "An off-center cube moves on a non-inertial rotating platform", physics: ["Friction", "Non-inertial frame"], materials: "Wood · Plastic · Metal" },
   { id: 5, slug: "bouncing-ball", category: "rigid", title: "Bouncing Ball", description: "A rubber ball repeatedly impacts the ground with diminishing bounce height.", physics: ["Rapid impact", "Restitution"], materials: "Rubber" },
-  { id: 6, slug: "newtons-cradle", category: "rigid", title: "Newton’s Cradle", description: "Closely fitted metal balls transfer momentum through repeated collisions.", physics: ["Momentum transfer"], materials: "Metal" },
+  { id: 6, slug: "newtons-cradle", category: "rigid", title: "Newton’s Cradle", description: "Closely fitted metal balls transfer momentum through successive collisions.", physics: ["Momentum transfer"], materials: "Metal" },
   { id: 7, slug: "wall-breaking", category: "rigid", title: "Wall Breaking", description: "A wrecking ball collides with and breaks a wall assembled from blocks.", physics: ["Dense collision"], materials: "Wood" },
   { id: 8, slug: "pendulum", category: "rigid", title: "Pendulum", description: "A ball on a rigid rod oscillates while gradually losing energy.", physics: ["Periodic motion", "Energy behavior"], materials: "Metal" },
-  { id: 9, slug: "rope-winding", category: "cable", title: "Rope Winding", description: "A flexible rope winds around supports while repeatedly making self-contact.", physics: ["Self-collision", "Stretch modulus"], materials: "Rubber" },
-  { id: 10, slug: "textile-stretching", category: "textile", title: "Textile Stretching", description: "A fabric sheet is pulled to reveal its distributed tensile response.", physics: ["Stretch modulus"], materials: "Six fabric types" },
+  { id: 9, slug: "rope-winding", category: "cable", title: "Rope Winding", description: "A flexible rope winds while repeatedly making self-contact.", physics: ["Self-collision", "Stretch modulus"], materials: "Rubber" },
+  { id: 10, slug: "textile-stretching", category: "textile", title: "Textile Stretching", description: "A fabric sheet is pulled to reveal its local tensile response.", physics: ["Stretch modulus"], materials: "Six fabric types" },
   { id: 11, slug: "textile-bending", category: "textile", title: "Textile Bending", description: "A supported textile sags naturally under gravity and bending resistance.", physics: ["Bending modulus"], materials: "Six fabric types" },
-  { id: 12, slug: "textile-flinging", category: "textile", title: "Textile Flinging", description: "Rapid acceleration drives flutter, folding, and high-frequency cloth motion.", physics: ["High-acceleration cloth"], materials: "Six fabric types" },
-  { id: 13, slug: "funnel", category: "textile", title: "Funnel", description: "A textile is drawn through an opening, coupling contact and friction.", physics: ["Collision", "Friction"], materials: "Six fabric types" },
+  { id: 12, slug: "textile-flinging", category: "textile", title: "Textile Flinging", description: "Rapid acceleration drives flutter, folding, and air-resistance cloth motion.", physics: ["High-acceleration cloth"], materials: "Six fabric types" },
+  { id: 13, slug: "funnel", category: "textile", title: "Funnel", description: "A textile is drawn through a hole.", physics: ["Collision", "Friction"], materials: "Six fabric types" },
   { id: 14, slug: "rotating-ball", category: "textile", title: "Rotating Ball", description: "A rotating ball drives a sheet through distributed surface friction.", physics: ["Static friction", "Kinetic friction"], materials: "Rayon · Satin · Uniform cloth" },
-  { id: 15, slug: "tablecloth-pulling", category: "textile", title: "Tablecloth Pulling", description: "A textile is pulled beneath rigid objects without moving them uniformly.", physics: ["Static friction", "Kinetic friction"], materials: "Wood · Plastic · Metal" },
+  { id: 15, slug: "tablecloth-pulling", category: "textile", title: "Tablecloth Pulling", description: "A textile is pulled beneath rigid objects.", physics: ["Static friction", "Kinetic friction"], materials: "Wood · Plastic · Metal" },
   { id: 16, slug: "foam-stretching", category: "soft", title: "Foam Stretching", description: "An elastic cuboid is stretched to expose volumetric tensile response.", physics: ["Stretch modulus"], materials: "Soft · Hard foam" },
   { id: 17, slug: "foam-compressing", category: "soft", title: "Foam Compressing", description: "A foam block is compressed while markers measure local deformation.", physics: ["Compression modulus"], materials: "Soft · Hard foam" },
   { id: 18, slug: "foam-shearing", category: "soft", title: "Foam Shearing", description: "Opposing motion shears a foam block and reveals off-axis strain.", physics: ["Shear modulus"], materials: "Soft · Hard foam" },
@@ -564,8 +583,8 @@ export function GaugeDemo() {
         <div className="academic-actions"><a className="button primary" href={assetUrl("gauge.pdf")} target="_blank" rel="noreferrer">Read the paper <span>↗</span></a><span className="button secondary code-disabled">Code · Coming soon</span><span className="button secondary code-disabled">Dataset · Coming soon</span></div>
         <figure className="academic-framework">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={assetUrl("paper/overview.png")} alt="GAUGE benchmark framework connecting real-world experiments to simulation-engine and video world-model evaluation tracks" />
-          <figcaption><span><strong>Benchmark framework</strong> · both evaluation tracks share the same real-world experimental foundation.</span><a href={assetUrl("paper/overview.png")} target="_blank" rel="noreferrer">Open full figure ↗</a></figcaption>
+          <img src={assetUrl("paper/overview-hd.png")} alt="GAUGE benchmark framework connecting real-world experiments to simulation-engine and video world-model evaluation tracks" />
+          <figcaption><span><strong>Benchmark framework</strong> · both evaluation tracks share the same real-world experimental foundation.</span><a href={assetUrl("paper/overview.pdf")} target="_blank" rel="noreferrer">Open full figure ↗</a></figcaption>
         </figure>
       </section>
 
@@ -589,12 +608,12 @@ export function GaugeDemo() {
 
       <section className="section measurement">
         <div className="section-kicker">02 / Measurement language</div>
-        <div className="section-title-grid"><h2>Different bodies need<br />different observables</h2><p>All experiments are captured with reflective markers, but GAUGE does not force every body into the same state description. It derives a regime-specific generalized trajectory from the marker geometry: position for rigid bodies, curvature for textiles, and local face area for volumetric deformation.</p></div>
+        <div className="section-title-grid"><h2>Different bodies need<br />different observables</h2><p>All experiments are captured with reflective markers, but GAUGE does not force every body into the same state description. It derives a regime-specific generalized trajectory according to geometry: position for rigid bodies, curvature for textiles, and local face area for volumetric deformable bodies.</p></div>
         <div className="measurement-map" aria-label="Marker representations mapped to regime-specific generalized trajectories"><div><b>Rigid marker frame</b><span>Object-centre position <strong>P(t)</strong></span></div><i>→</i><div><b>Textile marker mesh</b><span>Marker-wise curvature <strong>K(t)</strong></span></div><i>→</i><div><b>Soft-body surface mesh</b><span>Triangular-face area <strong>A(t)</strong></span></div></div>
         <div className="observable-grid">
-          <article><div className="observable-icon position"><i /><b>marker observations → fitted P(t)</b></div><span>RIGID BODY</span><h3>Position P(t)</h3><p className="observable-definition">Generalized trajectory · P(t) ∈ R³</p><p>Markers fixed to the object define a body-fixed frame at its geometric centre. Motion capture reconstructs the full 6-DoF pose; GAUGE uses the frame centre’s 3D position P(t) for trajectory comparison.</p><button onClick={() => setPaperDetail({ kicker: "Rigid-body generalized trajectory", title: "From a marker frame to position P(t)", summary: "The marker dots are not the trajectory themselves: their rigid arrangement lets motion capture fit a body-fixed coordinate frame at the object’s geometric centre.", items: [{ label: "Measured representation", value: "Reflective markers rigidly attached to the object and observed by the 16-camera array" }, { label: "Reconstruction", value: "A 6-DoF body pose is fitted at every time step from the marker configuration" }, { label: "Generalized trajectory", value: "The reconstructed frame-centre position P(t) ∈ R³" }, { label: "Evaluation role", value: "Real and simulated P(t) trajectories are compared through generalized trajectory error" }] })}>How P(t) is derived <span>↗</span></button></article>
-          <article><div className="observable-icon curvature"><i /><i /><i /><b>marker mesh → curvature</b></div><span>TEXTILE + CABLE</span><h3>Curvature K(t)</h3><p className="observable-definition">Generalized trajectory · K(t) ∈ Rᴺᵐ</p><p>Neighboring textile markers form a tracked surface mesh. GAUGE computes Gaussian curvature at each marker, preserving distributed bending that a single centre position would discard.</p><button onClick={() => setPaperDetail({ kicker: "Textile generalized trajectory", title: "From a marker mesh to curvature K(t)", summary: "Textile motion is represented by a field over the tracked surface rather than by one object centre.", items: [{ label: "Measured representation", value: "3D positions of markers connected into a tracked surface mesh" }, { label: "Per-marker quantity", value: "Discrete Gaussian curvature computed from the local mesh geometry" }, { label: "Generalized trajectory", value: "K(t), the vector of curvature values at all Nm textile markers" }, { label: "Evaluation role", value: "The field retains bending and folding patterns across the textile" }] })}>How K(t) is derived <span>↗</span></button></article>
-          <article><div className="observable-icon area"><i /><b>mesh faces → area</b></div><span>VOLUMETRIC SOFT BODY</span><h3>Triangle area A(t)</h3><p className="observable-definition">Generalized trajectory · A(t) ∈ Rᴺᶠ</p><p>Adjacent surface markers form triangular mesh faces. Their areas over time provide a local deformation representation for the volumetric body instead of collapsing it to one point.</p><button onClick={() => setPaperDetail({ kicker: "Deformable-body generalized trajectory", title: "From mesh faces to area A(t)", summary: "Local face areas preserve spatially distributed deformation on the tracked soft-body surface.", items: [{ label: "Measured representation", value: "3D marker positions connected into a triangulated surface mesh" }, { label: "Per-face quantity", value: "Area of every triangular face formed by neighboring markers" }, { label: "Generalized trajectory", value: "A(t), the vector of areas for all Nf mesh faces" }, { label: "Evaluation role", value: "Area changes expose local stretching and compression throughout the motion" }] })}>How A(t) is derived <span>↗</span></button></article>
+          <article><div className="observable-icon position"><i /><b>marker observations → fitted position</b></div><span>RIGID BODY</span><h3>Position P(t)</h3><p className="observable-definition">Generalized trajectory · <InlineMath tex={observableFormula.position} label="P of t belongs to R cubed" /></p><p>Markers fixed to the object define a body-fixed frame at its geometric centre. Motion capture traces the 6-DoF pose; GAUGE uses the frame centre’s 3D position P(t) for trajectory comparison.</p><button onClick={() => setPaperDetail({ kicker: "Rigid-body generalized trajectory", title: "From a marker frame to position P(t)", summary: "The marker dots are not the trajectory themselves: their rigid arrangement lets motion capture fit a body-fixed coordinate frame at the object’s geometric centre.", items: [{ label: "Measured representation", value: "Reflective markers rigidly attached to the object and observed by the 16-camera array" }, { label: "Reconstruction", value: "A 6-DoF body pose is calculated at every time step from the marker configuration" }, { label: "Generalized trajectory", value: <>The reconstructed frame-centre position <InlineMath tex={observableFormula.position} label="P of t belongs to R cubed" /></> }, { label: "Evaluation role", value: "Real and simulated P(t) trajectories are compared through generalized trajectory error" }] })}>How P(t) is derived <span>↗</span></button></article>
+          <article><div className="observable-icon curvature"><i /><i /><i /><b>marker mesh → curvature</b></div><span>TEXTILE + CABLE</span><h3>Curvature K(t)</h3><p className="observable-definition">Generalized trajectory · <InlineMath tex={observableFormula.curvature} label="K of t belongs to R to the power N sub m" /></p><p>Neighboring textile markers form a tracked surface mesh. GAUGE computes Gaussian curvature at each marker, preserving distributed bending that a single centre position would discard.</p><button onClick={() => setPaperDetail({ kicker: "Textile generalized trajectory", title: "From a marker mesh to curvature K(t)", summary: "Textile motion is represented by a field over the tracked surface rather than by one object centre.", items: [{ label: "Measured representation", value: "3D positions of markers connected into a tracked surface mesh" }, { label: "Per-marker quantity", value: "Discrete Gaussian curvature computed from the local mesh geometry" }, { label: "Generalized trajectory", value: <><InlineMath tex={observableFormula.curvature} label="K of t belongs to R to the power N sub m" />, with one curvature value for each tracked textile marker</> }, { label: "Evaluation role", value: "The field retains bending and folding patterns across the textile" }] })}>How K(t) is derived <span>↗</span></button></article>
+          <article><div className="observable-icon area"><i /><b>mesh faces → area</b></div><span>VOLUMETRIC SOFT BODY</span><h3>Triangle area A(t)</h3><p className="observable-definition">Generalized trajectory · <InlineMath tex={observableFormula.area} label="A of t belongs to R to the power N sub f" /></p><p>Adjacent surface markers form triangular mesh faces. Their areas over time provide a local deformation representation for the volumetric body instead of collapsing it to one point.</p><button onClick={() => setPaperDetail({ kicker: "Deformable-body generalized trajectory", title: "From mesh faces to area A(t)", summary: "Local face areas preserve spatially distributed deformation on the tracked soft-body surface.", items: [{ label: "Measured representation", value: "3D marker positions connected into a triangulated surface mesh" }, { label: "Per-face quantity", value: "Area of every triangular face formed by neighboring markers" }, { label: "Generalized trajectory", value: <><InlineMath tex={observableFormula.area} label="A of t belongs to R to the power N sub f" />, with one area value for each triangular mesh face</> }, { label: "Evaluation role", value: "Area changes expose local deformation throughout the motion" }] })}>How A(t) is derived <span>↗</span></button></article>
         </div>
       </section>
 
