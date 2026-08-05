@@ -61,6 +61,7 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /Open Slope Contact trial|class="trial-open"/);
   assert.match(html, /Physical fidelity is/);
   assert.match(html, /No engine stays uniformly faithful/);
+  assert.doesNotMatch(html, /All engines stay comparatively close|Fast, spatially varying cloth motion|Newton diverges strongly/);
   assert.doesNotMatch(html, />Lead<\/th>/);
   assert.match(html, /16 cameras/);
   assert.match(html, /Cosmos3-Super-I2V/);
