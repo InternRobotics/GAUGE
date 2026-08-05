@@ -116,7 +116,12 @@ const worldScenes = [
   ] },
 ] as const;
 
-const citationText = "Wang, S., Feng, Y., Jiang, X., et al. (2026). GAUGE: A Measurement-Grounded Benchmark for Physical Fidelity in Simulation Engines and Video World Models.";
+const citationText = `@article{wang2026gauge,
+  title   = {GAUGE: A Measurement-Grounded Benchmark for Physical Fidelity in Simulation Engines and Video World Models},
+  author  = {Wang, Shuai and Feng, Yaxin and Jiang, Xuekun and Tian, Shihan and Yan, Ningyu and Shen, Xing and Lyu, Chaoyang and Wang, Hui and Zhou, Yunsong and Wang, Hanqing and Pang, Jiangmiao and Xiang, Yang and Gao, Xing and Shen, Chunhua and Zhang, Weinan},
+  year    = {2026},
+  note    = {Manuscript}
+}`;
 
 const taskVariants = (task: TrialTask) => task.id >= 2 && task.id <= 4 ? 3 : 1;
 const taskObservable = (task: TrialTask) => task.category === "rigid" ? "6-DoF position P(t)" : task.category === "textile" || task.category === "cable" ? "Gaussian curvature K(t)" : "Triangle area A(t)";
@@ -326,7 +331,7 @@ export function GaugeDemo() {
       <header className="site-header">
         <a className="brand" href="#top" aria-label="GAUGE home"><MiniMark /><span>GAUGE</span></a>
         <nav aria-label="Primary navigation"><a href="#protocol">Protocol</a><a href="#benchmark">Benchmark</a><a href="#results">Results</a><a href="#paper">Paper</a></nav>
-        <div className="header-actions"><span className="code-coming" aria-label="Code release coming soon"><b>Code</b><small>Coming soon</small></span><a className="header-cta" href="/gauge.pdf" target="_blank" rel="noreferrer">Read paper <span>↗</span></a></div>
+        <div className="header-actions"><span className="github-coming" role="img" aria-label="GitHub repository coming soon" title="GitHub repository coming soon"><i aria-hidden="true" /></span><a className="header-cta" href="/gauge.pdf" target="_blank" rel="noreferrer">Read paper <span>↗</span></a></div>
       </header>
 
       <section className="hero" id="top">
@@ -453,7 +458,7 @@ export function GaugeDemo() {
         </div>
       </section>
 
-      <section className="paper-cta" id="paper"><div><p className="eyebrow">GAUGE / Benchmark & citation</p><h2>Explore the evidence.<br />Cite the benchmark.</h2></div><div className="paper-cta-copy"><p>Start with the 22-task atlas and the interactive diagnostics. The paper remains available for methods, ablations, and complete tables.</p><div className="paper-cta-actions"><a className="button primary" href="#benchmark">Browse the benchmark <span>↓</span></a><a className="button secondary" href="/gauge.pdf" target="_blank" rel="noreferrer">Read the paper <span>↗</span></a></div><div className="citation-box"><span>Suggested citation</span><p>{citationText}</p><button onClick={copyCitation}>{citationCopied ? "Citation copied" : "Copy citation"}</button></div></div></section>
+      <section className="paper-cta" id="paper"><div><p className="eyebrow">GAUGE / Benchmark & citation</p><h2>Explore the evidence.<br />Cite the benchmark.</h2></div><div className="paper-cta-copy"><p>Start with the 22-task atlas and the interactive diagnostics. The paper remains available for methods, ablations, and complete tables.</p><div className="paper-cta-actions"><a className="button primary" href="#benchmark">Browse the benchmark <span>↓</span></a><a className="button secondary" href="/gauge.pdf" target="_blank" rel="noreferrer">Read the paper <span>↗</span></a></div><div className="citation-box"><div className="citation-head"><span>BibTeX</span><button onClick={copyCitation}>{citationCopied ? "Copied" : "Copy"}</button></div><pre><code>{citationText}</code></pre></div></div></section>
       <footer className="site-footer"><a className="brand" href="#top"><MiniMark /><span>GAUGE</span></a><p>Measurement-grounded physical fidelity for simulation and video world models.</p><span>© 2026 Shanghai Artificial Intelligence Laboratory.</span></footer>
       {activeTask && <TaskModal task={activeTask} onClose={() => setActiveTask(null)} />}
       {paperDetail && <PaperDetailModal detail={paperDetail} onClose={() => setPaperDetail(null)} />}

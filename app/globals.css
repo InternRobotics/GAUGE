@@ -318,6 +318,25 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
 .code-disabled small { color: var(--orange-dark); font-family: var(--mono); font-size: .62rem; font-weight: 800; letter-spacing: .035em; text-transform: uppercase; }
 .button.code-disabled { border: 1px dashed var(--line); background: rgba(255,255,255,.24); }
 .button.code-disabled:hover { transform: none; }
+.github-coming {
+  width: 32px;
+  height: 32px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  cursor: default;
+}
+.github-coming i {
+  width: 22px;
+  height: 22px;
+  display: block;
+  border-radius: 50%;
+  background-color: var(--ink);
+  background-image: url("https://github.com/favicon.ico");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
 
 .micro { font-size: .74rem; line-height: 1.35; }
 .modal-copy dt,
@@ -465,9 +484,11 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
 .paper-cta-actions { display: flex; flex-wrap: wrap; gap: 9px; }
 .paper-cta-actions .button.secondary { background: rgba(255,255,255,.42); }
 .citation-box { padding: 20px; border: 1px solid #c7c2b8; border-radius: 12px; background: rgba(255,255,255,.32); }
-.citation-box > span { color: var(--orange-dark); font-family: var(--mono); font-size: .7rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
-.paper-cta .citation-box p { max-width: none; margin: 12px 0 15px; color: #485361; font-family: var(--sans); font-size: .78rem; line-height: 1.58; }
-.citation-box button { padding: 0 0 4px; border: 0; border-bottom: 1px solid #7a7189; background: transparent; color: var(--ink); cursor: pointer; font-size: .73rem; font-weight: 780; }
+.citation-head { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+.citation-head span { color: var(--orange-dark); font-family: var(--mono); font-size: .7rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+.citation-head button { padding: 0 0 3px; border: 0; border-bottom: 1px solid #7a7189; background: transparent; color: var(--ink); cursor: pointer; font-size: .73rem; font-weight: 780; }
+.citation-box pre { margin: 15px 0 0; color: #384452; font-family: var(--mono); font-size: .69rem; line-height: 1.58; white-space: pre-wrap; overflow-wrap: anywhere; }
+.citation-box code { font: inherit; }
 
 .site-footer { min-height: 130px; grid-template-columns: auto minmax(280px, 1fr) auto; gap: 36px; }
 .site-footer p { max-width: 58ch; margin: 0; color: #aab4c1; font-size: .79rem; line-height: 1.5; }
