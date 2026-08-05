@@ -1423,16 +1423,27 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
   grid-column: auto;
   grid-row: auto;
   width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-bottom: 1px solid #c7c2b8;
 }
 .conclusion-list li {
-  grid-template-columns: 44px minmax(0, 1fr);
-  gap: 18px;
-  padding: 20px 0;
+  min-height: 190px;
+  grid-template-columns: 1fr;
+  align-content: start;
+  gap: 20px;
+  padding: 26px clamp(24px, 3vw, 42px);
+  border-right: 1px solid #c7c2b8;
+  border-bottom: 0;
 }
-.conclusion-list p { max-width: 68ch; font-size: 1.08rem; }
+.conclusion-list li:first-child { padding-left: 0; }
+.conclusion-list li:last-child { padding-right: 0; border-right: 0; }
+.conclusion-list li > span { padding-top: 0; }
+.conclusion-list p { max-width: 29ch; font-size: 1.08rem; }
 .paper-cta-actions {
   grid-column: auto;
   grid-row: auto;
+  justify-content: center;
 }
 
 .citation-section {
@@ -1493,6 +1504,21 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
 @media (max-width: 700px) {
   .citation-section .citation-box { padding: 18px; }
   .citation-section .citation-box pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+}
+
+@media (max-width: 900px) {
+  .conclusion-list { grid-template-columns: 1fr; }
+  .conclusion-list li,
+  .conclusion-list li:first-child,
+  .conclusion-list li:last-child {
+    min-height: auto;
+    grid-template-columns: 38px minmax(0, 1fr);
+    padding: 20px 0;
+    border-right: 0;
+    border-bottom: 1px solid #c7c2b8;
+  }
+  .conclusion-list li:last-child { border-bottom: 0; }
+  .conclusion-list p { max-width: 62ch; }
 }
 
 @media (max-width: 780px) {
