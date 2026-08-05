@@ -36,6 +36,9 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /16 cameras/);
   assert.match(html, /Cosmos3-Super-I2V/);
   assert.match(html, /Video models can look plausible and still predict the wrong physics/);
+  assert.match(html, /Physical fidelity is/);
+  assert.match(html, /Dynamic contact, rapid cloth motion, and volumetric deformation/);
+  assert.match(html, /recover equation form while still missing the correct physical scale and timing/);
   assert.match(html, /Rope Winding/);
   assert.match(html, /Cantilever Beam/);
   assert.doesNotMatch(html, /Paper Table|Search tasks/i);
