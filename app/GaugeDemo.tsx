@@ -117,6 +117,23 @@ const worldScenes = [
   ] },
 ] as const;
 
+const worldModelCatalog = [
+  { id: "cosmos3-nano", name: "Cosmos3-Nano", resolution: "832×480 · 24 fps", hasPhysicsPrompt: true },
+  { id: "cosmos3-super-i2v", name: "Cosmos3-Super-I2V", resolution: "832×480 · 24 fps", hasPhysicsPrompt: true },
+  { id: "wan-2-2", name: "Wan-2.2", resolution: "832×464 · 16 fps", hasPhysicsPrompt: true },
+  { id: "wan-2-7", name: "Wan-2.7", resolution: "1264×728 · 30 fps", hasPhysicsPrompt: true },
+  { id: "seedance-2", name: "Seedance 2.0", resolution: "864×496 · 24 fps", hasPhysicsPrompt: false },
+  { id: "genie-3", name: "Genie 3", resolution: "1280×704 · 20 fps", hasPhysicsPrompt: false },
+] as const;
+
+const worldSceneVideoSlugs: Record<(typeof worldScenes)[number]["id"], string> = {
+  slope: "slope-slider",
+  turntable: "turntable",
+  bounce: "bouncing-ball",
+  cradle: "newtons-cradle",
+  pendulum: "pendulum",
+};
+
 const citationText = `@article{wang2026gauge,
   title   = {GAUGE: A Measurement-Grounded Benchmark for Physical Fidelity in Simulation Engines and Video World Models},
   author  = {Wang, Shuai and Feng, Yaxin and Jiang, Xuekun and Tian, Shihan and Yan, Ningyu and Shen, Xing and Lyu, Chaoyang and Wang, Hui and Zhou, Yunsong and Wang, Hanqing and Pang, Jiangmiao and Xiang, Yang and Gao, Xing and Shen, Chunhua and Zhang, Weinan},
@@ -447,6 +464,7 @@ export function GaugeDemo() {
   const [promptMode, setPromptMode] = useState<"standard" | "negative">("standard");
   const [paperDetail, setPaperDetail] = useState<PaperDetail | null>(null);
   const [citationCopied, setCitationCopied] = useState(false);
+  const worldVideoGridRef = useRef<HTMLDivElement>(null);
   const filteredTasks = useMemo(() => {
     const list = filter === "all" ? [...tasks] : tasks.filter((task) => task.category === filter);
     return list.sort((a, b) => taskSort === "title" ? a.title.localeCompare(b.title) : taskSort === "category" ? a.category.localeCompare(b.category) || a.id - b.id : taskSort === "variants" ? taskVariants(b) - taskVariants(a) || a.id - b.id : a.id - b.id);
@@ -473,6 +491,15 @@ export function GaugeDemo() {
     }
   };
 
+  const controlWorldVideos = (action: "play" | "pause" | "restart") => {
+    const videos = worldVideoGridRef.current?.querySelectorAll("video") ?? [];
+    videos.forEach((video) => {
+      if (action === "pause") video.pause();
+      if (action === "restart") video.currentTime = 0;
+      if (action !== "pause") video.play().catch(() => undefined);
+    });
+  };
+
   return (
     <main>
       <header className="site-header">
@@ -486,7 +513,7 @@ export function GaugeDemo() {
         <h1>GAUGE</h1>
         <h2>A Measurement-Grounded Benchmark for Physical Fidelity<br />in Simulation Engines and Video World Models</h2>
         <p className="academic-deck">Measure physical fidelity against the real world—not visual plausibility.</p>
-        <div className="academic-authors"><p>Shuai Wang · Yaxin Feng · Xuekun Jiang · Shihan Tian · Ningyu Yan · Xing Shen · Chaoyang Lyu · Hui Wang · Yunsong Zhou · Hanqing Wang · Jiangmiao Pang · Yang Xiang · Xing Gao · Chunhua Shen · Weinan Zhang</p><span>Shanghai Artificial Intelligence Laboratory · HKUST · Shanghai Jiao Tong University · Zhejiang University</span></div>
+        <div className="academic-authors"><p className="author-list"><span className="author-name">Shuai Wang<sup>*</sup></span> · <span className="author-name">Yaxin Feng<sup>*</sup></span> · <span className="author-name">Xuekun Jiang<sup>*</sup></span> · <span className="author-name">Shihan Tian<sup>*</sup></span> · <span className="author-name">Ningyu Yan<sup>*</sup></span> · Xing Shen · Chaoyang Lyu · Hui Wang · Yunsong Zhou · Hanqing Wang · Jiangmiao Pang · Yang Xiang · <span className="author-name">Xing Gao<sup title="Corresponding author">✉️</sup></span> · Chunhua Shen · Weinan Zhang</p><span className="affiliations">Shanghai Artificial Intelligence Laboratory · HKUST · Shanghai Jiao Tong University · Zhejiang University</span><span className="author-note"><b>*</b> Equal contribution · <b>✉️</b> Corresponding author</span></div>
         <div className="academic-actions"><a className="button primary" href="/gauge.pdf" target="_blank" rel="noreferrer">Read the paper <span>↗</span></a><span className="button secondary code-disabled">Code · Coming soon</span><span className="button secondary code-disabled">Dataset · Coming soon</span></div>
         <figure className="academic-framework">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -572,9 +599,19 @@ export function GaugeDemo() {
         <div className="world-lab" id="world-model-lab">
           <div className="world-scene-tabs" role="tablist" aria-label="World-model evaluation scene">{worldScenes.map((scene) => <button key={scene.id} className={worldScene.id === scene.id ? "active" : ""} onClick={() => setWorldSceneId(scene.id)} role="tab" aria-selected={worldScene.id === scene.id}><span>{scene.title}</span><small>{scene.metric} · {scene.parameter}</small></button>)}</div>
           <article className="world-scene-summary"><div><p>Selected scene</p><h3>{worldScene.title}</h3><span>{worldScene.baseline}</span></div><p>{worldScene.summary}</p><button onClick={() => setPaperDetail({ kicker: "World-model protocol", title: `${worldScene.title}: ${worldScene.metric} and ${worldScene.parameter}`, summary: worldScene.summary, items: [{ label: "Shared input", value: "Every model receives the same initial frame and standardized text prompt" }, { label: "Trajectory recovery", value: "SAM3 segmentation and centroid tracking recover motion directly from pixels" }, { label: "Primary signal", value: worldScene.metric }, { label: "Physical parameter", value: worldScene.parameter }, { label: "Real baseline", value: worldScene.baseline }] })}>Open scene method ↗</button></article>
-          <div className="prompt-switch"><span>Generation condition</span><div><button className={promptMode === "standard" ? "active" : ""} onClick={() => setPromptMode("standard")}>Standard prompt</button><button className={promptMode === "negative" ? "active" : ""} onClick={() => setPromptMode("negative")}>+ negative prompt</button></div></div>
-          <div className="world-table-panel"><table className="world-data-table"><thead><tr><th>Model</th><th>Condition</th><th>{worldScene.metric}</th><th>{worldScene.parameter}</th><th>Reading</th></tr></thead><tbody>{worldScene.rows.map((row) => { const values = promptMode === "standard" ? row[1] : row[2]; return <tr key={row[0]}><td><strong>{row[0]}</strong></td><td>{promptMode === "standard" ? "Standard" : row[2] ? "Negative" : "Unavailable"}</td><td>{values?.[0] === null || values === null ? "—" : values[0]}</td><td>{values?.[1] === null || values === null ? "—" : values[1]}</td><td><span className={values === null || values[0] === null ? "invalid" : "valid"}>{values === null || values[0] === null ? "No valid rollout" : worldScene.metric === "R²" && values[0] >= .95 ? "Strong form fit" : "Valid trajectory"}</span></td></tr>; })}</tbody></table></div>
-          <div className="model-roster"><span>Evaluated models</span><p>Cosmos3-Nano · Cosmos3-Super-I2V · Wan-2.2 · Wan-2.7 · Seedance 2.0 · Genie 3</p><small>Five image-to-video models plus one interactive world model. Seedance 2.0 and Genie 3 do not report the negative-prompt condition.</small></div>
+          <div className="world-explorer-toolbar"><div className="prompt-switch"><span>Generation condition</span><div><button className={promptMode === "standard" ? "active" : ""} onClick={() => setPromptMode("standard")}>Standard prompt</button><button className={promptMode === "negative" ? "active" : ""} onClick={() => setPromptMode("negative")}>Physics-negative prompt</button></div></div><div className="playback-controls" aria-label="Video playback controls"><button onClick={() => controlWorldVideos("play")}>Play all</button><button onClick={() => controlWorldVideos("pause")}>Pause</button><button onClick={() => controlWorldVideos("restart")}>Restart</button></div></div>
+          <div className="world-result-grid" ref={worldVideoGridRef}>
+            {worldModelCatalog.map((model, modelIndex) => {
+              const row = worldScene.rows[modelIndex];
+              const values = promptMode === "standard" ? row[1] : row[2];
+              const available = promptMode === "standard" || model.hasPhysicsPrompt;
+              const videoPath = available ? `/world-model-results/${worldSceneVideoSlugs[worldScene.id]}/${promptMode === "standard" ? "standard" : "physics"}/${model.id}.mp4` : null;
+              const hasTrajectory = values !== null && values[0] !== null;
+              return <article className={`world-result-card ${available ? "" : "unavailable"}`} key={`${worldScene.id}-${promptMode}-${model.id}`}><header><div><span>Video world model</span><h3>{model.name}</h3></div><small>{model.resolution}</small></header>{videoPath ? <video key={videoPath} src={videoPath} controls muted loop playsInline preload="metadata" aria-label={`${model.name} ${promptMode} output for ${worldScene.title}`} /> : <div className="world-video-unavailable"><strong>—</strong><p>No separate negative-prompt rollout</p></div>}<div className="world-result-reading"><div><span>{worldScene.metric}</span><strong>{values === null || values[0] === null ? "—" : values[0]}</strong></div><div><span>{worldScene.parameter}</span><strong>{values === null || values[1] === null ? "—" : values[1]}</strong></div><small className={hasTrajectory ? "valid" : "invalid"}>{!available ? "Condition unavailable" : hasTrajectory ? worldScene.metric === "R²" && Number(values?.[0]) >= .95 ? "Strong equation-form fit" : "Valid recovered trajectory" : "No valid trajectory"}</small></div></article>;
+            })}
+          </div>
+          <details className="world-data-disclosure"><summary>Exact reported values <span>Open table ↓</span></summary><div className="world-table-panel"><table className="world-data-table"><thead><tr><th>Model</th><th>Condition</th><th>{worldScene.metric}</th><th>{worldScene.parameter}</th><th>Reading</th></tr></thead><tbody>{worldScene.rows.map((row) => { const values = promptMode === "standard" ? row[1] : row[2]; return <tr key={row[0]}><td><strong>{row[0]}</strong></td><td>{promptMode === "standard" ? "Standard" : row[2] ? "Physics-negative" : "Unavailable"}</td><td>{values?.[0] === null || values === null ? "—" : values[0]}</td><td>{values?.[1] === null || values === null ? "—" : values[1]}</td><td><span className={values === null || values[0] === null ? "invalid" : "valid"}>{values === null || values[0] === null ? "No valid rollout" : worldScene.metric === "R²" && values[0] >= .95 ? "Strong form fit" : "Valid trajectory"}</span></td></tr>; })}</tbody></table></div></details>
+          <p className="world-explorer-note">Six models are compared on the same scene and first frame. Seedance 2.0 and Genie 3 do not expose a separate physics-negative condition.</p>
         </div>
       </section>
 

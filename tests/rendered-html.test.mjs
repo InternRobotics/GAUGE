@@ -25,6 +25,8 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /<title>GAUGE \| Measuring Physical Fidelity<\/title>/i);
   assert.match(html, /A Measurement-Grounded Benchmark for Physical Fidelity in Simulation Engines and Video World Models/);
   assert.match(html, /Measure physical fidelity against the real world/);
+  assert.match(html, /Equal contribution/);
+  assert.match(html, /Corresponding author/);
   assert.ok(html.indexOf('class="academic-hero"') < html.indexOf('class="benchmark-composition"'), "the academic paper header should precede benchmark statistics");
   assert.match(html, /class="academic-framework"/);
   assert.match(html, /class="composition-ring task-ring"/);
@@ -37,6 +39,9 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /No engine stays uniformly faithful/);
   assert.match(html, /16 cameras/);
   assert.match(html, /Cosmos3-Super-I2V/);
+  assert.match(html, /class="world-result-grid"/);
+  assert.match(html, /world-model-results\/slope-slider\/standard\/cosmos3-nano\.mp4/);
+  assert.match(html, /Exact reported values/);
   assert.match(html, /Video models can look plausible and still predict the wrong physics/);
   assert.match(html, /Physical fidelity is/);
   assert.match(html, /Dynamic contact, rapid cloth motion, and volumetric deformation/);
