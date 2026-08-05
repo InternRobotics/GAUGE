@@ -167,8 +167,7 @@ sup { color: var(--purple); }
 .result-table th:first-child { text-align: left; }
 .result-table tbody th[rowspan], .result-table tbody td[rowspan] { vertical-align: top; padding-top: 15px; }
 .result-table tbody tr:nth-child(odd):not(.table-group) > * { background: #fcfcfa; }
-.result-table .best { position: relative; color: #4d2e8f; background: var(--purple-soft); font-weight: 900; }
-.result-table .best::after { content: ""; position: absolute; left: 22%; right: 22%; bottom: 5px; height: 2px; background: var(--purple); border-radius: 2px; opacity: .55; }
+.result-table tbody tr:not(.table-group) > .best { color: #4d2e8f; background: var(--purple-soft); font-weight: 900; }
 .uncertainty { color: var(--muted); font-size: .88em; }
 .world-results { margin-top: clamp(72px, 8vw, 118px); }
 .table-scroll-wide { max-height: min(72vh, 700px); }
