@@ -386,8 +386,8 @@ export function GaugeDemo() {
       </section>
 
       <section className="section benchmark" id="benchmark">
-        <div className="section-kicker light">02 / Real-world task atlas</div>
-        <div className="section-title-grid light"><h2>Physics,<br />observed together.</h2><p>Browse real trials as a visual atlas. Each video remains attached to its task, target, materials, and paper details; switch to Dataset only when you want the denser sortable view.</p></div>
+        <div className="section-kicker light">02 / Benchmark task demonstrations</div>
+        <div className="section-title-grid light"><h2>22 task families.<br />Four physical regimes.</h2><p>Approximately 1,560 real trials span rigid bodies, flexible cables, textiles, and volumetric soft bodies. Each task isolates a measurable mechanism—from collision and friction to bending, strain, and large deformation.</p></div>
         <div className="atlas-toolbar">
           <div className="task-filter" role="tablist" aria-label="Filter trial tasks">
             {filterOptions.map((option) => <button key={option.key} className={filter === option.key ? "active" : ""} onClick={() => setFilter(option.key)} role="tab" aria-selected={filter === option.key}><span>{option.label}</span><b>{option.count}</b></button>)}

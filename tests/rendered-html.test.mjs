@@ -27,7 +27,9 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /A Measurement-Grounded Benchmark for Physical Fidelity in Simulation Engines and Video World Models/);
   assert.ok(html.indexOf("GAUGE diagnoses how simulation engines") < html.indexOf("A Measurement-Grounded Benchmark"), "the diagnosis summary should precede the full paper title");
   assert.match(html, /<strong>22<\/strong><span>task families<\/span>/);
-  assert.match(html, /Physics,/);
+  assert.match(html, /22 task families/);
+  assert.match(html, /Four physical regimes/);
+  assert.match(html, /Approximately 1,560 real trials/);
   assert.match(html, /Gallery/);
   assert.match(html, /Physical fidelity is/);
   assert.match(html, /No engine stays uniformly faithful/);
