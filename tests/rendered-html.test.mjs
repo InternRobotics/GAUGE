@@ -35,6 +35,7 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /Cantilever Beam/);
   assert.doesNotMatch(html, /Paper Table|Search tasks/i);
   assert.match(html, /Simulation-engine track/);
+  assert.ok(html.indexOf("protocol-figure") < html.indexOf("principle-grid"), "the overview figure should precede protocol detail cards");
   assert.match(html, /<nav aria-label="Primary navigation"><a href="#protocol">Protocol<\/a><a href="#benchmark">Benchmark<\/a><a href="#results">Results<\/a><a href="#paper">Paper<\/a><\/nav>/);
   assert.match(html, /Coming soon/);
   assert.doesNotMatch(html, /https:\/\/github\.com\/NINGYURICHARD\/gauge-web/);

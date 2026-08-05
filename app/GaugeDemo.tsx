@@ -360,6 +360,12 @@ export function GaugeDemo() {
       <section className="section intro" id="protocol">
         <div className="section-kicker">01 / The protocol</div>
         <div className="section-title-grid"><h2>One ground truth.<br />Two complementary tracks.</h2><p>GAUGE starts from repeated real-world experiments, calibrated metadata, and uncertainty—not visual preference. The same foundation diagnoses numerical simulators and generative video models.</p></div>
+        <figure className="paper-overview protocol-figure">
+          {/* The framework is a local paper figure with fixed intrinsic content. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/paper/overview.png" alt="GAUGE evaluation framework from the paper" />
+          <figcaption>The complete GAUGE pipeline: real-world measurements anchor both diagnostic tracks.</figcaption>
+        </figure>
         <div className="principle-grid">
           <article><span>01</span><h3>Measurement-grounded</h3><p>Sixteen infrared cameras capture motion at 180 Hz. Repeated trials yield millimeter-level trajectories and uncertainty estimates.</p></article>
           <article><span>02</span><h3>Cross-regime</h3><p>One benchmark spans rigid bodies, flexible cables, textiles, and volumetric soft bodies.</p></article>
@@ -375,12 +381,6 @@ export function GaugeDemo() {
             <div className="track-steps"><div><b>01</b><h4>Condition</h4><p>Provide a shared first frame and a verified task prompt.</p></div><div><b>02</b><h4>Generate</h4><p>Evaluate six video models on five rigid-body tasks.</p></div><div><b>03</b><h4>Diagnose</h4><p>Recover SAM3 trajectories and test law form, parameters, and timing.</p></div></div>
           </article>
         </div>
-        <figure className="paper-overview protocol-figure">
-          {/* The framework is a local paper figure with fixed intrinsic content. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/paper/overview.png" alt="GAUGE evaluation framework from the paper" />
-          <figcaption>Real-world measurements anchor both diagnostic tracks.</figcaption>
-        </figure>
       </section>
 
       <section className="section benchmark" id="benchmark">
