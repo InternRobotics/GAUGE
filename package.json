@@ -11,7 +11,7 @@
     "build:pages": "vite build --config vite.pages.config.ts",
     "start": "vinext start",
     "test": "npm run build && node --test tests/rendered-html.test.mjs",
-    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern gh-pages-dist",
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern gh-pages-dist --ignore-pattern assets",
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {

@@ -331,7 +331,7 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
 .academic-deck { margin: 35px auto 0; color: #4f5967; font-size: clamp(1.02rem, 1.4vw, 1.2rem); }
 .academic-authors { max-width: 1200px; margin: 32px auto 0; }
 .academic-authors p { margin: 0; color: #4f5967; font-size: .82rem; font-weight: 520; line-height: 1.8; }
-.academic-authors .author-name { display: inline; margin: 0; color: inherit; font-size: inherit; letter-spacing: 0; }
+.academic-authors .author-name { display: inline-block; margin: 0; color: inherit; font-size: inherit; letter-spacing: 0; white-space: nowrap; }
 .academic-authors .author-name sup { margin-left: 2px; color: var(--orange-dark); font-size: .7em; font-weight: 800; line-height: 0; }
 .academic-authors .affiliations { display: block; margin-top: 9px; color: #727b88; font-size: .78rem; letter-spacing: .015em; }
 .academic-authors .author-note { display: block; margin-top: 8px; color: #7d8590; font-family: var(--mono); font-size: .67rem; letter-spacing: .025em; }
