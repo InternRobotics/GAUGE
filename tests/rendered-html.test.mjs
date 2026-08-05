@@ -30,6 +30,8 @@ test("server-renders the GAUGE research demo", async () => {
   assert.ok(html.indexOf('class="academic-hero"') < html.indexOf('class="benchmark-composition"'), "the academic paper header should precede benchmark statistics");
   assert.match(html, /class="academic-framework"/);
   assert.match(html, /class="composition-ring task-ring"/);
+  assert.match(html, /class="capture-apparatus"/);
+  assert.doesNotMatch(html, /capture-ring/);
   assert.match(html, /<strong>22<\/strong><span>task families<\/span>/);
   assert.match(html, /22 task families/);
   assert.match(html, /Four physical regimes/);
@@ -41,6 +43,7 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /Cosmos3-Super-I2V/);
   assert.match(html, /class="world-result-grid"/);
   assert.match(html, /world-model-results\/slope-slider\/standard\/cosmos3-nano\.mp4/);
+  assert.match(html, /Prompt used/);
   assert.match(html, /Exact reported values/);
   assert.match(html, /Video models can look plausible and still predict the wrong physics/);
   assert.match(html, /Physical fidelity is/);

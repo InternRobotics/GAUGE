@@ -358,8 +358,17 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
 .capture-ring strong { font-size: 1.72rem; }
 .composition-ring span { margin-top: 6px; color: #737c88; font-family: var(--mono); font-size: .65rem; font-weight: 750; text-transform: uppercase; }
 .task-ring { background: conic-gradient(var(--blue) 0 36.36%, #8c6ad0 36.36% 40.91%, #c58a4b 40.91% 68.18%, var(--green) 68.18% 100%); }
-.capture-ring { background: repeating-conic-gradient(var(--orange) 0 8deg, #d8d3ca 8deg 22.5deg); }
 .track-ring { background: conic-gradient(var(--blue) 0 50%, var(--green) 50% 100%); }
+.capture-apparatus { width: 146px; height: 146px; position: relative; display: grid; place-items: center; border: 1px solid #aeb6c0; border-radius: 18px; background: linear-gradient(rgba(23,33,45,.055) 1px, transparent 1px), linear-gradient(90deg, rgba(23,33,45,.055) 1px, transparent 1px), #f7f5f0; background-size: 18px 18px; box-shadow: inset 0 0 0 7px rgba(255,255,255,.45), 0 7px 25px rgba(23,33,45,.08); }
+.capture-apparatus::before,
+.capture-apparatus::after { content: ""; position: absolute; z-index: 0; background: rgba(23,33,45,.16); }
+.capture-apparatus::before { width: 1px; inset-block: 17px; left: 50%; }.capture-apparatus::after { height: 1px; inset-inline: 17px; top: 50%; }
+.capture-volume-mark { width: 76px; height: 64px; position: relative; z-index: 2; display: grid; place-content: center; border: 2px solid var(--ink); background: #f7f5f0; text-align: center; box-shadow: 7px -7px 0 -3px #f7f5f0, 7px -7px 0 -1px var(--orange-dark); }
+.capture-volume-mark span { font-family: var(--serif); font-size: 1.75rem; font-weight: 600; line-height: 1; }
+.capture-volume-mark b { margin-top: 4px; font-family: var(--mono); font-size: .58rem; letter-spacing: .08em; }
+.capture-apparatus > small { position: absolute; right: 11px; bottom: 9px; z-index: 2; color: var(--orange-dark); font-family: var(--mono); font-size: .58rem; font-weight: 800; }
+.capture-node { width: 9px; height: 9px; position: absolute; z-index: 3; border: 2px solid #f7f5f0; border-radius: 2px; background: var(--ink); box-shadow: 0 0 0 1px var(--ink); }
+.capture-node.node-a { top: 14px; left: 14px; }.capture-node.node-b { top: 14px; right: 14px; }.capture-node.node-c { bottom: 14px; left: 14px; }.capture-node.node-d { right: 14px; bottom: 14px; }
 .composition-copy h3 { margin: 0 0 13px; font-family: var(--serif); font-size: 1.18rem; font-weight: 600; }
 .composition-copy p { margin: 0; color: var(--muted); font-size: .79rem; line-height: 1.65; }
 .composition-copy p b { color: var(--ink); }
@@ -396,9 +405,18 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
 .world-result-card > header span { color: #9d82dd; font-family: var(--mono); font-size: .7rem; font-weight: 800; letter-spacing: .055em; text-transform: uppercase; }
 .world-result-card > header h3 { margin: 4px 0 0; color: #f4f0e8; font-family: var(--serif); font-size: 1.2rem; font-weight: 600; }
 .world-result-card > header small { max-width: 11ch; color: #8694a5; font-family: var(--mono); font-size: .68rem; line-height: 1.4; text-align: right; }
-.world-result-card > video,
+.world-result-media,
 .world-video-unavailable { width: 100%; aspect-ratio: 16 / 9; display: block; border-block: 1px solid #344153; background: #0d1520; }
-.world-result-card > video { object-fit: cover; }
+.world-result-media { position: relative; overflow: hidden; outline: none; }
+.world-result-media:focus-visible { box-shadow: inset 0 0 0 3px #9d82dd; }
+.world-result-media > video { width: 100%; height: 100%; display: block; object-fit: cover; }
+.world-prompt-overlay { max-height: calc(100% - 22px); position: absolute; z-index: 3; inset: 11px 11px auto; overflow: auto; padding: 9px 11px; border: 1px solid rgba(255,255,255,.18); border-radius: 8px; background: rgba(10,17,26,.92); color: #d8dee7; opacity: 0; pointer-events: none; transform: translateY(-6px); transition: opacity 160ms ease, transform 160ms ease; }
+.world-result-media:hover .world-prompt-overlay,
+.world-result-media:focus .world-prompt-overlay { opacity: 1; pointer-events: auto; transform: translateY(0); }
+.world-prompt-overlay > span,
+.world-prompt-overlay > b { display: block; color: #b59ce9; font-family: var(--mono); font-size: .68rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.world-prompt-overlay > b { margin-top: 9px; color: #d6a284; }
+.world-prompt-overlay p { margin: 5px 0 0; color: #d8dee7; font-size: .72rem; line-height: 1.45; }
 .world-video-unavailable { display: grid; place-content: center; gap: 6px; padding: 20px; color: #738093; text-align: center; }
 .world-video-unavailable strong { font-family: var(--serif); font-size: 2rem; font-weight: 400; }
 .world-video-unavailable p { margin: 0; font-size: .76rem; }
@@ -434,7 +452,9 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
   .composition-intro { grid-template-columns: 1fr; }
   .composition-intro .section-kicker { grid-column: auto; }
   .composition-grid > article { grid-template-columns: 132px 1fr; padding: 18px; }
-  .composition-ring { width: 124px; height: 124px; padding: 13px; }
+  .composition-ring,
+  .capture-apparatus { width: 124px; height: 124px; }
+  .composition-ring { padding: 13px; }
   .composition-ring strong { font-size: 1.85rem; }
   .protocol-track-pair { grid-template-columns: 1fr; }
   .protocol-track-pair > article:first-child { padding-right: 0; border-right: 0; border-bottom: 1px solid var(--line); }
@@ -448,7 +468,8 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
   .academic-actions { display: grid; grid-template-columns: 1fr; }
   .academic-actions .button { width: 100%; }
   .composition-grid > article { grid-template-columns: 1fr; text-align: center; }
-  .composition-ring { margin: 0 auto; }
+  .composition-ring,
+  .capture-apparatus { margin: 0 auto; }
   .ring-legend { width: min(240px, 100%); margin-inline: auto; text-align: left; }
   .protocol-track-pair header { grid-template-columns: 1fr; min-height: auto; }
   .protocol-track-pair header > span { width: fit-content; padding-inline: 14px; }
