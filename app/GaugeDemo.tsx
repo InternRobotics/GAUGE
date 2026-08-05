@@ -116,6 +116,8 @@ const worldScenes = [
   ] },
 ] as const;
 
+const citationText = "Wang, S., Feng, Y., Jiang, X., et al. (2026). GAUGE: A Measurement-Grounded Benchmark for Physical Fidelity in Simulation Engines and Video World Models.";
+
 const taskVariants = (task: TrialTask) => task.id >= 2 && task.id <= 4 ? 3 : 1;
 const taskObservable = (task: TrialTask) => task.category === "rigid" ? "6-DoF position P(t)" : task.category === "textile" || task.category === "cable" ? "Gaussian curvature K(t)" : "Triangle area A(t)";
 
@@ -292,6 +294,7 @@ export function GaugeDemo() {
   const [worldSceneId, setWorldSceneId] = useState("slope");
   const [promptMode, setPromptMode] = useState<"standard" | "negative">("standard");
   const [paperDetail, setPaperDetail] = useState<PaperDetail | null>(null);
+  const [citationCopied, setCitationCopied] = useState(false);
   const filteredTasks = useMemo(() => {
     const list = filter === "all" ? [...tasks] : tasks.filter((task) => task.category === filter);
     return list.sort((a, b) => taskSort === "title" ? a.title.localeCompare(b.title) : taskSort === "category" ? a.category.localeCompare(b.category) || a.id - b.id : taskSort === "variants" ? taskVariants(b) - taskVariants(a) || a.id - b.id : a.id - b.id);
@@ -308,12 +311,22 @@ export function GaugeDemo() {
   const bestEngineScore = Math.min(...selectedMetric.values.map((value) => metricScore(value, selectedMetric.target)));
   const worldScene = worldScenes.find((scene) => scene.id === worldSceneId) ?? worldScenes[0];
 
+  const copyCitation = async () => {
+    try {
+      await navigator.clipboard.writeText(citationText);
+      setCitationCopied(true);
+      window.setTimeout(() => setCitationCopied(false), 2200);
+    } catch {
+      setCitationCopied(false);
+    }
+  };
+
   return (
     <main>
       <header className="site-header">
         <a className="brand" href="#top" aria-label="GAUGE home"><MiniMark /><span>GAUGE</span></a>
         <nav aria-label="Primary navigation"><a href="#benchmark">Benchmark</a><a href="#protocol">Protocol</a><a href="#results">Results</a><a href="#paper">Paper</a></nav>
-        <div className="header-actions"><a href="https://github.com/NINGYURICHARD/gauge-web" target="_blank" rel="noreferrer">Code <span>↗</span></a><a className="header-cta" href="/gauge.pdf" target="_blank" rel="noreferrer">Read paper <span>↗</span></a></div>
+        <div className="header-actions"><span className="code-coming" aria-label="Code release coming soon"><b>Code</b><small>Coming soon</small></span><a className="header-cta" href="/gauge.pdf" target="_blank" rel="noreferrer">Read paper <span>↗</span></a></div>
       </header>
 
       <section className="hero" id="top">
@@ -321,7 +334,7 @@ export function GaugeDemo() {
           <p className="eyebrow"><span>Measurement-grounded</span> physical fidelity</p>
           <h1>Does it move right,<br />or just <em>look</em> right?</h1>
           <p className="hero-deck">GAUGE diagnoses how simulation engines and video world models reproduce—or violate—real-world physics.</p>
-          <div className="hero-actions"><a className="button primary" href="#results">Open the diagnostic</a><a className="button secondary" href="#benchmark">Explore 22 tasks <span>↓</span></a><a className="button code-link" href="https://github.com/NINGYURICHARD/gauge-web" target="_blank" rel="noreferrer">GitHub code <span>↗</span></a></div>
+          <div className="hero-actions"><a className="button primary" href="#results">Open the diagnostic</a><a className="button secondary" href="#benchmark">Explore 22 tasks <span>↓</span></a><span className="button code-link code-disabled" aria-label="Code release coming soon"><b>Code</b><small>Coming soon</small></span></div>
           <div className="authors"><p>Shuai Wang · Yaxin Feng · Xuekun Jiang · Shihan Tian · Ningyu Yan · Xing Shen · Chaoyang Lyu · Hui Wang · Yunsong Zhou · Hanqing Wang · Jiangmiao Pang · Yang Xiang · Xing Gao · Chunhua Shen · Weinan Zhang</p><span>Shanghai AI Laboratory · HKUST · Shanghai Jiao Tong University · Zhejiang University</span></div>
         </div>
         <div className="hero-instrument" aria-label="Physical fidelity diagnostic preview">
@@ -413,14 +426,14 @@ export function GaugeDemo() {
       </section>
 
       <section className="section world-models">
-        <div className="world-copy"><div className="section-kicker light">04 / World-model diagnosis</div><h2>Plausible motion can still encode the wrong physics.</h2><p>Explore five rigid-body scenes across six video world models. Switch the negative prompt on to see that prompt sensitivity can alter equation-form scores without fixing physical scale.</p><a href="/gauge.pdf" target="_blank" rel="noreferrer">Read the model analysis <span>↗</span></a></div>
+        <div className="world-copy"><div className="section-kicker light">04 / World-model diagnosis</div><h2>Plausible motion can still encode the wrong physics.</h2><p>These are generated videos, not the real trials above. GAUGE tracks the moving object in every frame, fits the expected law, then checks whether its scale and timing match reality.</p><a href="#world-model-lab">Compare all model readings <span>↓</span></a></div>
         <div className="evidence-stack">
-          <article><div><span>Slope slider</span><b>Acceleration</b></div><h3>Closest generation</h3><strong>2.06 <small>m/s²</small></strong><p>Real baseline <b>2.58 m/s²</b> · lowest QFI 13.61</p></article>
-          <article><div><span>Pendulum</span><b>Timing</b></div><h3>Equation form fits</h3><strong>0.99 <small>R²</small></strong><p>Generated periods <b>1.93 / 1.90 s</b> · real 1.06 s</p></article>
-          <article><div><span>Bouncing ball</span><b>Physical scale</b></div><h3>Motion looks plausible</h3><strong>0.088 <small>m/s²</small></strong><p>Versus <b>9.81 m/s²</b> real baseline · lowest QFI 12.50</p></article>
+          <article className="world-video-card featured"><video autoPlay muted loop playsInline preload="metadata"><source src="/world-models/slope-slider.mp4" type="video/mp4" /></video><div className="world-video-label"><span>Seedance 2.0 · Standard prompt</span><b>Slope slider</b></div><div className="world-video-reading"><h3>Looks like a clean slide.</h3><p><strong>0.23 m/s²</strong> recovered acceleration <span>Real: 2.58 m/s² · QFI: 781.51</span></p></div></article>
+          <article className="world-video-card"><video autoPlay muted loop playsInline preload="metadata"><source src="/world-models/pendulum.mp4" type="video/mp4" /></video><div className="world-video-label"><span>Wan-2.7 · Physics-conditioned</span><b>Pendulum</b></div><div className="world-video-reading"><h3>A familiar swing, but the wrong clock.</h3><p><strong>R² 0.72</strong><span>Period: 1.87 s · Real: 1.06 s</span></p></div></article>
+          <article className="world-video-card"><video autoPlay muted loop playsInline preload="metadata"><source src="/world-models/bouncing-ball.mp4" type="video/mp4" /></video><div className="world-video-label"><span>Cosmos3-Nano · Standard prompt</span><b>Bouncing ball</b></div><div className="world-video-reading"><h3>A bounce without gravity’s scale.</h3><p><strong>0.45 m/s²</strong><span>Real gravity: 9.81 m/s² · QFI: 2620.05</span></p></div></article>
           <div className="law-callout"><span>KEY FINDING</span><p>Equation-form agreement does not guarantee correct scale or timing.</p></div>
         </div>
-        <div className="world-lab">
+        <div className="world-lab" id="world-model-lab">
           <div className="world-scene-tabs" role="tablist" aria-label="World-model evaluation scene">{worldScenes.map((scene) => <button key={scene.id} className={worldScene.id === scene.id ? "active" : ""} onClick={() => setWorldSceneId(scene.id)} role="tab" aria-selected={worldScene.id === scene.id}><span>{scene.title}</span><small>{scene.metric} · {scene.parameter}</small></button>)}</div>
           <article className="world-scene-summary"><div><p>Selected scene</p><h3>{worldScene.title}</h3><span>{worldScene.baseline}</span></div><p>{worldScene.summary}</p><button onClick={() => setPaperDetail({ kicker: "World-model protocol", title: `${worldScene.title}: ${worldScene.metric} and ${worldScene.parameter}`, summary: worldScene.summary, items: [{ label: "Shared input", value: "Every model receives the same initial frame and standardized text prompt" }, { label: "Trajectory recovery", value: "SAM3 segmentation and centroid tracking recover motion directly from pixels" }, { label: "Primary signal", value: worldScene.metric }, { label: "Physical parameter", value: worldScene.parameter }, { label: "Real baseline", value: worldScene.baseline }] })}>Open scene method ↗</button></article>
           <div className="prompt-switch"><span>Generation condition</span><div><button className={promptMode === "standard" ? "active" : ""} onClick={() => setPromptMode("standard")}>Standard prompt</button><button className={promptMode === "negative" ? "active" : ""} onClick={() => setPromptMode("negative")}>+ negative prompt</button></div></div>
@@ -431,16 +444,17 @@ export function GaugeDemo() {
 
       <section className="section measurement">
         <div className="section-kicker">05 / Measurement language</div>
-        <div className="section-title-grid"><h2>Different bodies need<br />different observables.</h2><p>GAUGE maps each physical regime to a generalized trajectory, preserving what matters for that body instead of forcing every experiment into a single perceptual metric.</p></div>
+        <div className="section-title-grid"><h2>Different bodies need<br />different observables.</h2><p>“Observable” simply means the quantity GAUGE follows over time. A rigid object moves as one body; cloth bends as a surface; foam changes local shape. Each therefore needs a different measurement.</p></div>
+        <div className="measurement-flow" aria-label="How camera measurements become comparable trajectories"><div><b>01</b><span>Infrared cameras track reflective markers</span></div><i>→</i><div><b>02</b><span>Markers describe the body’s geometry</span></div><i>→</i><div><b>03</b><span>Geometry becomes a trajectory over time</span></div></div>
         <div className="observable-grid">
-          <article><div className="observable-icon position"><i /></div><span>RIGID</span><h3>Position P(t)</h3><p>Millimeter-scale 3D body motion from a body-fixed marker frame.</p></article>
-          <article><div className="observable-icon curvature"><i /><i /><i /></div><span>TEXTILE</span><h3>Curvature K(t)</h3><p>Marker-wise Gaussian curvature captures distributed surface deformation.</p></article>
-          <article><div className="observable-icon area"><i /></div><span>VOLUMETRIC</span><h3>Triangle area A(t)</h3><p>Neighboring marker faces quantify local strain and 3D deformation.</p></article>
+          <article><div className="observable-icon position"><i /><b>tracked markers</b></div><span>RIGID BODY</span><h3>Position P(t)</h3><p className="observable-question">Question answered: where is the object at each moment?</p><p>The dots are motion-capture markers. Together they form a body-fixed frame that recovers millimeter-scale 3D position and pose.</p><button onClick={() => setPaperDetail({ kicker: "Rigid-body observable", title: "How tracked markers become position P(t)", summary: "A rigid object keeps the same internal shape, so a body-fixed marker frame can describe the motion of the whole object.", items: [{ label: "What the dots mean", value: "Reflective markers observed by the 16-camera motion-capture array" }, { label: "What is reconstructed", value: "A six-degree-of-freedom body pose for every captured frame" }, { label: "Generalized trajectory", value: "3D position and pose P(t), compared through trajectory error" }, { label: "Why it works", value: "The distances between markers remain fixed on a rigid body" }] })}>How P(t) is built <span>↗</span></button></article>
+          <article><div className="observable-icon curvature"><i /><i /><i /><b>bending surface</b></div><span>TEXTILE + CABLE</span><h3>Curvature K(t)</h3><p className="observable-question">Question answered: how does the surface bend and fold?</p><p>The arcs represent local patches of a tracked marker mesh. Their Gaussian curvature records distributed deformation over time.</p><button onClick={() => setPaperDetail({ kicker: "Surface observable", title: "How a marker mesh becomes curvature K(t)", summary: "Cloth and cable cannot be reduced to one center point: their changing shape is the physical signal.", items: [{ label: "What the arcs mean", value: "Local patches of the triangulated marker surface" }, { label: "What is reconstructed", value: "The surface geometry around every tracked marker" }, { label: "Generalized trajectory", value: "Marker-wise Gaussian curvature K(t)" }, { label: "Why it works", value: "Curvature preserves bending and folding that a single position would discard" }] })}>How K(t) is built <span>↗</span></button></article>
+          <article><div className="observable-icon area"><i /><b>marker triangle</b></div><span>VOLUMETRIC SOFT BODY</span><h3>Triangle area A(t)</h3><p className="observable-question">Question answered: where is the material stretching or compressing?</p><p>Three neighboring surface markers define a face. Its changing area is a local measure of strain and 3D deformation.</p><button onClick={() => setPaperDetail({ kicker: "Volumetric observable", title: "How marker faces become triangle area A(t)", summary: "A soft body changes shape throughout its volume, so GAUGE follows many local surface faces instead of one global point.", items: [{ label: "What the triangle means", value: "A face joining three neighboring tracked surface markers" }, { label: "What is reconstructed", value: "The area of every local face at every frame" }, { label: "Generalized trajectory", value: "Triangle area A(t), a local proxy for strain" }, { label: "Why it works", value: "Area changes expose stretching and compression even when the object remains in place" }] })}>How A(t) is built <span>↗</span></button></article>
         </div>
       </section>
 
-      <section className="paper-cta" id="paper"><div><p className="eyebrow">GAUGE / 2026</p><h2>Measure the physics,<br />not the impression.</h2></div><div><p>A measurement-grounded benchmark for physical fidelity in simulation engines and video world models.</p><a className="button primary" href="/gauge.pdf" target="_blank" rel="noreferrer">Download the paper <span>↗</span></a></div></section>
-      <footer><a className="brand" href="#top"><MiniMark /><span>GAUGE</span></a><p>Built from the GAUGE paper · Local research demo</p><a href="#top">Back to top ↑</a></footer>
+      <section className="paper-cta" id="paper"><div><p className="eyebrow">GAUGE / Benchmark & citation</p><h2>Explore the evidence.<br />Cite the benchmark.</h2></div><div className="paper-cta-copy"><p>Start with the 22-task atlas and the interactive diagnostics. The paper remains available for methods, ablations, and complete tables.</p><div className="paper-cta-actions"><a className="button primary" href="#benchmark">Browse the benchmark <span>↓</span></a><a className="button secondary" href="/gauge.pdf" target="_blank" rel="noreferrer">Read the paper <span>↗</span></a></div><div className="citation-box"><span>Suggested citation</span><p>{citationText}</p><button onClick={copyCitation}>{citationCopied ? "Citation copied" : "Copy citation"}</button></div></div></section>
+      <footer className="site-footer"><a className="brand" href="#top"><MiniMark /><span>GAUGE</span></a><p>Measurement-grounded physical fidelity for simulation and video world models.</p><span>© 2026 Shanghai Artificial Intelligence Laboratory.</span></footer>
       {activeTask && <TaskModal task={activeTask} onClose={() => setActiveTask(null)} />}
       {paperDetail && <PaperDetailModal detail={paperDetail} onClose={() => setPaperDetail(null)} />}
     </main>

@@ -34,7 +34,11 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /Cantilever Beam/);
   assert.doesNotMatch(html, /Paper Table|Search tasks/i);
   assert.match(html, /Simulation-engine track/);
-  assert.match(html, /GitHub code/);
+  assert.match(html, /Coming soon/);
+  assert.doesNotMatch(html, /https:\/\/github\.com\/NINGYURICHARD\/gauge-web/);
+  assert.match(html, /\/world-models\/slope-slider\.mp4/);
+  assert.match(html, /Suggested citation/);
+  assert.match(html, /© 2026 Shanghai Artificial Intelligence Laboratory/);
   assert.match(html, /http:\/\/localhost(?::3000)?\/og\.png/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|react-loading-skeleton/i);
 });
