@@ -327,7 +327,8 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
 }
 .academic-kicker { margin: 0 0 14px; color: var(--orange-dark); font-family: var(--mono); font-size: .78rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
 .academic-hero h1 { margin: 0; font-family: var(--serif); font-size: clamp(6.4rem, 12vw, 10.8rem); font-weight: 600; letter-spacing: -.075em; line-height: .78; }
-.academic-hero h2 { max-width: 1050px; margin: 34px auto 0; font-family: var(--serif); font-size: clamp(1.75rem, 3vw, 2.75rem); font-weight: 600; letter-spacing: -.035em; line-height: 1.15; }
+.academic-hero h2 { max-width: 1120px; margin: 42px auto 0; font-family: var(--serif); font-size: clamp(1.7rem, 2.65vw, 2.55rem); font-weight: 600; letter-spacing: -.035em; line-height: 1.14; }
+.academic-hero h2 span { display: block; }
 .academic-deck { margin: 35px auto 0; color: #4f5967; font-size: clamp(1.02rem, 1.4vw, 1.2rem); }
 .academic-authors { max-width: 1200px; margin: 32px auto 0; }
 .academic-authors p { margin: 0; color: #4f5967; font-size: .82rem; font-weight: 520; line-height: 1.8; }
@@ -450,8 +451,9 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
   .academic-hero { width: min(calc(100% - 28px), 1320px); padding-top: 54px; }
   .academic-kicker { font-size: .7rem; }
   .academic-hero h1 { font-size: clamp(5.2rem, 26vw, 7rem); }
-  .academic-hero h2 { margin-top: 28px; font-size: clamp(1.5rem, 7.5vw, 2.25rem); }
-  .academic-hero h2 br { display: none; }
+  .academic-hero h2 { margin-top: 32px; font-size: clamp(1.5rem, 7.5vw, 2.25rem); }
+  .academic-hero h2 span { display: inline; }
+  .academic-hero h2 span + span::before { content: " "; }
   .academic-deck { margin-top: 25px; }
   .academic-framework { margin-top: 52px; padding: 11px; }
   .academic-framework figcaption { align-items: flex-start; flex-direction: column; gap: 8px; }
