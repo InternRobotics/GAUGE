@@ -405,7 +405,7 @@ export function GaugeDemo() {
 
       <section className="section results" id="results">
         <div className="section-kicker">03 / Engine diagnosis</div>
-        <div className="section-title-grid"><h2>Every row can drive<br />the diagnosis.</h2><p>Filter fourteen representative evaluations, select any task, and switch between its two reported metrics. The chart and real-world baseline update together.</p></div>
+        <div className="section-title-grid"><h2>Physical fidelity is<br />mechanism-specific.</h2><p>No engine stays uniformly faithful across every regime. Dynamic contact, rapid cloth motion, and volumetric deformation expose the widest sim-to-real gaps, while the leading simulator changes from task to task.</p></div>
         <div className="result-filter-bar">
           <div role="tablist" aria-label="Filter engine results">{([{"key":"all","label":"All","count":14},{"key":"rigid","label":"Rigid","count":7},{"key":"textile","label":"Textile","count":3},{"key":"soft","label":"Soft body","count":4}] as const).map((option) => <button key={option.key} className={engineFilter === option.key ? "active" : ""} onClick={() => { setEngineFilter(option.key); const first = option.key === "all" ? 0 : engineResults.findIndex((result) => result.category === option.key); if (first >= 0) setSelectedEngineIndex(first); }} role="tab" aria-selected={engineFilter === option.key}>{option.label} <span>{option.count}</span></button>)}</div>
           <label>Order<select value={resultSort} onChange={(event) => setResultSort(event.target.value as "order" | "regime")}><option value="order">Paper order</option><option value="regime">Physical regime</option></select></label>

@@ -27,7 +27,8 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /<strong>22<\/strong><span>task families<\/span>/);
   assert.match(html, /Physics,/);
   assert.match(html, /Gallery/);
-  assert.match(html, /Every row can drive/);
+  assert.match(html, /Physical fidelity is/);
+  assert.match(html, /No engine stays uniformly faithful/);
   assert.match(html, /16 cameras/);
   assert.match(html, /Cosmos3-Super-I2V/);
   assert.match(html, /Rope Winding/);
