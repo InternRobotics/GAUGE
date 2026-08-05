@@ -518,7 +518,7 @@ export function GaugeDemo() {
     <main>
       <header className="site-header">
         <a className="brand" href="#top" aria-label="GAUGE home"><MiniMark /><span>GAUGE</span></a>
-        <nav aria-label="Primary navigation"><a href="#protocol">Protocol</a><a href="#benchmark">Benchmark</a><a href="#results">Results</a><a href="#paper">Paper</a></nav>
+        <nav aria-label="Primary navigation"><a href="#protocol">Protocol</a><a href="#benchmark">Benchmark</a><a href="#results">Results</a><a href="#conclusion">Conclusion</a></nav>
         <div className="header-actions"><a className="header-cta" href={assetUrl("gauge.pdf")} target="_blank" rel="noreferrer">Read paper <span>↗</span></a><a className="github-link" href="#github-coming-soon" aria-disabled="true" aria-label="GitHub repository coming soon" title="GitHub repository coming soon" onClick={(event) => event.preventDefault()}><MarkGithubIcon size={24} /></a></div>
       </header>
 
@@ -639,7 +639,7 @@ export function GaugeDemo() {
         </div>
       </section>
 
-      <section className="paper-cta" id="paper"><div><p className="eyebrow">GAUGE / Conclusion</p><h2>Physical fidelity is mechanism-specific</h2></div><div className="paper-cta-copy"><ol className="conclusion-list"><li><span>01</span><p>No simulation engine is uniformly faithful across every physical regime.</p></li><li><span>02</span><p>Dynamic contact, rapid cloth motion, and volumetric deformation expose the largest sim-to-real gaps.</p></li><li><span>03</span><p>Video world models can recover equation form while still missing the correct physical scale and timing.</p></li></ol><div className="paper-cta-actions"><a className="button primary" href="#benchmark">Browse the benchmark <span>↑</span></a><a className="button secondary" href={assetUrl("gauge.pdf")} target="_blank" rel="noreferrer">Read the paper <span>↗</span></a></div></div></section>
+      <section className="paper-cta" id="conclusion"><div><p className="eyebrow">GAUGE / Conclusion</p><h2>Physical fidelity is mechanism-specific</h2></div><div className="paper-cta-copy"><ol className="conclusion-list"><li><span>01</span><p>No simulation engine is uniformly faithful across every physical regime.</p></li><li><span>02</span><p>Dynamic contact, rapid cloth motion, and volumetric deformation expose the largest sim-to-real gaps.</p></li><li><span>03</span><p>Video world models can recover equation form while still missing the correct physical scale and timing.</p></li></ol><div className="paper-cta-actions"><a className="button primary" href="#benchmark">Browse the benchmark <span>↑</span></a><a className="button secondary" href={assetUrl("gauge.pdf")} target="_blank" rel="noreferrer">Read the paper <span>↗</span></a></div></div></section>
 
       <section className="citation-section" id="citation"><div className="citation-shell"><header className="citation-intro"><p className="eyebrow">Reference</p><h2>Citation</h2><p>If you use GAUGE or its benchmark in your research, please cite the work below.</p></header><div className="citation-box"><div className="citation-head"><span>BibTeX</span><button onClick={copyCitation}>{citationCopied ? "Copied" : "Copy"}</button></div><pre><code>{citationText}</code></pre></div></div></section>
       <footer className="site-footer"><a className="brand" href="#top"><MiniMark /><span>GAUGE</span></a><p>Measurement-grounded physical fidelity for simulation and video world models.</p><span>© 2026 Shanghai Artificial Intelligence Laboratory.</span></footer>

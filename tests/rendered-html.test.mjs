@@ -64,7 +64,8 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /Track B/);
   assert.doesNotMatch(html, /PAPER DATA \/ SIM-TO-REAL GAP|metric-aware gap · log scale/);
   assert.doesNotMatch(html, /◇|▶/);
-  assert.match(html, /<nav aria-label="Primary navigation"><a href="#protocol">Protocol<\/a><a href="#benchmark">Benchmark<\/a><a href="#results">Results<\/a><a href="#paper">Paper<\/a><\/nav>/);
+  assert.match(html, /<nav aria-label="Primary navigation"><a href="#protocol">Protocol<\/a><a href="#benchmark">Benchmark<\/a><a href="#results">Results<\/a><a href="#conclusion">Conclusion<\/a><\/nav>/);
+  assert.match(html, /class="paper-cta" id="conclusion"/);
   assert.match(html, /Coming soon/);
   assert.doesNotMatch(html, /https:\/\/github\.com\/NINGYURICHARD\/gauge-web/);
   assert.match(html, /\/world-models\/slope-slider\.mp4/);
