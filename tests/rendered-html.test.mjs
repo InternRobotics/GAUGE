@@ -44,12 +44,17 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /Open Slope Contact trial|class="trial-open"/);
   assert.match(html, /Physical fidelity is/);
   assert.match(html, /No engine stays uniformly faithful/);
+  assert.doesNotMatch(html, />Lead<\/th>/);
   assert.match(html, /16 cameras/);
   assert.match(html, /Cosmos3-Super-I2V/);
   assert.match(html, /class="world-result-grid"/);
   assert.match(html, /world-model-results\/slope-slider\/standard\/cosmos3-nano\.mp4/);
   assert.match(html, /Prompt used/);
   assert.match(html, /Exact reported values/);
+  assert.match(html, /Complete material readings/);
+  assert.match(html, /Slope slider across materials/);
+  assert.match(html, /129\.76 · 0\.58/);
+  assert.match(html, /1266\.40 · 0\.056/);
   assert.match(html, /Generated videos/);
   assert.match(html, /can look plausible/);
   assert.match(html, /yet still predict/);
@@ -76,12 +81,14 @@ test("server-renders the GAUGE research demo", async () => {
   assert.doesNotMatch(html, /https:\/\/github\.com\/NINGYURICHARD\/gauge-web/);
   assert.match(html, /world-model-results\/slope-slider\/standard\/cosmos3-super-i2v\.mp4/);
   assert.match(html, /world-model-results\/pendulum\/physics\/wan-2-2\.mp4/);
-  assert.match(html, /world-model-results\/bouncing-ball\/physics\/cosmos3-super-i2v\.mp4/);
+  assert.match(html, /world-model-results\/bouncing-ball\/standard\/seedance-2\.mp4/);
   assert.match(html, /The slide accelerates, but at the wrong rate/);
   assert.match(html, /The swing trend fits, but the period is wrong/);
-  assert.match(html, /Recovered free-fall acceleration · Real: 9\.81 m\/s² · QFI: 12\.50/);
+  assert.match(html, /The ball falls and rebounds, but gravity is still too weak/);
+  assert.match(html, /Recovered free-fall acceleration · Real: 9\.81 m\/s² · QFI: 65\.16/);
   assert.match(html, /BibTeX/);
   assert.match(html, /class="citation-section"/);
+  assert.doesNotMatch(html, />Reference</);
   assert.match(html, /GAUGE \/ Conclusion/);
   assert.match(html, /@article\{wang2026gauge/);
   assert.match(html, /GitHub repository coming soon/);
@@ -92,10 +99,11 @@ test("server-renders the GAUGE research demo", async () => {
 });
 
 test("removes the starter preview and keeps project metadata specific", async () => {
-  const [page, layout, packageJson] = await Promise.all([
+  const [page, layout, packageJson, demo] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
     readFile(new URL("../package.json", import.meta.url), "utf8"),
+    readFile(new URL("../app/GaugeDemo.tsx", import.meta.url), "utf8"),
   ]);
 
   assert.match(page, /<GaugeDemo \/>/);
@@ -103,5 +111,7 @@ test("removes the starter preview and keeps project metadata specific", async ()
   assert.match(layout, /og\.png/);
   assert.match(packageJson, /"name": "gauge-physical-fidelity-demo"/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
+  assert.match(demo, /0\.0029/);
+  assert.match(demo, /0\.00048/);
   assert.deepEqual(await readdir(new URL("app/_sites-preview", projectRoot)), []);
 });

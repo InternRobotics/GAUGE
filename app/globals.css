@@ -322,8 +322,8 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
 }
 .academic-kicker { margin: 0 0 14px; color: var(--orange-dark); font-family: var(--mono); font-size: .78rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
 .academic-hero h1 { margin: 0; font-family: var(--serif); font-size: clamp(6.4rem, 12vw, 10.8rem); font-weight: 600; letter-spacing: -.075em; line-height: .78; }
-.academic-hero h2 { max-width: 1120px; margin: 42px auto 0; font-family: var(--serif); font-size: clamp(1.7rem, 2.65vw, 2.55rem); font-weight: 600; letter-spacing: -.035em; line-height: 1.14; }
-.academic-hero h2 span { display: block; }
+.academic-hero h2 { max-width: 1280px; margin: 42px auto 0; font-family: var(--serif); font-size: clamp(1.7rem, 2.65vw, 2.55rem); font-weight: 600; letter-spacing: -.035em; line-height: 1.14; }
+.academic-hero h2 span { display: block; white-space: nowrap; }
 .academic-deck { margin: 35px auto 0; color: #4f5967; font-size: clamp(1.02rem, 1.4vw, 1.2rem); }
 .academic-authors { max-width: 1200px; margin: 32px auto 0; }
 .academic-authors p { margin: 0; color: #4f5967; font-size: .82rem; font-weight: 520; line-height: 1.8; }
@@ -447,7 +447,7 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
   .academic-kicker { font-size: .7rem; }
   .academic-hero h1 { font-size: clamp(5.2rem, 26vw, 7rem); }
   .academic-hero h2 { margin-top: 32px; font-size: clamp(1.5rem, 7.5vw, 2.25rem); }
-  .academic-hero h2 span { display: inline; }
+  .academic-hero h2 span { display: inline; white-space: normal; }
   .academic-hero h2 span + span::before { content: " "; }
   .academic-deck { margin-top: 25px; }
   .academic-framework { margin-top: 52px; padding: 11px; }
@@ -954,7 +954,7 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
 .bar-item.best .bar-meta i { margin-left: 6px; color: var(--orange-dark); font-family: var(--mono); font-size: .48rem; font-style: normal; }
 .result-workbench .diagnostic-footer button { padding: 0; border: 0; background: transparent; color: #6f7885; cursor: pointer; font-family: var(--mono); font-size: .56rem; }
 .engine-table-panel { min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 15px; background: #f8f6f0; }
-.engine-data-table th:nth-child(1) { width: 27%; }.engine-data-table th:nth-child(2) { width: 18%; }.engine-data-table th:nth-child(n+3):nth-child(-n+5) { width: 11%; }.engine-data-table th:nth-child(6) { width: 22%; }
+.engine-data-table th:nth-child(1) { width: 30%; }.engine-data-table th:nth-child(2) { width: 22%; }.engine-data-table th:nth-child(n+3):nth-child(-n+5) { width: 16%; }
 .engine-data-table tbody tr { border-top: 1px solid var(--line); color: #626c7a; cursor: pointer; }
 .engine-data-table tbody tr:hover, .engine-data-table tbody tr.active { background: #eeebe3; }
 .engine-data-table tbody tr.active { box-shadow: inset 3px 0 var(--orange); }
@@ -1023,8 +1023,8 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
   .result-filter-bar { align-items: flex-start; flex-direction: column; }
   .engine-data-table tbody tr { grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 13px; }
   .engine-data-table td { padding: 7px; }
-  .engine-data-table td:first-child { grid-column: 1 / -1; }.engine-data-table td:nth-child(2), .engine-data-table td:last-child { grid-column: span 3; }
-  .engine-data-table td:nth-child(2)::before { content: "Metric / baseline"; }.engine-data-table td:nth-child(3)::before { content: "Isaac Sim"; }.engine-data-table td:nth-child(4)::before { content: "Genesis"; }.engine-data-table td:nth-child(5)::before { content: "Newton"; }.engine-data-table td:nth-child(6)::before { content: "Lead"; }
+  .engine-data-table td:first-child { grid-column: 1 / -1; }.engine-data-table td:nth-child(2) { grid-column: span 3; }
+  .engine-data-table td:nth-child(2)::before { content: "Metric / baseline"; }.engine-data-table td:nth-child(3)::before { content: "Isaac Sim"; }.engine-data-table td:nth-child(4)::before { content: "Genesis"; }.engine-data-table td:nth-child(5)::before { content: "Newton"; }
   .world-scene-tabs { grid-template-columns: repeat(2, 1fr); }
   .world-scene-summary { grid-template-columns: 1fr; gap: 16px; }
   .prompt-switch { align-items: flex-start; flex-direction: column; }
@@ -1474,10 +1474,10 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
   line-height: .95;
 }
 .citation-intro > p:last-child {
-  max-width: 60ch;
+  max-width: none;
   margin: 24px 0 0;
   color: #4f5967;
-  font-size: 1rem;
+  font-size: 1.08rem;
   line-height: 1.6;
 }
 .citation-section .citation-box {
@@ -1502,6 +1502,90 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
   overflow-x: auto;
   white-space: pre;
   overflow-wrap: normal;
+}
+
+/* Rigid-body observable: show the fitted path through marker observations. */
+.observable-icon.position::before { content: none; }
+.observable-icon.position::after {
+  width: 72%;
+  height: 2px;
+  top: 62px;
+  left: 14%;
+  border: 0;
+  border-radius: 0;
+  background: var(--ink);
+  transform: rotate(-7deg);
+}
+.observable-icon.position i {
+  z-index: 4;
+  top: 31px;
+  left: 21%;
+  box-shadow: 78px 38px 0 #7085a3, 154px 53px 0 var(--ink), 226px 68px 0 #9da8b6;
+}
+
+/* Material-level Table 4 readings without a wide, horizontally scrolling table. */
+.world-material-disclosure {
+  margin-top: 16px;
+  border: 1px solid #3a4757;
+  border-radius: 12px;
+  background: #101824;
+  color: #f3f0e8;
+}
+.world-material-disclosure > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 22px;
+  cursor: pointer;
+  list-style: none;
+}
+.world-material-disclosure > summary::-webkit-details-marker { display: none; }
+.world-material-disclosure > summary span { display: grid; gap: 5px; }
+.world-material-disclosure > summary b { font-family: var(--serif); font-size: 1.2rem; }
+.world-material-disclosure > summary small,
+.world-material-disclosure > summary em {
+  color: #a78de0;
+  font-family: var(--mono);
+  font-size: .78rem;
+  font-style: normal;
+  letter-spacing: .05em;
+}
+.world-material-body { padding: 0 22px 24px; border-top: 1px solid #303d4d; }
+.world-material-body > header {
+  display: grid;
+  grid-template-columns: minmax(240px, .75fr) minmax(320px, 1.25fr);
+  gap: 34px;
+  align-items: end;
+  padding: 26px 0 22px;
+}
+.world-material-body > header span { color: #a78de0; font-family: var(--mono); font-size: .78rem; font-weight: 800; text-transform: uppercase; }
+.world-material-body > header h3 { margin: 7px 0 0; font-family: var(--serif); font-size: 1.7rem; }
+.world-material-body > header p { margin: 0; color: #adb8c5; font-size: .92rem; line-height: 1.65; }
+.world-material-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.world-material-card { overflow: hidden; border: 1px solid #394758; border-radius: 10px; background: #172536; }
+.world-material-card > header { display: grid; gap: 10px; padding: 16px; border-bottom: 1px solid #394758; }
+.world-material-card > header > div { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.world-material-card h4 { margin: 0; font-family: var(--serif); font-size: 1.3rem; }
+.world-material-card header span,
+.world-material-card header small { color: #9fabb9; font-family: var(--mono); font-size: .7rem; }
+.world-material-columns,
+.world-material-row { display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: 8px; align-items: center; padding: 10px 13px; }
+.world-material-columns { color: #8f9cab; font-family: var(--mono); font-size: .65rem; text-transform: uppercase; }
+.world-material-row { border-top: 1px solid #303e4e; font-family: var(--mono); font-size: .72rem; }
+.world-material-row strong { color: #eef1f5; font-family: var(--sans); font-size: .78rem; }
+.world-material-row span { color: #bac6d3; }
+.world-material-footnote { margin: 18px 0 0; color: #8f9baa; font-size: .78rem; line-height: 1.55; }
+
+@media (max-width: 980px) {
+  .world-material-grid { grid-template-columns: 1fr; }
+  .world-material-body > header { grid-template-columns: 1fr; gap: 12px; }
+}
+
+@media (max-width: 560px) {
+  .world-material-disclosure > summary,
+  .world-material-body { padding-left: 15px; padding-right: 15px; }
+  .world-material-row { font-size: .66rem; }
 }
 
 @media (max-width: 700px) {
