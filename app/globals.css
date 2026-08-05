@@ -1031,6 +1031,92 @@ footer > a:last-child { justify-self: end; color: #aeb7c4; font-size: .7rem; tex
 .engine-data-table td small { font-size: .57rem; }
 .engine-data-table td:last-child span { font-size: .61rem; }
 
+/* World-model evidence cards: one consistent editorial rhythm. */
+.evidence-stack {
+  min-height: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: 340px auto;
+  gap: 12px;
+}
+.evidence-stack .world-video-card,
+.evidence-stack .world-video-card.featured {
+  min-height: 340px;
+  position: relative;
+  display: block;
+  overflow: hidden;
+  grid-row: auto;
+  padding: 0;
+  border: 1px solid #465468;
+  border-radius: 14px;
+  background: #0d1621;
+  isolation: isolate;
+}
+.evidence-stack .world-video-label {
+  position: absolute;
+  z-index: 2;
+  inset: 0 0 auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px;
+  color: #f0edf6;
+  font-family: var(--mono);
+  font-size: .61rem;
+  font-weight: 800;
+  letter-spacing: .045em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+.evidence-stack .world-video-label b { color: #c6b3ef; font-weight: 800; text-align: right; }
+.evidence-stack .world-video-reading {
+  position: absolute;
+  z-index: 2;
+  inset: auto 0 0;
+  display: block;
+  padding: 22px 17px 18px;
+  color: #fff;
+  font-family: var(--sans);
+  font-size: inherit;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.evidence-stack .world-video-reading h3,
+.evidence-stack .world-video-card.featured .world-video-reading h3 {
+  max-width: 20ch;
+  margin: 0 0 13px;
+  color: #fff;
+  font-family: var(--serif);
+  font-size: clamp(1.18rem, 1.5vw, 1.45rem);
+  font-weight: 500;
+  letter-spacing: -.015em;
+  line-height: 1.12;
+  text-transform: none;
+}
+.evidence-stack .world-video-reading p {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  color: #d2d9e2;
+  font-family: var(--sans);
+  font-size: .68rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.45;
+  text-transform: none;
+}
+.evidence-stack .world-video-reading p strong,
+.evidence-stack .world-video-card.featured .world-video-reading p strong { color: #fff; font-family: var(--serif); font-size: 1.32rem; font-weight: 600; }
+.evidence-stack .world-video-reading p span { color: #aab5c2; font-size: .65rem; }
+.evidence-stack .law-callout { grid-column: 1 / -1; }
+
+@media (max-width: 780px) {
+  .evidence-stack { grid-template-columns: 1fr; grid-template-rows: none; }
+  .evidence-stack .world-video-card,
+  .evidence-stack .world-video-card.featured { min-height: 320px; }
+  .evidence-stack .law-callout { grid-column: auto; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
