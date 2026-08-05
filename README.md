@@ -10,7 +10,7 @@ The demo translates the paper into five explorable ideas:
 - an interactive comparison of Isaac Sim, Genesis, and Newton results;
 - a three-layer diagnosis of video world models: equation form, parameter accuracy, and temporal stability.
 
-The task atlas uses category filters instead of search, and keeps the complete task/material index and engine result ledger collapsed until requested. Trial video previews are lazy-loaded and open into focused detail views.
+The task atlas opens as a multi-video gallery so every real trial stays attached to its task, target, materials, and paper detail. A Dataset toggle provides a sortable 22-task table when a denser view is useful. The engine and world-model sections use linked tables for task, metric, scene, and prompt exploration.
 
 ## Run locally
 

@@ -4,7 +4,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 type TaskCategory = "rigid" | "cable" | "textile" | "soft";
 type TaskFilter = "all" | TaskCategory;
-type SimTaskKey = "slope" | "bounce" | "fling" | "bend";
+type EngineCategory = "rigid" | "textile" | "soft";
+type EngineFilter = "all" | EngineCategory;
 
 type TrialTask = {
   id: number;
@@ -14,6 +15,30 @@ type TrialTask = {
   description: string;
   physics: string[];
   materials: string;
+};
+
+type EngineMetric = {
+  label: string;
+  baseline: string;
+  target: "low" | "one" | "zero";
+  values: [number | null, number | null, number | null];
+};
+
+type EngineResult = {
+  task: string;
+  category: EngineCategory;
+  material: string;
+  frames: string;
+  note: string;
+  metrics: [EngineMetric, EngineMetric];
+};
+
+type PaperDetail = {
+  kicker: string;
+  title: string;
+  summary: string;
+  items: { label: string; value: string }[];
+  footnote?: string;
 };
 
 const categoryLabels: Record<TaskCategory, string> = {
@@ -56,67 +81,43 @@ const filterOptions: { key: TaskFilter; label: string; count: number }[] = [
   { key: "soft", label: "Soft body", count: 7 },
 ];
 
-const simTasks: Record<SimTaskKey, {
-  label: string;
-  material: string;
-  metric: string;
-  note: string;
-  values: { name: string; value: number; color: string }[];
-}> = {
-  slope: {
-    label: "Slope contact", material: "Plastic · 10 frames", metric: "Normalized RMSE",
-    note: "A controlled contact case where all three engines remain comparatively close to the real trajectory.",
-    values: [
-      { name: "Isaac Sim", value: 1.26, color: "#ff6b35" },
-      { name: "Genesis", value: 1.6, color: "#7f8ba3" },
-      { name: "Newton", value: 1.75, color: "#b7bdc8" },
-    ],
-  },
-  bounce: {
-    label: "Bouncing ball", material: "Rubber · 18 frames", metric: "Normalized RMSE",
-    note: "Rapid impact is difficult for every engine: the best error is still more than fifteen times the real-world baseline.",
-    values: [
-      { name: "Isaac Sim", value: 15.63, color: "#ff6b35" },
-      { name: "Genesis", value: 22.5, color: "#7f8ba3" },
-      { name: "Newton", value: 22.71, color: "#b7bdc8" },
-    ],
-  },
-  fling: {
-    label: "Textile flinging", material: "Satin · 562 frames", metric: "Normalized RMSE",
-    note: "Solver rankings reverse under fast cloth motion. Genesis is strongest here; Isaac Sim diverges by more than an order of magnitude.",
-    values: [
-      { name: "Isaac Sim", value: 128.26, color: "#b7bdc8" },
-      { name: "Genesis", value: 8.54, color: "#ff6b35" },
-      { name: "Newton", value: 9.25, color: "#7f8ba3" },
-    ],
-  },
-  bend: {
-    label: "Foam bending", material: "Soft foam · 35 frames", metric: "Normalized RMSE",
-    note: "Newton edges out Isaac Sim for bending, while Genesis trails—another sign that no engine dominates every physical regime.",
-    values: [
-      { name: "Isaac Sim", value: 10.71, color: "#7f8ba3" },
-      { name: "Genesis", value: 14.43, color: "#b7bdc8" },
-      { name: "Newton", value: 10.37, color: "#ff6b35" },
-    ],
-  },
-};
-
-const engineLedger = [
-  ["Slope contact", "Plastic", "RMSE / DTW", "1.26 / 1.83", "1.60 / 2.57", "1.75 / 3.07"],
-  ["Nonsmooth contact", "Plastic", "RMSE / DTW", "1.53 / 1.90", "10.04 / 14.37", "6.05 / 8.01"],
-  ["Slope slider", "Metal", "RMSE / DTW", "0.61 / 0.71", "0.58 / 0.69", "1.95 / 2.93"],
-  ["Turntable", "Metal", "RMSE / DTW", "0.17 / 0.61", "0.57 / 2.01", "20.04 / 66.72"],
-  ["Bouncing ball", "Rubber", "RMSE / DTW", "15.63 / 5.58", "22.50 / 14.58", "22.71 / 14.89"],
-  ["Newton’s cradle", "Metal", "LSD / MTE", "0.00 / 0.20", "— / —", "0.00 / 0.26"],
-  ["Pendulum", "Metal", "PD / EL", "1.10 / 11.01", "2.47 / −1.67", "1.09 / 6.87"],
-  ["Textile stretching", "Satin", "RMSE / DTW", "0.73 / 0.76", "1.51 / 1.56", "0.73 / 0.75"],
-  ["Textile bending", "Satin", "RMSE / DTW", "7.94 / 11.78", "11.73 / 17.35", "19.90 / 18.82"],
-  ["Textile flinging", "Satin", "RMSE / DTW", "128.26 / 167.31", "8.54 / 11.27", "9.25 / 12.12"],
-  ["Foam stretching", "Soft", "RMSE / DTW", "16.15 / 17.18", "10.05 / 10.65", "15.46 / 16.45"],
-  ["Foam shearing", "Soft", "RMSE / DTW", "26.13 / 28.85", "15.26 / 16.74", "26.57 / 29.34"],
-  ["Foam twisting", "Soft", "RMSE / DTW", "17.14 / 18.47", "10.86 / 11.67", "16.78 / 18.07"],
-  ["Foam bending", "Soft", "RMSE / DTW", "10.71 / 21.28", "14.43 / 27.51", "10.37 / 20.53"],
+const engineResults: EngineResult[] = [
+  { task: "Slope contact", category: "rigid", material: "Plastic", frames: "10", note: "All engines stay comparatively close on this controlled contact case.", metrics: [{ label: "RMSE", baseline: "12.31 (7.62)", target: "low", values: [1.26, 1.60, 1.75] }, { label: "DTW", baseline: "5.30 (1.84)", target: "low", values: [1.83, 2.57, 3.07] }] },
+  { task: "Nonsmooth contact", category: "rigid", material: "Plastic", frames: "20", note: "Codimensional contact exposes a marked gap between Isaac Sim and the other solvers.", metrics: [{ label: "RMSE", baseline: "17.67 (6.19)", target: "low", values: [1.53, 10.04, 6.05] }, { label: "DTW", baseline: "8.92 (2.44)", target: "low", values: [1.90, 14.37, 8.01] }] },
+  { task: "Slope slider", category: "rigid", material: "Metal", frames: "60", note: "Genesis is marginally strongest for this friction-controlled slide.", metrics: [{ label: "RMSE", baseline: "38.01 (28.53)", target: "low", values: [0.61, 0.58, 1.95] }, { label: "DTW", baseline: "9.54 (8.52)", target: "low", values: [0.71, 0.69, 2.93] }] },
+  { task: "Turntable", category: "rigid", material: "Metal", frames: "95", note: "Newton diverges strongly in a rotating non-inertial frame.", metrics: [{ label: "RMSE", baseline: "13.26 (7.43)", target: "low", values: [0.17, 0.57, 20.04] }, { label: "DTW", baseline: "3.33 (0.81)", target: "low", values: [0.61, 2.01, 66.72] }] },
+  { task: "Bouncing ball", category: "rigid", material: "Rubber", frames: "18", note: "Rapid impact remains difficult: even the best normalized trajectory error is large.", metrics: [{ label: "RMSE", baseline: "5.29 (3.60)", target: "low", values: [15.63, 22.50, 22.71] }, { label: "DTW", baseline: "4.23 (2.87)", target: "low", values: [5.58, 14.58, 14.89] }] },
+  { task: "Newton’s cradle", category: "rigid", material: "Metal", frames: "1,027", note: "Genesis has no valid rollout; the remaining engines transfer only a fraction of momentum.", metrics: [{ label: "LSD", baseline: "0.38 (0.015)", target: "one", values: [0.00, null, 0.00] }, { label: "MTE", baseline: "93.02 (2.47)", target: "one", values: [0.20, null, 0.26] }] },
+  { task: "Pendulum", category: "rigid", material: "Metal", frames: "300 / 3,000", note: "Period can appear plausible while energy behavior remains non-physical.", metrics: [{ label: "PD", baseline: "1.14 (0.066)", target: "one", values: [1.10, 2.47, 1.09] }, { label: "EL", baseline: "0.00", target: "zero", values: [11.01, -1.67, 6.87] }] },
+  { task: "Textile stretching", category: "textile", material: "Satin", frames: "380", note: "Slow tensile deformation is one of the better-reproduced cloth cases.", metrics: [{ label: "RMSE", baseline: "0.21 (0.42)", target: "low", values: [0.73, 1.51, 0.73] }, { label: "DTW", baseline: "0.21 (0.42)", target: "low", values: [0.76, 1.56, 0.75] }] },
+  { task: "Textile bending", category: "textile", material: "Satin", frames: "335", note: "Natural sagging amplifies bending-model differences across all engines.", metrics: [{ label: "RMSE", baseline: "1.92 (0.69)", target: "low", values: [7.94, 11.73, 19.90] }, { label: "DTW", baseline: "1.20 (0.17)", target: "low", values: [11.78, 17.35, 18.82] }] },
+  { task: "Textile flinging", category: "textile", material: "Satin", frames: "562", note: "Fast, spatially varying cloth motion reverses the solver ranking.", metrics: [{ label: "RMSE", baseline: "0.016 (0.0056)", target: "low", values: [128.26, 8.54, 9.25] }, { label: "DTW", baseline: "0.012 (0.0014)", target: "low", values: [167.31, 11.27, 12.12] }] },
+  { task: "Foam stretching", category: "soft", material: "Soft", frames: "30", note: "All three simulators remain an order of magnitude above the real baseline.", metrics: [{ label: "RMSE", baseline: "8.72 (6.94)", target: "low", values: [16.15, 10.05, 15.46] }, { label: "DTW", baseline: "8.19 (6.93)", target: "low", values: [17.18, 10.65, 16.45] }] },
+  { task: "Foam shearing", category: "soft", material: "Soft", frames: "37", note: "Genesis is strongest, but deformation errors remain substantial.", metrics: [{ label: "RMSE", baseline: "5.60 (0.70)", target: "low", values: [26.13, 15.26, 26.57] }, { label: "DTW", baseline: "5.07 (0.59)", target: "low", values: [28.85, 16.74, 29.34] }] },
+  { task: "Foam twisting", category: "soft", material: "Soft", frames: "65", note: "Twisting again favors Genesis without approaching real-trial variation.", metrics: [{ label: "RMSE", baseline: "8.07 (0.53)", target: "low", values: [17.14, 10.86, 16.78] }, { label: "DTW", baseline: "7.48 (0.39)", target: "low", values: [18.47, 11.67, 18.07] }] },
+  { task: "Foam bending", category: "soft", material: "Soft", frames: "35", note: "Newton narrowly leads bending, confirming that no engine dominates every regime.", metrics: [{ label: "RMSE", baseline: "7.00 (4.39)", target: "low", values: [10.71, 14.43, 10.37] }, { label: "DTW", baseline: "3.52 (1.05)", target: "low", values: [21.28, 27.51, 20.53] }] },
 ];
+
+const worldScenes = [
+  { id: "slope", title: "Slope slider", metric: "QFI", parameter: "Acceleration", baseline: "QFI 0 · 2.58 m/s² (wood)", summary: "Equation-form ranking changes across materials; a low QFI still does not guarantee the correct acceleration.", rows: [
+    ["Cosmos3-Nano", [64.89, 2.06], [26.65, 0.90]], ["Cosmos3-Super-I2V", [13.61, 0.13], [569.36, 0.12]], ["Wan-2.2", [393.00, 0.43], [15.74, 0.091]], ["Wan-2.7", [1201.08, 0.061], [558.97, 0.038]], ["Seedance 2.0", [781.51, 0.23], null], ["Genie 3", [40.11, 0.62], null],
+  ] },
+  { id: "turntable", title: "Turntable", metric: "DE", parameter: "Radial diagnosis", baseline: "DE 0 (wood)", summary: "Force-motion consistency is tested separately from whether the cube visibly slides radially on the turntable.", rows: [
+    ["Cosmos3-Nano", [0.078, null], [0.10, null]], ["Cosmos3-Super-I2V", [0.092, null], [0.00, null]], ["Wan-2.2", [0.00, null], [0.00, null]], ["Wan-2.7", [0.18, null], [0.00037, null]], ["Seedance 2.0", [0.00, null], null], ["Genie 3", [0.00, null], null],
+  ] },
+  { id: "bounce", title: "Bouncing ball", metric: "QFI", parameter: "Acceleration", baseline: "QFI 0 · 9.81 m/s²", summary: "The smoothest fitted law can still encode less than one percent of real gravitational acceleration.", rows: [
+    ["Cosmos3-Nano", [2620.05, 0.45], [1125.36, 0.33]], ["Cosmos3-Super-I2V", [270.69, 0.076], [12.50, 0.088]], ["Wan-2.2", [428.39, 0.051], [38.72, 0.064]], ["Wan-2.7", [59.49, 0.16], [16.08, 0.15]], ["Seedance 2.0", [65.16, 1.84], null], ["Genie 3", [88.70, -0.052], null],
+  ] },
+  { id: "cradle", title: "Newton’s cradle", metric: "MTE", parameter: "Transfer events", baseline: "MTE ≈ 1", summary: "Six of ten reported configurations fail to produce a valid cradle sequence; the best MTE reaches only 0.76.", rows: [
+    ["Cosmos3-Nano", [null, null], [null, null]], ["Cosmos3-Super-I2V", [null, null], [null, null]], ["Wan-2.2", [null, null], [0.76, null]], ["Wan-2.7", [0.55, null], [0.48, null]], ["Seedance 2.0", [0.24, null], null], ["Genie 3", [null, null], null],
+  ] },
+  { id: "pendulum", title: "Pendulum", metric: "R²", parameter: "Period", baseline: "R² 1 · 1.06 s", summary: "Wan-2.2 and Genie 3 reach R² = 0.99, yet their periods are still 1.93 s and 1.90 s.", rows: [
+    ["Cosmos3-Nano", [0.86, 2.36], [0.66, 2.93]], ["Cosmos3-Super-I2V", [0.50, 17.95], [0.92, 2.34]], ["Wan-2.2", [0.98, 6.03], [0.99, 1.93]], ["Wan-2.7", [0.71, 1.83], [0.72, 1.87]], ["Seedance 2.0", [0.96, 3.13], null], ["Genie 3", [0.99, 1.90], null],
+  ] },
+] as const;
+
+const taskVariants = (task: TrialTask) => task.id >= 2 && task.id <= 4 ? 3 : 1;
+const taskObservable = (task: TrialTask) => task.category === "rigid" ? "6-DoF position P(t)" : task.category === "textile" || task.category === "cable" ? "Gaussian curvature K(t)" : "Triangle area A(t)";
 
 function TraceCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -142,7 +143,7 @@ function TraceCanvas() {
       for (let y = 0; y <= h; y += h / 4) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
       const traces = [
         { color: "#151b26", width: 3, dash: [] as number[], amp: 0.3, drift: 0 },
-        { color: "#ff6b35", width: 2, dash: [7, 6], amp: 0.28, drift: -0.015 },
+        { color: "#7652c8", width: 2, dash: [7, 6], amp: 0.28, drift: -0.015 },
         { color: "#7a879d", width: 2, dash: [3, 6], amp: 0.39, drift: 0.02 },
       ];
       traces.forEach((trace, index) => {
@@ -189,7 +190,7 @@ function TrialVideo({ task, controls = false }: { task: TrialTask; controls?: bo
 
   if (failed) return <div className="video-fallback"><span>{String(task.id).padStart(2, "0")}</span><small>REAL-WORLD TRIAL</small></div>;
   return (
-    <video ref={videoRef} muted={!controls} loop={!controls} playsInline controls={controls} preload={controls ? "metadata" : "none"} onError={() => setFailed(true)} aria-label={`${task.title} real-world trial`}>
+    <video ref={videoRef} muted loop playsInline controls={controls} autoPlay preload={controls ? "metadata" : "none"} onError={() => setFailed(true)} aria-label={`${task.title} real-world trial`}>
       {ready && <source src={`/trials/${task.slug}.mp4`} type="video/mp4" />}
     </video>
   );
@@ -200,13 +201,13 @@ function TaskCard({ task, onOpen }: { task: TrialTask; onOpen: (task: TrialTask)
     <article className="trial-card">
       <button className="trial-media" onClick={() => onOpen(task)} aria-label={`Open ${task.title} trial`}>
         <TrialVideo task={task} />
-        <span className="trial-badge">Real trial</span>
-        <span className="trial-open">View <i>↗</i></span>
+        <span className="trial-badge">Real trial · {String(task.id).padStart(2, "0")}</span>
+        <span className="trial-open">Details <i>↗</i></span>
       </button>
-      <div className="trial-meta"><span>Task {String(task.id).padStart(2, "0")}</span><span>{categoryLabels[task.category]}</span></div>
+      <div className="trial-meta"><span>{categoryLabels[task.category]}</span><span>{taskVariants(task)} {taskVariants(task) === 1 ? "subtask" : "subtasks"}</span></div>
       <h3><button onClick={() => onOpen(task)}>{task.title}</button></h3>
       <p>{task.description}</p>
-      <div className="physics-tags">{task.physics.map((tag) => <span key={tag}>{tag}</span>)}</div>
+      <div className="physics-tags">{task.physics.map((tag) => <span key={tag}>{tag}</span>)}<span>{task.materials}</span></div>
     </article>
   );
 }
@@ -222,18 +223,57 @@ function TaskModal({ task, onClose }: { task: TrialTask; onClose: () => void }) 
 
   return (
     <div className="task-modal" role="dialog" aria-modal="true" aria-labelledby="task-modal-title" onMouseDown={(event) => { if (event.currentTarget === event.target) onClose(); }}>
-      <div className="task-modal-panel">
+      <div className="task-modal-panel expanded-task-modal">
         <button className="modal-close" onClick={onClose} aria-label="Close task detail">×</button>
         <div className="modal-video"><TrialVideo task={task} controls /></div>
         <div className="modal-copy">
           <p className="micro">Task {String(task.id).padStart(2, "0")} · {categoryLabels[task.category]}</p>
           <h3 id="task-modal-title">{task.title}</h3>
           <p>{task.description}</p>
-          <dl><div><dt>Diagnostic target</dt><dd>{task.physics.join(" · ")}</dd></div><div><dt>Materials</dt><dd>{task.materials}</dd></div></dl>
+          <dl>
+            <div><dt>Diagnostic target</dt><dd>{task.physics.join(" · ")}</dd></div>
+            <div><dt>Condition subtasks</dt><dd>{taskVariants(task)}</dd></div>
+            <div><dt>Materials</dt><dd>{task.materials}</dd></div>
+            <div><dt>Observable</dt><dd>{taskObservable(task)}</dd></div>
+            <div><dt>Acquisition</dt><dd>20 real trials · 180 Hz capture · 30 fps evaluation</dd></div>
+          </dl>
         </div>
       </div>
     </div>
   );
+}
+
+function PaperDetailModal({ detail, onClose }: { detail: PaperDetail; onClose: () => void }) {
+  useEffect(() => {
+    const previous = document.body.style.overflow;
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") onClose(); };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+    return () => { document.body.style.overflow = previous; window.removeEventListener("keydown", closeOnEscape); };
+  }, [onClose]);
+
+  return (
+    <div className="task-modal" role="dialog" aria-modal="true" aria-labelledby="paper-detail-title" onMouseDown={(event) => { if (event.currentTarget === event.target) onClose(); }}>
+      <div className="paper-detail-panel">
+        <button className="modal-close" onClick={onClose} aria-label="Close detail">×</button>
+        <div className="detail-orbit" aria-hidden="true"><span /><i /><b /></div>
+        <div className="paper-detail-copy">
+          <p className="micro">{detail.kicker}</p>
+          <h3 id="paper-detail-title">{detail.title}</h3>
+          <p>{detail.summary}</p>
+          <dl>{detail.items.map((item) => <div key={item.label}><dt>{item.label}</dt><dd>{item.value}</dd></div>)}</dl>
+          {detail.footnote && <small>{detail.footnote}</small>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function metricScore(value: number | null, target: EngineMetric["target"]) {
+  if (value === null) return Number.POSITIVE_INFINITY;
+  if (target === "one") return Math.abs(value - 1);
+  if (target === "zero") return Math.abs(value);
+  return value;
 }
 
 function MiniMark() {
@@ -242,19 +282,38 @@ function MiniMark() {
 
 export function GaugeDemo() {
   const [filter, setFilter] = useState<TaskFilter>("all");
+  const [taskView, setTaskView] = useState<"gallery" | "dataset">("gallery");
   const [activeTask, setActiveTask] = useState<TrialTask | null>(null);
-  const [simTask, setSimTask] = useState<SimTaskKey>("fling");
-  const [track, setTrack] = useState<"engine" | "world">("engine");
-  const filteredTasks = useMemo(() => filter === "all" ? tasks : tasks.filter((task) => task.category === filter), [filter]);
-  const selectedTask = simTasks[simTask];
-  const maxLog = Math.max(...selectedTask.values.map((item) => Math.log10(item.value + 1)));
+  const [taskSort, setTaskSort] = useState<"id" | "title" | "category" | "variants">("id");
+  const [engineFilter, setEngineFilter] = useState<EngineFilter>("all");
+  const [selectedEngineIndex, setSelectedEngineIndex] = useState(9);
+  const [metricIndex, setMetricIndex] = useState<0 | 1>(0);
+  const [resultSort, setResultSort] = useState<"order" | "regime">("order");
+  const [worldSceneId, setWorldSceneId] = useState("slope");
+  const [promptMode, setPromptMode] = useState<"standard" | "negative">("standard");
+  const [paperDetail, setPaperDetail] = useState<PaperDetail | null>(null);
+  const filteredTasks = useMemo(() => {
+    const list = filter === "all" ? [...tasks] : tasks.filter((task) => task.category === filter);
+    return list.sort((a, b) => taskSort === "title" ? a.title.localeCompare(b.title) : taskSort === "category" ? a.category.localeCompare(b.category) || a.id - b.id : taskSort === "variants" ? taskVariants(b) - taskVariants(a) || a.id - b.id : a.id - b.id);
+  }, [filter, taskSort]);
+  const visibleEngineResults = useMemo(() => {
+    const list = engineFilter === "all" ? engineResults.map((result, index) => ({ result, index })) : engineResults.map((result, index) => ({ result, index })).filter(({ result }) => result.category === engineFilter);
+    return resultSort === "regime" ? list.sort((a, b) => a.result.category.localeCompare(b.result.category)) : list;
+  }, [engineFilter, resultSort]);
+  const selectedEngine = engineResults[selectedEngineIndex];
+  const selectedMetric = selectedEngine.metrics[metricIndex];
+  const engineNames = ["Isaac Sim", "Genesis", "Newton"];
+  const engineColors = ["#7652c8", "#7f8ba3", "#b7bdc8"];
+  const maxMetricLog = Math.max(...selectedMetric.values.filter((value): value is number => value !== null).map((value) => Math.log10(Math.abs(value) + 1)), 0.01);
+  const bestEngineScore = Math.min(...selectedMetric.values.map((value) => metricScore(value, selectedMetric.target)));
+  const worldScene = worldScenes.find((scene) => scene.id === worldSceneId) ?? worldScenes[0];
 
   return (
     <main>
       <header className="site-header">
         <a className="brand" href="#top" aria-label="GAUGE home"><MiniMark /><span>GAUGE</span></a>
         <nav aria-label="Primary navigation"><a href="#benchmark">Benchmark</a><a href="#protocol">Protocol</a><a href="#results">Results</a><a href="#paper">Paper</a></nav>
-        <a className="header-cta" href="/gauge.pdf" target="_blank" rel="noreferrer">Read paper <span>↗</span></a>
+        <div className="header-actions"><a href="https://github.com/NINGYURICHARD/gauge-web" target="_blank" rel="noreferrer">Code <span>↗</span></a><a className="header-cta" href="/gauge.pdf" target="_blank" rel="noreferrer">Read paper <span>↗</span></a></div>
       </header>
 
       <section className="hero" id="top">
@@ -262,8 +321,8 @@ export function GaugeDemo() {
           <p className="eyebrow"><span>Measurement-grounded</span> physical fidelity</p>
           <h1>Does it move right,<br />or just <em>look</em> right?</h1>
           <p className="hero-deck">GAUGE diagnoses how simulation engines and video world models reproduce—or violate—real-world physics.</p>
-          <div className="hero-actions"><a className="button primary" href="#results">Open the diagnostic</a><a className="button secondary" href="#benchmark">Explore 22 tasks <span>↓</span></a></div>
-          <div className="authors"><p>Shuai Wang · Yaxin Feng · Xuekun Jiang · Shihan Tian · Ningyu Yan · Xing Shen · Chaoyang Lyu · Hui Wang · Yunsong Zhou · Hanqing Wang · Jiangmiao Pang · Yang Xiang · Xing Gao · Chunhua Shen · Weinan Zhang</p><span>Shanghai AI Laboratory · HKUST · SJTU · Zhejiang University</span></div>
+          <div className="hero-actions"><a className="button primary" href="#results">Open the diagnostic</a><a className="button secondary" href="#benchmark">Explore 22 tasks <span>↓</span></a><a className="button code-link" href="https://github.com/NINGYURICHARD/gauge-web" target="_blank" rel="noreferrer">GitHub code <span>↗</span></a></div>
+          <div className="authors"><p>Shuai Wang · Yaxin Feng · Xuekun Jiang · Shihan Tian · Ningyu Yan · Xing Shen · Chaoyang Lyu · Hui Wang · Yunsong Zhou · Hanqing Wang · Jiangmiao Pang · Yang Xiang · Xing Gao · Chunhua Shen · Weinan Zhang</p><span>Shanghai AI Laboratory · HKUST · Shanghai Jiao Tong University · Zhejiang University</span></div>
         </div>
         <div className="hero-instrument" aria-label="Physical fidelity diagnostic preview">
           <div className="instrument-topline"><span>LIVE DIAGNOSTIC / PENDULUM</span><span className="live-dot">REAL → SIM</span></div>
@@ -288,71 +347,85 @@ export function GaugeDemo() {
           <article><span>02</span><h3>Cross-regime</h3><p>One benchmark spans rigid bodies, flexible cables, textiles, and volumetric soft bodies.</p></article>
           <article><span>03</span><h3>Diagnostic by design</h3><p>Trajectory error, equation form, physical parameters, and temporal stability remain separate signals.</p></article>
         </div>
-        <div className="track-switcher" role="tablist" aria-label="Evaluation track">
-          <button className={track === "engine" ? "active" : ""} onClick={() => setTrack("engine")} role="tab" aria-selected={track === "engine"}>Simulation-engine track</button>
-          <button className={track === "world" ? "active" : ""} onClick={() => setTrack("world")} role="tab" aria-selected={track === "world"}>Video world-model track</button>
+        <div className="track-overview">
+          <article className="track-column engine-track">
+            <header><span>◇</span><div><h3>Simulation-engine track</h3><p>How accurately does a numerical simulator reproduce measured outcomes?</p></div></header>
+            <div className="track-steps"><div><b>01</b><h4>Reconstruct</h4><p>Match real initial states, geometry, materials, and calibrated parameters.</p></div><div><b>02</b><h4>Simulate</h4><p>Run Isaac Sim, Genesis, and Newton on fourteen representative task families.</p></div><div><b>03</b><h4>Compare</h4><p>Measure generalized trajectory error with RMSE, DTW, and task-specific metrics.</p></div></div>
+          </article>
+          <article className="track-column world-track">
+            <header><span>▶</span><div><h3>Video world-model track</h3><p>Does generated motion obey the right law at the right physical scale?</p></div></header>
+            <div className="track-steps"><div><b>01</b><h4>Condition</h4><p>Provide a shared first frame and a verified task prompt.</p></div><div><b>02</b><h4>Generate</h4><p>Evaluate six video models on five rigid-body tasks.</p></div><div><b>03</b><h4>Diagnose</h4><p>Recover SAM3 trajectories and test law form, parameters, and timing.</p></div></div>
+          </article>
         </div>
-        <div className="protocol-stage">
-          <div className="protocol-steps">
-            {(track === "engine" ? [
-              ["01", "Match the scene", "Assets, geometry, materials, and initial conditions mirror the real apparatus."],
-              ["02", "Run the engine", "Isaac Sim, Genesis, and Newton produce comparable state trajectories."],
-              ["03", "Measure the gap", "Six metrics expose errors across four physical regimes."],
-            ] : [
-              ["01", "Condition generation", "A fixed first frame and standardized text prompt define the rollout."],
-              ["02", "Recover motion", "Tracking extracts keypoints and derived physical signals from pixels."],
-              ["03", "Test the law", "Five metrics separate equation form, parameter accuracy, and stability."],
-            ]).map(([number, title, copy]) => <article key={number}><span>{number}</span><div><h3>{title}</h3><p>{copy}</p></div></article>)}
-          </div>
-          <figure className="paper-overview">
-            {/* The framework is a local paper figure with fixed intrinsic content. */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/paper/overview.png" alt="GAUGE evaluation framework from the paper" />
-            <figcaption>Real-world measurements anchor both evaluation tracks.</figcaption>
-          </figure>
-        </div>
+        <figure className="paper-overview protocol-figure">
+          {/* The framework is a local paper figure with fixed intrinsic content. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/paper/overview.png" alt="GAUGE evaluation framework from the paper" />
+          <figcaption>Real-world measurements anchor both diagnostic tracks.</figcaption>
+        </figure>
       </section>
 
       <section className="section benchmark" id="benchmark">
         <div className="section-kicker light">02 / Real-world task atlas</div>
-        <div className="section-title-grid light"><h2>Physics,<br />observed.</h2><p>Every card is a canonical real-world trial. Filter by body type; open any task to inspect its diagnostic target and material setup.</p></div>
-        <div className="task-filter" role="tablist" aria-label="Filter trial tasks">
-          {filterOptions.map((option) => <button key={option.key} className={filter === option.key ? "active" : ""} onClick={() => setFilter(option.key)} role="tab" aria-selected={filter === option.key}><span>{option.label}</span><b>{option.count}</b></button>)}
+        <div className="section-title-grid light"><h2>Physics,<br />observed together.</h2><p>Browse real trials as a visual atlas. Each video remains attached to its task, target, materials, and paper details; switch to Dataset only when you want the denser sortable view.</p></div>
+        <div className="atlas-toolbar">
+          <div className="task-filter" role="tablist" aria-label="Filter trial tasks">
+            {filterOptions.map((option) => <button key={option.key} className={filter === option.key ? "active" : ""} onClick={() => setFilter(option.key)} role="tab" aria-selected={filter === option.key}><span>{option.label}</span><b>{option.count}</b></button>)}
+          </div>
+          <div className="view-switch" role="tablist" aria-label="Task atlas view"><button className={taskView === "gallery" ? "active" : ""} onClick={() => setTaskView("gallery")} role="tab" aria-selected={taskView === "gallery"}>Gallery</button><button className={taskView === "dataset" ? "active" : ""} onClick={() => setTaskView("dataset")} role="tab" aria-selected={taskView === "dataset"}>Dataset</button></div>
         </div>
-        <p className="filter-status" aria-live="polite">Showing {filteredTasks.length} of 22 task families</p>
-        <div className="trial-grid">{filteredTasks.map((task) => <TaskCard key={task.id} task={task} onOpen={setActiveTask} />)}</div>
-        <details className="disclosure task-index">
-          <summary><span><small>Reference index</small>Complete task &amp; material index</span><b>22 tasks <i>＋</i></b></summary>
-          <div className="task-index-grid">{tasks.map((task) => <article key={task.id}><span>{String(task.id).padStart(2, "0")}</span><div><p>{categoryLabels[task.category]}</p><h3>{task.title}</h3><small>{task.physics.join(" · ")}</small></div><strong>{task.materials}</strong></article>)}</div>
-        </details>
+        <p className="filter-status" aria-live="polite">Showing {filteredTasks.length} of 22 task families · {taskView} view</p>
+        {taskView === "gallery" ? <div className="trial-grid">{filteredTasks.map((task) => <TaskCard key={task.id} task={task} onOpen={setActiveTask} />)}</div> :
+          <div className="task-table-panel">
+            <div className="table-toolbar"><p aria-live="polite">{filteredTasks.length} task families</p><div><span>Sort</span>{(["id", "title", "category", "variants"] as const).map((key) => <button key={key} className={taskSort === key ? "active" : ""} onClick={() => setTaskSort(key)}>{key === "id" ? "Task" : key === "variants" ? "Subtasks" : key === "category" ? "Regime" : "Name"}</button>)}</div></div>
+            <table className="task-data-table">
+              <thead><tr><th>Task</th><th>Regime</th><th>Diagnostic target</th><th>Sub.</th><th>Material</th></tr></thead>
+              <tbody>{filteredTasks.map((task) => <tr key={task.id} onClick={() => setActiveTask(task)} tabIndex={0} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") setActiveTask(task); }}><td><span>{String(task.id).padStart(2, "0")}</span><strong>{task.title}</strong></td><td>{categoryLabels[task.category]}</td><td>{task.physics.join(" · ")}</td><td>{taskVariants(task)}</td><td>{task.materials}</td></tr>)}</tbody>
+            </table>
+          </div>}
+        <div className="paper-detail-cards">
+          <button onClick={() => setPaperDetail({ kicker: "Acquisition detail", title: "From millimeter capture to evaluation trajectories", summary: "GAUGE records repeated experiments inside a calibrated 2 m × 2 m × 2 m motion-capture volume.", items: [{ label: "Camera array", value: "16 NOKOV Mars9H infrared cameras across three height levels" }, { label: "Capture rate", value: "180 Hz raw acquisition; processed trajectories downsampled to 30 fps" }, { label: "Repetition", value: "20 independent real-world trials for every evaluation task" }, { label: "Output", value: "Valid intervals and calibrated physical properties stored with trajectories in JSON" }] })}><span>Capture</span><strong>16 cameras · 180 Hz</strong><small>Open acquisition detail ↗</small></button>
+          <button onClick={() => setPaperDetail({ kicker: "Calibration detail", title: "The scene is measured, not visually approximated", summary: "Each asset carries task-matched physical metadata so simulator and model outputs can be diagnosed against the same apparatus.", items: [{ label: "Every asset", value: "Dimensions, mass, and density" }, { label: "Rigid contact", value: "Friction and restitution measured for task-specific material pairs" }, { label: "Textiles", value: "Rayon, satin, uniform cloth, Oxford fabric, synthetic leather, and nylon taslan" }, { label: "Soft bodies", value: "Soft and hard foam or rubber variants" }] })}><span>Calibration</span><strong>Mass · friction · restitution</strong><small>Open parameter detail ↗</small></button>
+          <button onClick={() => setPaperDetail({ kicker: "Representation detail", title: "One benchmark, three generalized trajectories", summary: "The benchmark does not force different bodies into a single perceptual representation.", items: [{ label: "Rigid", value: "Body-fixed marker frame recovers 6-DoF pose and position P(t)" }, { label: "Textile and cable", value: "Triangulated surface tracking yields Gaussian curvature K(t)" }, { label: "Volumetric soft body", value: "Neighboring marker faces yield triangle area A(t) as local strain" }, { label: "Comparison", value: "RMSE and DTW operate on the regime-appropriate generalized trajectory" }] })}><span>Observables</span><strong>P(t) · K(t) · A(t)</strong><small>Open representation detail ↗</small></button>
+        </div>
       </section>
 
       <section className="section results" id="results">
         <div className="section-kicker">03 / Engine diagnosis</div>
-        <div className="section-title-grid"><h2>No single engine<br />wins every regime.</h2><p>Choose a task to compare reported physical-fidelity errors. Bar lengths use a logarithmic scale so compact errors and catastrophic divergence remain readable.</p></div>
-        <div className="diagnostic-shell">
-          <div className="task-selector" role="tablist" aria-label="Engine result task">{(Object.keys(simTasks) as SimTaskKey[]).map((key) => <button key={key} className={simTask === key ? "active" : ""} onClick={() => setSimTask(key)} role="tab" aria-selected={simTask === key}>{simTasks[key].label}</button>)}</div>
-          <div className="diagnostic-main">
-            <div className="diagnostic-copy"><p className="micro">{selectedTask.material}</p><h3>{selectedTask.label}</h3><p>{selectedTask.note}</p><div className="legend-note"><b>↓ Lower is better</b><span>{selectedTask.metric}</span></div></div>
-            <div className="bar-plot">{selectedTask.values.map((item) => { const width = 18 + (Math.log10(item.value + 1) / maxLog) * 82; return <div className="bar-item" key={item.name}><div className="bar-meta"><span>{item.name}</span><strong>{item.value.toFixed(2)}×</strong></div><div className="bar-track"><i style={{ width: `${width}%`, background: item.color }} /></div></div>; })}</div>
-          </div>
-          <div className="diagnostic-footer"><span>REAL-WORLD BASELINE = 1.00×</span><span>Reported GAUGE evaluation</span></div>
+        <div className="section-title-grid"><h2>Every row can drive<br />the diagnosis.</h2><p>Filter fourteen representative evaluations, select any task, and switch between its two reported metrics. The chart and real-world baseline update together.</p></div>
+        <div className="result-filter-bar">
+          <div role="tablist" aria-label="Filter engine results">{([{"key":"all","label":"All","count":14},{"key":"rigid","label":"Rigid","count":7},{"key":"textile","label":"Textile","count":3},{"key":"soft","label":"Soft body","count":4}] as const).map((option) => <button key={option.key} className={engineFilter === option.key ? "active" : ""} onClick={() => { setEngineFilter(option.key); const first = option.key === "all" ? 0 : engineResults.findIndex((result) => result.category === option.key); if (first >= 0) setSelectedEngineIndex(first); }} role="tab" aria-selected={engineFilter === option.key}>{option.label} <span>{option.count}</span></button>)}</div>
+          <label>Order<select value={resultSort} onChange={(event) => setResultSort(event.target.value as "order" | "regime")}><option value="order">Paper order</option><option value="regime">Physical regime</option></select></label>
         </div>
-        <details className="disclosure engine-ledger">
-          <summary><span><small>Normalized errors</small>Complete engine result ledger</span><b>14 tasks <i>＋</i></b></summary>
-          <div className="ledger-legend"><span>Task / metric</span><span>Isaac Sim</span><span>Genesis</span><span>Newton</span></div>
-          <div className="ledger-rows">{engineLedger.map(([name, material, metric, isaac, genesis, newton]) => <article key={name}><div><p>{material}</p><h3>{name}</h3><small>{metric}</small></div><dl><div><dt>Isaac Sim</dt><dd>{isaac}</dd></div><div><dt>Genesis</dt><dd>{genesis}</dd></div><div><dt>Newton</dt><dd>{newton}</dd></div></dl></article>)}</div>
-          <p className="ledger-note">Values are normalized by the real-world baseline mean. Lower is better for RMSE and DTW; metric-specific interpretation applies to LSD, MTE, PD, and EL.</p>
-        </details>
+        <div className="result-workbench">
+          <div className="diagnostic-shell">
+            <div className="metric-switch" role="tablist" aria-label="Select reported metric">{selectedEngine.metrics.map((metric, index) => <button key={metric.label} className={metricIndex === index ? "active" : ""} onClick={() => setMetricIndex(index as 0 | 1)} role="tab" aria-selected={metricIndex === index}>{metric.label}<small>Baseline {metric.baseline}</small></button>)}</div>
+          <div className="diagnostic-main">
+              <div className="diagnostic-copy"><p className="micro">{selectedEngine.material} · {selectedEngine.frames} frames · {selectedEngine.category}</p><h3>{selectedEngine.task}</h3><p>{selectedEngine.note}</p><div className="legend-note"><b>{selectedMetric.target === "low" ? "↓ Lower is better" : selectedMetric.target === "one" ? "→ Closer to 1 is better" : "→ Closer to 0 is better"}</b><span>Real mean (σ): {selectedMetric.baseline}</span></div></div>
+              <div className="bar-plot">{selectedMetric.values.map((value, index) => { const width = value === null ? 0 : 14 + (Math.log10(Math.abs(value) + 1) / maxMetricLog) * 86; const isBest = metricScore(value, selectedMetric.target) === bestEngineScore; return <div className={`bar-item ${isBest ? "best" : ""}`} key={engineNames[index]}><div className="bar-meta"><span>{engineNames[index]} {isBest && <i>BEST</i>}</span><strong>{value === null ? "—" : value.toFixed(2)}</strong></div><div className="bar-track"><i style={{ width: `${width}%`, background: engineColors[index] }} /></div></div>; })}</div>
+            </div>
+            <div className="diagnostic-footer"><span>NORMALIZED BY REAL-WORLD BASELINE</span><button onClick={() => setPaperDetail({ kicker: "Metric interpretation", title: `${selectedMetric.label} on ${selectedEngine.task}`, summary: selectedEngine.note, items: [{ label: "Real baseline", value: selectedMetric.baseline }, { label: "Interpretation", value: selectedMetric.target === "low" ? "RMSE and DTW are normalized trajectory errors; lower values indicate closer motion." : selectedMetric.target === "one" ? "This task-specific normalized metric is best when it approaches one." : "Pendulum energy loss is reported raw because its baseline is zero; zero is ideal." }, { label: "Evaluation material", value: selectedEngine.material }, { label: "Recorded frames", value: selectedEngine.frames }] })}>How to read this metric ↗</button></div>
+          </div>
+          <div className="engine-table-panel">
+            <table className="engine-data-table"><thead><tr><th>Task / setup</th><th>{metricIndex === 0 ? "Primary metric" : "Secondary metric"}</th><th>Isaac</th><th>Genesis</th><th>Newton</th><th>Lead</th></tr></thead><tbody>{visibleEngineResults.map(({ result, index }) => { const metric = result.metrics[metricIndex]; const scores = metric.values.map((value) => metricScore(value, metric.target)); const best = Math.min(...scores); const leaders = scores.map((score, engineIndex) => score === best ? engineNames[engineIndex] : null).filter(Boolean).join(" / "); return <tr key={result.task} className={selectedEngineIndex === index ? "active" : ""} onClick={() => setSelectedEngineIndex(index)} tabIndex={0} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") setSelectedEngineIndex(index); }}><td><strong>{result.task}</strong><small>{result.material} · {result.frames} f</small></td><td><b>{metric.label}</b><small>base {metric.baseline}</small></td>{metric.values.map((value, valueIndex) => <td key={valueIndex} className={scores[valueIndex] === best ? "best" : ""}>{value === null ? "—" : value.toFixed(2)}</td>)}<td><span>{leaders || "No valid result"}</span></td></tr>; })}</tbody></table>
+          </div>
+        </div>
       </section>
 
       <section className="section world-models">
-        <div className="world-copy"><div className="section-kicker light">04 / World-model diagnosis</div><h2>Plausible motion can still encode the wrong physics.</h2><p>A generated video may follow the expected equation form while recovering incorrect acceleration, momentum transfer, or oscillation timing. GAUGE keeps those layers separate.</p><a href="/gauge.pdf" target="_blank" rel="noreferrer">Read the model analysis <span>↗</span></a></div>
+        <div className="world-copy"><div className="section-kicker light">04 / World-model diagnosis</div><h2>Plausible motion can still encode the wrong physics.</h2><p>Explore five rigid-body scenes across six video world models. Switch the negative prompt on to see that prompt sensitivity can alter equation-form scores without fixing physical scale.</p><a href="/gauge.pdf" target="_blank" rel="noreferrer">Read the model analysis <span>↗</span></a></div>
         <div className="evidence-stack">
           <article><div><span>Slope slider</span><b>Acceleration</b></div><h3>Closest generation</h3><strong>2.06 <small>m/s²</small></strong><p>Real baseline <b>2.58 m/s²</b> · lowest QFI 13.61</p></article>
           <article><div><span>Pendulum</span><b>Timing</b></div><h3>Equation form fits</h3><strong>0.99 <small>R²</small></strong><p>Generated periods <b>1.93 / 1.90 s</b> · real 1.06 s</p></article>
           <article><div><span>Bouncing ball</span><b>Physical scale</b></div><h3>Motion looks plausible</h3><strong>0.088 <small>m/s²</small></strong><p>Versus <b>9.81 m/s²</b> real baseline · lowest QFI 12.50</p></article>
           <div className="law-callout"><span>KEY FINDING</span><p>Equation-form agreement does not guarantee correct scale or timing.</p></div>
+        </div>
+        <div className="world-lab">
+          <div className="world-scene-tabs" role="tablist" aria-label="World-model evaluation scene">{worldScenes.map((scene) => <button key={scene.id} className={worldScene.id === scene.id ? "active" : ""} onClick={() => setWorldSceneId(scene.id)} role="tab" aria-selected={worldScene.id === scene.id}><span>{scene.title}</span><small>{scene.metric} · {scene.parameter}</small></button>)}</div>
+          <article className="world-scene-summary"><div><p>Selected scene</p><h3>{worldScene.title}</h3><span>{worldScene.baseline}</span></div><p>{worldScene.summary}</p><button onClick={() => setPaperDetail({ kicker: "World-model protocol", title: `${worldScene.title}: ${worldScene.metric} and ${worldScene.parameter}`, summary: worldScene.summary, items: [{ label: "Shared input", value: "Every model receives the same initial frame and standardized text prompt" }, { label: "Trajectory recovery", value: "SAM3 segmentation and centroid tracking recover motion directly from pixels" }, { label: "Primary signal", value: worldScene.metric }, { label: "Physical parameter", value: worldScene.parameter }, { label: "Real baseline", value: worldScene.baseline }] })}>Open scene method ↗</button></article>
+          <div className="prompt-switch"><span>Generation condition</span><div><button className={promptMode === "standard" ? "active" : ""} onClick={() => setPromptMode("standard")}>Standard prompt</button><button className={promptMode === "negative" ? "active" : ""} onClick={() => setPromptMode("negative")}>+ negative prompt</button></div></div>
+          <div className="world-table-panel"><table className="world-data-table"><thead><tr><th>Model</th><th>Condition</th><th>{worldScene.metric}</th><th>{worldScene.parameter}</th><th>Reading</th></tr></thead><tbody>{worldScene.rows.map((row) => { const values = promptMode === "standard" ? row[1] : row[2]; return <tr key={row[0]}><td><strong>{row[0]}</strong></td><td>{promptMode === "standard" ? "Standard" : row[2] ? "Negative" : "Unavailable"}</td><td>{values?.[0] === null || values === null ? "—" : values[0]}</td><td>{values?.[1] === null || values === null ? "—" : values[1]}</td><td><span className={values === null || values[0] === null ? "invalid" : "valid"}>{values === null || values[0] === null ? "No valid rollout" : worldScene.metric === "R²" && values[0] >= .95 ? "Strong form fit" : "Valid trajectory"}</span></td></tr>; })}</tbody></table></div>
+          <div className="model-roster"><span>Evaluated models</span><p>Cosmos3-Nano · Cosmos3-Super-I2V · Wan-2.2 · Wan-2.7 · Seedance 2.0 · Genie 3</p><small>Five image-to-video models plus one interactive world model. Seedance 2.0 and Genie 3 do not report the negative-prompt condition.</small></div>
         </div>
       </section>
 
@@ -369,6 +442,7 @@ export function GaugeDemo() {
       <section className="paper-cta" id="paper"><div><p className="eyebrow">GAUGE / 2026</p><h2>Measure the physics,<br />not the impression.</h2></div><div><p>A measurement-grounded benchmark for physical fidelity in simulation engines and video world models.</p><a className="button primary" href="/gauge.pdf" target="_blank" rel="noreferrer">Download the paper <span>↗</span></a></div></section>
       <footer><a className="brand" href="#top"><MiniMark /><span>GAUGE</span></a><p>Built from the GAUGE paper · Local research demo</p><a href="#top">Back to top ↑</a></footer>
       {activeTask && <TaskModal task={activeTask} onClose={() => setActiveTask(null)} />}
+      {paperDetail && <PaperDetailModal detail={paperDetail} onClose={() => setPaperDetail(null)} />}
     </main>
   );
 }
