@@ -325,7 +325,7 @@ export function GaugeDemo() {
     <main>
       <header className="site-header">
         <a className="brand" href="#top" aria-label="GAUGE home"><MiniMark /><span>GAUGE</span></a>
-        <nav aria-label="Primary navigation"><a href="#benchmark">Benchmark</a><a href="#protocol">Protocol</a><a href="#results">Results</a><a href="#paper">Paper</a></nav>
+        <nav aria-label="Primary navigation"><a href="#protocol">Protocol</a><a href="#benchmark">Benchmark</a><a href="#results">Results</a><a href="#paper">Paper</a></nav>
         <div className="header-actions"><span className="code-coming" aria-label="Code release coming soon"><b>Code</b><small>Coming soon</small></span><a className="header-cta" href="/gauge.pdf" target="_blank" rel="noreferrer">Read paper <span>↗</span></a></div>
       </header>
 
