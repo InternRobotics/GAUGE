@@ -140,5 +140,8 @@ test("removes the starter preview and keeps project metadata specific", async ()
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   assert.match(demo, /0\.0029/);
   assert.match(demo, /0\.00048/);
+  assert.match(demo, /values: \[0\.034, -0\.041, 0\.022\]/);
+  assert.doesNotMatch(demo, /values: \[11\.01, -1\.67, 6\.87\]/);
+  assert.match(demo, /metric\.label === "EL" \? 3 : 2/);
   assert.deepEqual(await readdir(new URL("app/_sites-preview", projectRoot)), []);
 });
