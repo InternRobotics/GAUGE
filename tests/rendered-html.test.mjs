@@ -117,7 +117,12 @@ test("server-renders the GAUGE research demo", async () => {
   assert.match(html, /class="citation-section"/);
   assert.doesNotMatch(html, />Reference</);
   assert.match(html, /GAUGE \/ Conclusion/);
-  assert.match(html, /@article\{wang2026gauge/);
+  assert.match(html, /@misc\{wang2026gaugemeasurementgroundedbenchmarkphysical/);
+  assert.match(html, /eprint\s+= \{2608\.05948\}/);
+  assert.match(html, /primaryClass\s+= \{cs\.AI\}/);
+  assert.match(html, /https:\/\/arxiv\.org\/abs\/2608\.05948/);
+  assert.equal((html.match(/href="https:\/\/arxiv\.org\/pdf\/2608\.05948v1"/g) || []).length, 3);
+  assert.doesNotMatch(html, /href="\/GAUGE\/gauge\.pdf"|note\s+= \{Manuscript\}/);
   assert.match(html, /GitHub repository coming soon/);
   assert.match(html, /octicon-mark-github/);
   assert.match(html, /© 2026 Shanghai Artificial Intelligence Laboratory/);

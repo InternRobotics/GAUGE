@@ -200,11 +200,16 @@ const worldScenePrompts: Record<(typeof worldScenes)[number]["id"], string> = {
 
 const physicsNegativePrompt = "No adherence to physical laws. Objects defy gravity, pass through solid surfaces, and change mass and momentum without cause. Broken fluid dynamics, cloth simulation, rigid-body physics and conservation of energy; objects gain or lose kinetic energy spontaneously. Elastic collisions produce inelastic results and vice versa. Surface friction is inconsistent: objects slide on rough surfaces or stick to smooth ones. Air resistance affects some objects while others move through air unimpeded.";
 
-const citationText = `@article{wang2026gauge,
-  title   = {GAUGE: A Measurement-Grounded Benchmark for Physical Fidelity in Simulation Engines and Video World Models},
-  author  = {Wang, Shuai and Feng, Yaxin and Jiang, Xuekun and Tian, Shihan and Yan, Ningyu and Shen, Xing and Lyu, Chaoyang and Wang, Hui and Zhou, Yunsong and Wang, Hanqing and Pang, Jiangmiao and Xiang, Yang and Gao, Xing and Shen, Chunhua and Zhang, Weinan},
-  year    = {2026},
-  note    = {Manuscript}
+const paperUrl = "https://arxiv.org/pdf/2608.05948v1";
+
+const citationText = `@misc{wang2026gaugemeasurementgroundedbenchmarkphysical,
+  title         = {GAUGE: A Measurement-Grounded Benchmark for Physical Fidelity in Simulation Engines and Video World Models},
+  author        = {Shuai Wang and Yaxin Feng and Xuekun Jiang and Shihan Tian and Ningyu Yan and Xing Shen and Chaoyang Lyu and Hui Wang and Yunsong Zhou and Hanqing Wang and Jiangmiao Pang and Yang Xiang and Xing Gao and Chunhua Shen and Weinan Zhang},
+  year          = {2026},
+  eprint        = {2608.05948},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.AI},
+  url           = {https://arxiv.org/abs/2608.05948}
 }`;
 
 const taskVariants = (task: TrialTask) => task.id >= 2 && task.id <= 4 ? 3 : 1;
@@ -576,7 +581,7 @@ export function GaugeDemo() {
       <header className="site-header">
         <a className="brand" href="#top" aria-label="GAUGE home"><MiniMark /><span>GAUGE</span></a>
         <nav aria-label="Primary navigation"><a href="#protocol">Protocol</a><a href="#benchmark">Benchmark</a><a href="#results">Results</a><a href="#conclusion">Conclusion</a></nav>
-        <div className="header-actions"><a className="header-cta" href={assetUrl("gauge.pdf")} target="_blank" rel="noreferrer">Read paper <span>↗</span></a><a className="github-link" href="#github-coming-soon" aria-disabled="true" aria-label="GitHub repository coming soon" title="GitHub repository coming soon" onClick={(event) => event.preventDefault()}><MarkGithubIcon size={24} /></a></div>
+        <div className="header-actions"><a className="header-cta" href={paperUrl} target="_blank" rel="noreferrer">Read paper <span>↗</span></a><a className="github-link" href="#github-coming-soon" aria-disabled="true" aria-label="GitHub repository coming soon" title="GitHub repository coming soon" onClick={(event) => event.preventDefault()}><MarkGithubIcon size={24} /></a></div>
       </header>
 
       <section className="academic-hero" id="top">
@@ -584,7 +589,7 @@ export function GaugeDemo() {
         <h2 aria-label="A Measurement-Grounded Benchmark for Physical Fidelity in Simulation Engines and Video World Models"><span>A Measurement-Grounded Benchmark for Physical Fidelity</span><span>in Simulation Engines and Video World Models</span></h2>
         <p className="academic-deck">Measure physical fidelity against the real world—not only visual plausibility.</p>
         <div className="academic-authors"><p className="author-list"><span className="author-name">Shuai Wang<sup>*</sup></span> · <span className="author-name">Yaxin Feng<sup>*</sup></span> · <span className="author-name">Xuekun Jiang<sup>*</sup></span> · <span className="author-name">Shihan Tian<sup>*</sup></span> · <span className="author-name">Ningyu Yan<sup>*</sup></span> · <span className="author-name">Xing Shen</span> · <span className="author-name">Chaoyang Lyu</span> · <span className="author-name">Hui Wang</span> · <span className="author-name">Yunsong Zhou</span> · <span className="author-name">Hanqing Wang</span> · <span className="author-name">Jiangmiao Pang</span> · <span className="author-name">Yang Xiang</span> · <span className="author-name">Xing Gao<sup title="Corresponding author">✉️</sup></span> · <span className="author-name">Chunhua Shen</span> · <span className="author-name">Weinan Zhang</span></p><span className="affiliations">Shanghai Artificial Intelligence Laboratory · Hong Kong University of Science and Technology · Shanghai Jiao Tong University · Zhejiang University</span><span className="author-note"><b>*</b> Equal contribution · <b>✉️</b> Corresponding author</span></div>
-        <div className="academic-actions"><a className="button primary" href={assetUrl("gauge.pdf")} target="_blank" rel="noreferrer">Read the paper <span>↗</span></a><span className="button secondary code-disabled">Code · Coming soon</span><span className="button secondary code-disabled">Dataset · Coming soon</span></div>
+        <div className="academic-actions"><a className="button primary" href={paperUrl} target="_blank" rel="noreferrer">Read the paper <span>↗</span></a><span className="button secondary code-disabled">Code · Coming soon</span><span className="button secondary code-disabled">Dataset · Coming soon</span></div>
         <figure className="academic-framework">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={assetUrl("paper/overview-hd.png")} alt="GAUGE benchmark framework connecting real-world experiments to simulation-engine and video world-model evaluation tracks" />
@@ -697,7 +702,7 @@ export function GaugeDemo() {
         </div>
       </section>
 
-      <section className="paper-cta" id="conclusion"><div><p className="eyebrow">GAUGE / Conclusion</p><h2>Physical fidelity is mechanism-specific</h2></div><div className="paper-cta-copy"><ol className="conclusion-list"><li><span>01</span><p>No simulation engine is uniformly faithful across every physical regime.</p></li><li><span>02</span><p>Dynamic contact, rapid cloth motion, and volumetric deformation expose the largest sim-to-real gaps.</p></li><li><span>03</span><p>Video world models can recover equation form while still missing the correct physical parameters.</p></li></ol><div className="paper-cta-actions"><a className="button primary" href="#benchmark">Browse the benchmark <span>↑</span></a><a className="button secondary" href={assetUrl("gauge.pdf")} target="_blank" rel="noreferrer">Read the paper <span>↗</span></a></div></div></section>
+      <section className="paper-cta" id="conclusion"><div><p className="eyebrow">GAUGE / Conclusion</p><h2>Physical fidelity is mechanism-specific</h2></div><div className="paper-cta-copy"><ol className="conclusion-list"><li><span>01</span><p>No simulation engine is uniformly faithful across every physical regime.</p></li><li><span>02</span><p>Dynamic contact, rapid cloth motion, and volumetric deformation expose the largest sim-to-real gaps.</p></li><li><span>03</span><p>Video world models can recover equation form while still missing the correct physical parameters.</p></li></ol><div className="paper-cta-actions"><a className="button primary" href="#benchmark">Browse the benchmark <span>↑</span></a><a className="button secondary" href={paperUrl} target="_blank" rel="noreferrer">Read the paper <span>↗</span></a></div></div></section>
 
       <section className="citation-section" id="citation"><div className="citation-shell"><header className="citation-intro"><h2>Citation</h2><p>If you use GAUGE or its benchmark in your research, please cite the work below.</p></header><div className="citation-box"><div className="citation-head"><span>BibTeX</span><button onClick={copyCitation}>{citationCopied ? "Copied" : "Copy"}</button></div><pre><code>{citationText}</code></pre></div></div></section>
       <footer className="site-footer"><a className="brand" href="#top"><MiniMark /><span>GAUGE</span></a><p>Measurement-grounded physical fidelity for simulation and video world models.</p><span>© 2026 Shanghai Artificial Intelligence Laboratory.</span></footer>
