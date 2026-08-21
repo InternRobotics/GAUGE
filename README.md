@@ -196,32 +196,17 @@ Depending on the task and material, GAUGE provides experimentally characterized 
 * Young's modulus
 * Poisson's ratio
 
-### Dataset Structure
+### Project layout
 
-```text
+GAUGE is split across a small constellation of repositories. **This repo** is the front door:
+
+| Component | Where it lives | What it provides |
+| --- | --- | --- |
+| **GAUGE** (this repo) | [InternRobotics/GAUGE](https://github.com/InternRobotics/GAUGE) | Reference baselines, scripts, project entry point |
+| **GAUGE-Dataset** | [🤗 GAUGE-Dataset](https://huggingface.co/datasets/InternRobotics/GAUGE-Dataset) | Scenes, task assets, physical metadata and measured trajectories (json format) |
+
+```
 GAUGE/
-├── data/                       # Real-world motion-capture trajectories and measurements
-│   ├── rigid/                  # Rigid-body experiments (contact, friction, impact, oscillation)
-│   ├── rope/                   # Flexible-cable experiment (winding and self-contact)
-│   ├── textile/                # Textile experiments (stretching, bending, flinging, friction)
-│   └── deformable/             # Volumetric deformable-body experiments (stretch, shear, twist, bend)
-│
-├── assets/                     # Simulation-ready object and scene assets
-│   ├── mjcf/                   # MJCF assets for MuJoCo-based simulation
-│   ├── obj/                    # OBJ geometry and mesh files
-│   ├── stl/                    # STL geometry files
-│   └── usd/                    # USD assets for Isaac Sim and compatible simulators
-│
-├── metadata/                   # Calibrated physical properties and experiment conditions metadata
-│   ├── rigid/                  # Mass, dimensions, density, friction, restitution, etc.
-│   ├── rope/                   # Cable geometry and physical-property metadata
-│   ├── textile/                # Textile tensile, shear, and bending properties
-│   └── deformable/             # Young's modulus, Poisson's ratio, geometry, etc.
-│
-├── input/                      # Standardized inputs for the video world-model track
-│   ├── first_frames/           # Initial real-world frames for video generation
-│   └── text_prompts/           # Standardized task prompts for video generation
-│
 ├── scripts/                    # Evaluation scripts for GAUGE benchmark tracks
 │   ├── simulation/             # Physics-engine simulation 
 │   └── metrics/                # Trajectory and task-specific physical metrics and sim-to-real evaluation
