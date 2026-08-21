@@ -205,37 +205,22 @@ GAUGE 的每个任务均以重复开展的真实物理实验为基础。
 * 杨氏模量
 * 泊松比
 
-### 数据集结构
+### 项目结构
 
-``` text
+GAUGE 由一组相互协作的代码仓库组成。本仓库是整个项目的主要入口：
+
+| 组件 | 仓库地址 | 提供内容 |
+| --- | --- | --- |
+| GAUGE（本仓库） | InternRobotics/GAUGE | 基准实现、评测脚本以及项目入口 |
+| GAUGE-Dataset | 🤗 GAUGE-Dataset | 场景、任务资产、物理元数据以及实测轨迹（JSON 格式） |
+
+```
 GAUGE/
-├── data/                       # 真实世界动作捕捉轨迹与测量数据
-│   ├── rigid/                  # 刚体实验（接触、摩擦、冲击、振荡）
-│   ├── rope/                   # 柔性绳索实验（缠绕与自接触）
-│   ├── textile/                # 织物实验（拉伸、弯曲、甩动、摩擦）
-│   └── deformable/             # 三维体积可变形物体实验（拉伸、剪切、扭转、弯曲）
-│
-├── assets/                     # 可直接用于仿真的物体与场景资产
-│   ├── mjcf/                   # 用于 MuJoCo 系仿真的 MJCF 资产
-│   ├── obj/                    # OBJ 几何与网格文件
-│   ├── stl/                    # STL 几何文件
-│   └── usd/                    # 用于 Isaac Sim 及兼容仿真器的 USD 资产
-│
-├── metadata/                   # 经标定的物理属性与实验条件元数据
-│   ├── rigid/                  # 质量、尺寸、密度、摩擦、恢复系数等
-│   ├── rope/                   # 绳索几何与物理属性元数据
-│   ├── textile/                # 织物拉伸、剪切与弯曲属性
-│   └── deformable/             # 杨氏模量、泊松比、几何信息等
-│
-├── input/                      # 视频世界模型赛道的标准化输入
-│   ├── first_frames/           # 用于视频生成的真实世界初始帧
-│   └── text_prompts/           # 用于视频生成的标准化任务 Prompt
-│
-├── scripts/                    # GAUGE 各评测赛道脚本
+├── scripts/                    # GAUGE 各评测赛道的评测脚本
 │   ├── simulation/             # 物理引擎仿真
-│   └── metrics/                # 轨迹指标、任务特定物理指标与 Sim-to-Real 评测
+│   └── metrics/                # 轨迹指标、任务特定物理指标以及 Sim-to-Real 评测
 │
-├── media/                      # README 图片与任务可视化
+├── media/                      # README 图片与任务可视化资源
 ├── LICENSE                     # 项目许可证
 └── README.md                   # 基准概览、配置、评测与使用说明
 ```
