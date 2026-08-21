@@ -114,46 +114,34 @@ Evaluation includes trajectory discrepancy, temporal alignment, momentum transfe
 
 ## 🧪 Benchmark Tasks
 
-GAUGE contains **22 standardized task families**.
+GAUGE contains **22 controlled task families** spanning rigid bodies, flexible cables, textiles, and volumetric deformable objects.
 
-### Rigid Bodies
+| Category | Task | Video | Description | Evaluation | Subtasks | Material |
+| --- | --- | --- | --- | --- | ---: | --- |
+| Rigid Body | Slope Contact | <img src="./media/webp/slope_contact.webp" width="180" alt="Slope Contact"> | Fall of a trirectangular tetrahedron | Slope collisions | 1 | Wood, Plastic |
+| Rigid Body | Nonsmooth Contact | <img src="./media/webp/nonsmooth_contact.webp" width="180" alt="Nonsmooth Contact"> | Fall of wedges and pyramids | Codimensional collisions | 3 | Wood, Plastic |
+| Rigid Body | Slope Slider | <img src="./media/webp/slope_slider.webp" width="180" alt="Slope Slider"> | Slide of a cube on a slope | Static and kinetic friction | 3 | Wood, Plastic, Metal |
+| Rigid Body | Turntable | <img src="./media/webp/turntable.webp" width="180" alt="Turntable"> | Slide of a cube on a turntable | Static and kinetic friction in a non-inertial frame | 3 | Wood, Plastic, Metal |
+| Rigid Body | Bouncing Ball | <img src="./media/webp/bouncing_ball.webp" width="180" alt="Bouncing Ball"> | Fall and bouncing of a ball | Rapid impact | 1 | Rubber |
+| Rigid Body | Newton's Cradle | <img src="./media/webp/newton_cradle.webp" width="180" alt="Newton's Cradle"> | Collision of closely fitted balls | Momentum transfer | 1 | Metal |
+| Rigid Body | Wall Breaking | <img src="./media/webp/wall_breaking.webp" width="180" alt="Wall Breaking"> | Collision of a wrecking ball with a wall | Large-scale dense collisions | 1 | Wood |
+| Rigid Body | Pendulum | <img src="./media/webp/pendulum.webp" width="180" alt="Pendulum"> | Oscillation of a ball | Periodic motion | 1 | Metal |
+| Flexible Cable | Rope Winding | <img src="./media/webp/rope_winding.webp" width="180" alt="Rope Winding"> | Winding of a rope | Self-collision and stretch modulus | 1 | Rubber |
+| Textile | Textile Stretching | <img src="./media/webp/textile_stretching.webp" width="180" alt="Textile Stretching"> | Tensile deformation of a textile | Stretch modulus | 1 | R, S, U, O, L, N |
+| Textile | Textile Bending | <img src="./media/webp/textile_bending.webp" width="180" alt="Textile Bending"> | Natural sagging of a textile | Bending modulus | 1 | R, S, U, O, L, N |
+| Textile | Textile Flinging | <img src="./media/webp/textile_flinging.webp" width="180" alt="Textile Flinging"> | Fluttering of a textile | Motion under locally high acceleration | 1 | R, S, U, O, L, N |
+| Textile | Funnel | <img src="./media/webp/funnel.webp" width="180" alt="Funnel"> | Passage of textiles through a hole | Collision, friction | 1 | R, S, U, O, L, N |
+| Textile | Rotating Ball | <img src="./media/webp/rotating_ball.webp" width="180" alt="Rotating Ball"> | Motion of a textile driven by a rotating ball | Static and kinetic friction | 1 | R, S, U |
+| Textile | Tablecloth Pulling | <img src="./media/webp/tablecloth_pulling.webp" width="180" alt="Tablecloth Pulling"> | Pulling a textile from beneath rigid objects | Static and kinetic friction | 1 | Wood, Plastic, Metal |
+| Volumetric Deformable Body | Foam Stretching | <img src="./media/webp/foam_stretching.webp" width="180" alt="Foam Stretching"> | Stretching of an elastic cuboid | Stretching modulus | 1 | Soft, Hard |
+| Volumetric Deformable Body | Foam Compression | <img src="./media/webp/foam_compression.webp" width="180" alt="Foam Compression"> | Compression of an elastic cuboid | Compression modulus | 1 | Soft, Hard |
+| Volumetric Deformable Body | Foam Shearing | <img src="./media/webp/foam_shearing.webp" width="180" alt="Foam Shearing"> | Shearing of an elastic cuboid | Shear modulus | 1 | Soft, Hard |
+| Volumetric Deformable Body | Foam Twisting | <img src="./media/webp/foam_twisting.webp" width="180" alt="Foam Twisting"> | Twisting of an elastic cuboid | Twisting modulus | 1 | Soft, Hard |
+| Volumetric Deformable Body | Foam Bending | <img src="./media/webp/foam_bending.webp" width="180" alt="Foam Bending"> | Bending of an elastic cuboid | Bending modulus | 1 | Soft, Hard |
+| Volumetric Deformable Body | Stick-Stack | <img src="./media/webp/stick_stack.webp" width="180" alt="Stick-Stack"> | Sliding of an elastic rod on a plane | Static and kinetic friction | 1 | Soft, Hard |
+| Volumetric Deformable Body | Cantilever Beam | <img src="./media/webp/cantilever_beam.webp" width="180" alt="Cantilever Beam"> | Free hanging of an elastic cantilever beam | Coupling with a large stiffness ratio | 1 | Soft, Hard |
 
-| Task              | Physical Property              | Materials            |
-| ----------------- | ------------------------------ | -------------------- |
-| Slope Contact     | Collision                      | Wood, Plastic        |
-| Nonsmooth Contact | Codimensional collision        | Wood, Plastic        |
-| Slope Slider      | Static & kinetic friction      | Wood, Plastic, Metal |
-| Turntable         | Friction in non-inertial frame | Wood, Plastic, Metal |
-| Bouncing Ball     | Rapid impact                   | Rubber               |
-| Newton's Cradle   | Momentum transfer              | Metal                |
-| Wall Breaking     | Dense collision                | Wood                 |
-| Pendulum          | Periodic motion                | Metal                |
-
-### Flexible Cable & Textiles
-
-| Task               | Physical Property                    |
-| ------------------ | ------------------------------------ |
-| Rope Winding       | Self-collision & stretch modulus     |
-| Textile Stretching | Stretch modulus                      |
-| Textile Bending    | Bending modulus                      |
-| Textile Flinging   | High-acceleration deformation        |
-| Funnel             | Collision & friction                 |
-| Rotating Ball      | Static & kinetic friction            |
-| Tablecloth Pulling | Rigid–textile interaction & friction |
-
-Textile materials include rayon, satin, uniform cloth, Oxford fabric, synthetic leather, and nylon taslan.
-
-### Volumetric Deformable Bodies
-
-| Task             | Physical Property              |
-| ---------------- | ------------------------------ |
-| Foam Stretching  | Stretching modulus             |
-| Foam Compressing | Compression modulus            |
-| Foam Shearing    | Shear modulus                  |
-| Foam Twisting    | Twisting modulus               |
-| Foam Bending     | Bending modulus                |
-| Stick-Stack      | Friction                       |
-| Cantilever Beam  | Large stiffness-ratio coupling |
+**Textile material abbreviations:** R = Rayon, S = Satin, U = Uniform cloth, O = Oxford fabric, L = Synthetic leather, N = Nylon taslan.
 
 ---
 
