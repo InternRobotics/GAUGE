@@ -1,0 +1,89 @@
+{
+    "description": "The task involves a textile pressed by a cube. One of textile's edges is attached to a rod. Then, suddenly pull the rod to make the textile slide.",
+    "assets": {
+        "cube": {
+            "model": "../../assets/obj/cube.obj",
+            "material": {
+                "wood": {
+                    "mass": 0.0938,
+                    "friction": 0.482590,
+                    "restitution": 0.343222
+                },
+                "plastic": {
+                    "mass": 0.1494,
+                    "friction": 0.409626,
+                    "restitution": 0.303054
+                },
+                "metal": {
+                    "mass": 0.3422,
+                    "friction": 0.385805,
+                    "restitution": 0.189784
+                }
+            }
+        },
+        "rod": {
+            "model": "../../assets/obj/rod-40.obj",
+            "material": {
+                "wood": {
+                    "mass": 0.02136,
+                    "friction": 0.01,
+                    "restitution": 0.01 
+                }
+            }
+        },
+        "table": {
+            "model": "../../assets/obj/table.obj",
+            "material": {
+                "wood": {
+                    "mass": 6.4113,
+                    "friction": 0.01,
+                    "restitution": 0.01
+                }
+            }
+        },
+        "textile": {
+            "model": "../../assets/obj/tablecloth.obj",
+            "material": {
+                "nylon": {
+                    "mass": 0.096011,
+                    "density": 0.53939,
+                    "thickness": 0.21e-3,
+                    "stretch stiffness": 1308.39850,
+                    "bend stiffness": 2.8613e-7,
+                    "shear stiffness": 86.34980,
+                    "friction": 0.1,
+                    "restitution": 0.1
+                }
+            }
+        }
+    },
+    "tasks": {
+        "default": {
+            "assets": ["cube", "rod", "table", "textile"],
+            "translation": {
+                "cube": [0.71605, 0.41785, 0.2077],
+                "rod": [0.36220, 0.42129, 0.1826],
+                "table": [0.78265, 0.40502, 0.17],
+                "textile": [0.58470, 0.42129, 0.1826]
+            },
+            "orientation": {
+                "cube": [0, 0, 0],
+                "rod": [0, 0, 0],
+                "table": [0, 0, 0],
+                "textile": [0, 0, 0]
+            },
+            "fixed": {
+                "cube": false,
+                "rod": false,
+                "table": true,
+                "textile": false
+            },
+            "kinematic": {
+                "cube": false,
+                "rod": true,
+                "table": false,
+                "textile": false
+            }
+        }
+    }
+}

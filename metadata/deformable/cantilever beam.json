@@ -1,0 +1,138 @@
+{
+    "description": "The task involves an elastic cantilever beam with one end fixed on the wall. The beam consists of 4 deformable blocks. ",
+    "assets": {
+        "base": {
+            "model": "../../assets/obj/pedestal.obj",
+            "material": {
+                "plastic": {
+                    "mass": 0.1719,
+                    "friction": 0.01,
+                    "restitution": 0.01
+                }
+            }
+        },
+        "cube-1": {
+            "model": "../../assets/obj/cube.obj",
+            "material": {
+                "soft": {
+                    "mass": 0.0016,
+                    "density": 12.8,
+                    "young": 86410,
+                    "poisson": 0.23,
+                    "friction": 0,
+                    "restitution": 0
+                },
+                "hard": {
+                    "mass": 0.0034,
+                    "density": 27.2,
+                    "young": 99372,
+                    "poisson": 0.34,
+                    "friction": 0,
+                    "restitution": 0
+                }
+            }
+        },
+        "cube-2": {
+            "model": "../../assets/obj/cube.obj",
+            "material": {
+                "rubber": {
+                    "mass": 0.1341,
+                    "friction": 0.01,
+                    "restitution": 0.01
+                }
+            }
+        },
+        "cube-3": {
+            "model": "../../assets/obj/cube.obj",
+            "material": {
+                "soft": {
+                    "mass": 0.0016,
+                    "density": 12.8,
+                    "young": 86410,
+                    "poisson": 0.23,
+                    "friction": 0,
+                    "restitution": 0
+                },
+                "hard": {
+                    "mass": 0.0034,
+                    "density": 27.2,
+                    "young": 99372,
+                    "poisson": 0.34,
+                    "friction": 0.01,
+                    "restitution": 0.01
+                }
+            }
+        },
+        "cube-4": {
+            "model": "../../assets/obj/cube.obj",
+            "material": {
+                "rubber": {
+                    "mass": 0.1341,
+                    "friction": 0.01,
+                    "restitution": 0.01
+                }
+            }
+        }
+    },
+    "tasks": {
+        "default": {
+            "assets": ["base", "cube-1", "cube-2", "cube-3", "cube-4"],
+            "translation": {
+                "base": [0.41849, 0.28158, 0.20601],
+                "cube-1": [0.41849, 0.36858, 0.20601],
+                "cube-2": [0.41849, 0.41858, 0.20601],
+                "cube-3": [0.41849, 0.46858, 0.20601],
+                "cube-4": [0.41849, 0.51858, 0.20601]
+            },
+            "orientation": {
+                "base": [0, 0, 0],
+                "cube-1": [0, 0, 0],
+                "cube-2": [0, 0, 0],
+                "cube-3": [0, 0, 0],
+                "cube-4": [0, 0, 0]
+            },
+            "fixed": {
+                "base": true,
+                "cube-1": false,
+                "cube-2": false,
+                "cube-3": false,
+                "cube-4": false
+            },
+            "kinematic": {
+                "base": false,
+                "cube-1": false,
+                "cube-2": false,
+                "cube-3": false,
+                "cube-4": false
+            },
+            "record": {
+                "assets": ["markers"],
+                "dim": ["x", "y", "z"],
+                "fps": 30
+            }
+        }
+    },
+    "markers": {
+        "translation": [
+            [0.39349, 0.34358, 0.23101],
+            [0.39349, 0.39358, 0.23101],
+            [0.39349, 0.44358, 0.23101],
+            [0.39349, 0.49358, 0.23101],
+            [0.41849, 0.36858, 0.23101],
+            [0.41849, 0.41858, 0.23101],
+            [0.41849, 0.46858, 0.23101],
+            [0.41849, 0.51858, 0.23101],
+            [0.44349, 0.34358, 0.23101],
+            [0.44349, 0.39358, 0.23101],
+            [0.44349, 0.44358, 0.23101],
+            [0.44349, 0.49358, 0.23101],
+            [0.44349, 0.36858, 0.20601],
+            [0.44349, 0.41858, 0.20601],
+            [0.44349, 0.46858, 0.20601],
+            [0.44349, 0.51858, 0.20601],
+            [0.44349, 0.34358, 0.18101],
+            [0.44349, 0.39358, 0.18101],
+            [0.44349, 0.44358, 0.18101],
+            [0.44349, 0.49358, 0.18101]]
+    }
+}

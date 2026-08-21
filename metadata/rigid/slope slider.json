@@ -1,0 +1,163 @@
+{
+    "description": "The task involves a cube resting on a board which can rotate with different angles according to its fixed axis passing through its geometric center. Then, the cube is placed at the higher end of the broad, and slides under its own gravity.",
+    "prompt": "Static frontal camera view: A black plastic cube (mass ≈ 147 g) sits near the upper end of a wooden plank (mass ≈ 477 g). The plank is secured to a pivoting fixture locked at a steady, relatively steep incline of approximately 30°. A linear ruler and digital protractor are placed beside the assembly, all resting on a black perforated optical table. Coefficient of friction between plastic and wood ≈ 0.28; coefficient of restitution for the cube ≈ 0.37. Upon release, the cube undergoes the following motion sequence: it accelerates as it slides down the inclined surface, and finally lands before coming to rest on the table surface. The wooden plank remains fully stationary for the entire duration of the motion.",
+    "assets": {
+        "cube": {
+            "model": "../../assets/obj/cube.obj",
+            "material": {
+                "wood": {
+                    "mass": 0.0903,
+                    "density": 722.4,
+                    "friction": 0.273673,
+                    "restitution": 0.223583
+                },
+                "plastic": {
+                    "mass": 0.1469,
+                    "density": 1175.2,
+                    "friction": 0.275018,
+                    "restitution": 0.373862
+                },
+                "metal": {
+                    "mass": 0.3397,
+                    "density": 2717.6,
+                    "friction": 0.262758,
+                    "restitution": 0.333623
+                }
+            }
+        },
+        "board": {
+            "model": "../../assets/obj/board.obj",
+            "material": {
+                "wood": {
+                    "mass": 0.4769,
+                    "density": 635.87,
+                    "friction": 0.262758,
+                    "restitution": 0.223583
+                }
+            }
+        }
+    },
+    "tasks": {
+        "task-1": {
+            "assets": ["cube", "board"],
+            "translation": {
+                "cube": {
+                    "wood": [0.017089, 0.396862, 0.210591],
+                    "plastic": [0.014675, 0.398604, 0.203510],
+                    "metal": [0.014765, 0.401449, 0.202390]
+                },
+                "board": {
+                    "wood": [0.233461, 0.396862, 0.141976],
+                    "plastic": [0.231047, 0.398604, 0.134895],
+                    "metal": [0.231137, 0.401449, 0.133775]
+                }
+            },
+            "orientation": {
+                "cube": {
+                    "wood": [0, 10, 0],
+                    "plastic": [0, 10, 0],
+                    "metal": [0, 10, 0]
+                },
+                "board": {
+                    "wood": [0, 10, 0],
+                    "plastic": [0, 10, 0],
+                    "metal": [0, 10, 0]
+                }
+            },
+            "fixed": {
+                "cube": false,
+                "board": true
+            },
+            "kinematic": {
+                "cube": false,
+                "board": false
+            },
+            "record": {
+                "assets": ["cube"],
+                "dim": ["x", "y", "z"],
+                "fps": 30
+            }
+        },
+        "task-2": {
+            "assets": ["cube", "board"],
+            "translation": {
+                "cube": {
+                    "wood": [0.097247, 0.406934, 0.359354],
+                    "plastic": [0.099205, 0.405048, 0.359256],
+                    "metal": [0.098720, 0.403392, 0.359680]
+                },
+                "board": {
+                    "wood": [0.277103, 0.406934, 0.220873],
+                    "plastic": [0.279061, 0.405048, 0.220775],
+                    "metal": [0.27857572, 0.403392, 0.22119924]
+                }
+            },
+            "orientation": {
+                "cube": {
+                    "wood": [0, 30, 0],
+                    "plastic": [0, 30, 0],
+                    "metal": [0, 30, 0]
+                },
+                "board": {
+                    "wood": [0, 30, 0],
+                    "plastic": [0, 30, 0],
+                    "metal": [0, 30, 0]
+                }
+            },
+            "fixed": {
+                "cube": false,
+                "board": true
+            },
+            "kinematic": {
+                "cube": false,
+                "board": false
+            },
+            "record": {
+                "assets": ["cube"],
+                "dim": ["x", "y", "z"],
+                "fps": 30
+            }
+        },
+        "task-3": {
+            "assets": ["cube", "board"],
+            "translation": {
+                "cube": {
+                    "wood": [0.072447, 0.388420, 0.264611],
+                    "plastic": [0.071240, 0.385604, 0.264552],
+                    "metal": [0.072298, 0.387577, 0.268944]
+                },
+                "board": {
+                    "wood": [0.297447, 0.38842, 0.234611],
+                    "plastic": [0.29624 , 0.385604, 0.234552],
+                    "metal": [0.297298, 0.387577, 0.238944]
+                }
+            },
+            "orientation": {
+                "cube": {
+                    "wood": [0, 0, 0],
+                    "plastic": [0, 0, 0],
+                    "metal": [0, 0, 0]
+                },
+                "board": {
+                    "wood": [0, 0, 0],
+                    "plastic": [0, 0, 0],
+                    "metal": [0, 0, 0]
+                }
+            },
+            "fixed": {
+                "cube": false,
+                "board": false
+            },
+            "kinematic": {
+                "cube": false,
+                "board": true
+            },
+            "record": {
+                "assets": ["cube"],
+                "dim": ["x", "y", "z"],
+                "fps": 30
+            }
+        }
+    }
+    
+}

@@ -1,0 +1,164 @@
+{
+    "description": "The task involves one piece of textiles stacked on a plane with a hole at its center. Then, a heavy ball falls and passes through the hole together with the textiles.",
+    "assets": {
+        "ball": {
+            "model": "../../assets/obj/ball-14.obj",
+            "material": {
+                "plastic": {
+                    "mass": 0.8839,
+                    "friction": 0.1,
+                    "restitution": 0.1 
+                }
+            }
+        },
+        "board": {
+            "model": "../../assets/obj/holeboard.obj",
+            "material": {
+                "wood": {
+                    "mass": 1.5265,
+                    "friction": 0.1,
+                    "restitution": 0.1 
+                }
+            }
+        },
+        "textile": {
+            "model": "../../assets/obj/textile-80_80.obj",
+            "material": {
+                "oxford": {
+                    "mass": 1.1316352,
+                    "density": 1.76818,
+                    "thickness": 0.36e-3,
+                    "stretch stiffness": 2904.55425,
+                    "bend stiffness": 4.77659e-5,
+                    "shear stiffness": 2904.55425,
+                    "friction": 0.293218,
+                    "restitution": 0.380043
+                },
+                "leather": {
+                    "mass": 1.28,
+                    "density": 2,
+                    "thickness": 0.68e-3,
+                    "stretch stiffness": 2080.14025,
+                    "bend stiffness": 1.762045e-5,
+                    "shear stiffness": 1950.165,
+                    "friction": 0.50969,
+                    "restitution": 0.385093
+                },
+                "nylon": {
+                    "mass": 0.0853312,
+                    "density": 0.13333,
+                    "thickness": 0.19e-3,
+                    "stretch stiffness": 1243.5165,
+                    "bend stiffness": 6.24621e-6,
+                    "shear stiffness": 120,
+                    "friction": 0.694324,
+                    "restitution": 0.398675
+                },
+                "cotton": {
+                    "mass": 0.08576,
+                    "density": 0.134,
+                    "thickness": 0.27e-3,
+                    "stretch stiffness": 302.137325,
+                    "bend stiffness": 1.388423e-6,
+                    "shear stiffness": 333.14525,
+                    "friction": 0.364288,
+                    "restitution": 0.39215
+                },
+                "satin": {
+                    "mass": 0.0455744,
+                    "density": 0.07121,
+                    "thickness": 0.14e-3,
+                    "stretch stiffness": 77.15638,
+                    "bend stiffness": 1.47498e-6,
+                    "shear stiffness": 1.00797,
+                    "friction": 0.436423,
+                    "restitution": 0.360739
+                },
+                "suit": {
+                    "mass": 0.3704256,
+                    "density": 0.57879,
+                    "thickness": 0.2e-3,
+                    "stretch stiffness": 900,
+                    "bend stiffness": 2.22038e-6,
+                    "shear stiffness": 333.16913,
+                    "friction": 0.418105,
+                    "restitution": 0.367445
+                }
+            }
+        }
+    },
+    "tasks": {
+        "default": {
+            "assets": ["ball", "board", "textile"],
+            "translation": {
+                "ball": [0.4785, 0.4285, 0.343],
+                "board": [0.4785, 0.4285, 0.180],
+                "textile": [0.4785, 0.4285, 0.186]
+            },
+            "orientation": {
+                "ball": [0, 0, 0],
+                "board": [0, 0, 0],
+                "textile": [0, 0, 0]
+            },
+            "fixed": {
+                "ball": false,
+                "board": true,
+                "textile": false
+            },
+            "kinematic": {
+                "ball": true,
+                "board": false,
+                "textile": false
+            },
+            "record": {
+                "assets": ["markers"],
+                "dim": ["x", "y", "z"],
+                "fps": 30
+            }
+        }
+    },
+    "markers": {
+        "translation": [
+            [0.1785, 0.1285, 0.186 ],
+            [0.1785, 0.2285, 0.186 ],
+            [0.1785, 0.3285, 0.186 ],
+            [0.1785, 0.4285, 0.186 ],
+            [0.1785, 0.5285, 0.186 ],
+            [0.1785, 0.6285, 0.186 ],
+            [0.1785, 0.7285, 0.186 ],
+            [0.2785, 0.1285, 0.186 ],
+            [0.2785, 0.2285, 0.186 ],
+            [0.2785, 0.3285, 0.186 ],
+            [0.2785, 0.4285, 0.186 ],
+            [0.2785, 0.5285, 0.186 ],
+            [0.2785, 0.6285, 0.186 ],
+            [0.2785, 0.7285, 0.186 ],
+            [0.3785, 0.1285, 0.186 ],
+            [0.3785, 0.2285, 0.186 ],
+            [0.3785, 0.6285, 0.186 ],
+            [0.3785, 0.7285, 0.186 ],
+            [0.4785, 0.1285, 0.186 ],
+            [0.4785, 0.2285, 0.186 ],
+            [0.4785, 0.6285, 0.186 ],
+            [0.4785, 0.7285, 0.186 ],
+            [0.5785, 0.1285, 0.186 ],
+            [0.5785, 0.2285, 0.186 ],
+            [0.5785, 0.6285, 0.186 ],
+            [0.5785, 0.7285, 0.186 ],
+            [0.6785, 0.1285, 0.186 ],
+            [0.6785, 0.2285, 0.186 ],
+            [0.6785, 0.3285, 0.186 ],
+            [0.6785, 0.4285, 0.186 ],
+            [0.6785, 0.5285, 0.186 ],
+            [0.6785, 0.6285, 0.186 ],
+            [0.6785, 0.7285, 0.186 ],
+            [0.7785, 0.1285, 0.186 ],
+            [0.7785, 0.2285, 0.186 ],
+            [0.7785, 0.3285, 0.186 ],
+            [0.7785, 0.4285, 0.186 ],
+            [0.7785, 0.5285, 0.186 ],
+            [0.7785, 0.6285, 0.186 ],
+            [0.7785, 0.7285, 0.186 ]
+        ]
+    }
+}

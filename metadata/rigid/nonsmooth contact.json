@@ -1,0 +1,200 @@
+{
+    "description": "The task involves wedges or pyramids suspended at a fixed height. Then, these wedges and pyramids are released and fall under its own gravity on the square base or tribase.",
+    "prompt": "Static frontal camera view: A robotic gripper holds a black plastic pyramid (mass ≈ 98 g, apex oriented downward with a slight tilt) suspended approximately 13 cm above a stationary light wooden square base (mass ≈ 115 g) featuring a square recess; the entire assembly sits atop a black perforated optical table. Coefficient of friction for plastic–wood contact ≈ 0.28; coefficient of restitution ≈ 0.36. The gripper actuates open to release the pyramid, which then undergoes unconstrained free fall driven by gravity. The pyramid follows this sequence of motion: it descends vertically, strikes near the square base on initial contact, may tip or bounce due to inherent instability from its apex-down orientation, and finally settles into a stable resting configuration. The square base and optical table remain fully stationary for the entire duration of the motion.",
+    "assets": {
+        "wedge": {
+            "model": "../../assets/obj/wedge.obj",
+            "material": {
+                "wood": {
+                    "mass": 0.0634,
+                    "density": 507.2,
+                    "friction": 0.273673,
+                    "restitution": {
+                        "task-5": 0.307752
+                    }
+                },
+                "plastic": {
+                    "mass": 0.1463,
+                    "density": 1170.4,
+                    "friction": 0.275018,
+                    "restitution": {
+                        "task-5": 0.389192
+                    }
+                }
+            }
+        },
+        "pyramid": {
+            "model": "../../assets/obj/pyramid.obj",
+            "material": {
+                "wood": {
+                    "mass": 0.0433,
+                    "density": 519.6,
+                    "friction": 0.273673,
+                    "restitution": {
+                        "task-3": 0.329297,
+                        "task-4": 0.334596
+                    }
+                },
+                "plastic": {
+                    "mass": 0.0976,
+                    "density": 1171.2,
+                    "friction": 0.275018,
+                    "restitution": {
+                        "task-3": 0.364949,
+                        "task-4": 0.319815
+                    }
+                }
+            }
+        },
+        "squarebase": {
+            "model": "../../assets/obj/squarebase.obj",
+            "material": {
+                "wood": {
+                    "mass": 0.1146,
+                    "density": 523.8857,
+                    "friction": 0.273673,
+                    "restitution": {
+                        "task-3": 0.329297
+                    }
+                }
+            }
+        },
+        "tribase": {
+            "model": "../../assets/obj/tribase.obj",
+            "material": {
+                "wood": {
+                    "mass": 0.0547,
+                    "density": 500.1143,
+                    "friction": 0.273673,
+                    "restitution": {
+                        "task-4": 0.334596,
+                        "task-5": 0.307752
+                    }
+                }
+            }
+        }
+    },
+    "tasks": {
+        "task-3": {
+            "assets": ["pyramid", "squarebase"],
+            "translation": {
+                "pyramid": {
+                    "wood": [0.419851, 0.430966, 0.164676],
+                    "plastic": [0.420323, 0.430436, 0.164440]
+                },
+                "squarebase": {
+                    "wood": [0.410310, 0.429903, 0.030423],
+                    "plastic": [0.410314, 0.429868, 0.030368]
+                },
+                "ground": {
+                    "wood": [0, 0, 0.005423],
+                    "plastic": [0, 0, 0.005368]
+                }
+            },
+            "orientation": {
+                "pyramid": {
+                    "wood": [-10, 10, 0],
+                    "plastic": [-10, 10, 0]
+                },
+                "squarebase": {
+                    "wood": [0, 0, 0],
+                    "plastic": [0, 0, 0]
+                }
+            },
+            "fixed": {
+                "pyramid": false,
+                "squarebase": true
+            },
+            "kinematic": {
+                "pyramid": false,
+                "squarebase": false
+            },
+            "record": {
+                "assets": ["pyramid"],
+                "dim": ["x", "y", "z"],
+                "fps": 30
+            }
+        },
+        "task-4": {
+            "assets": ["pyramid", "tribase"],
+            "translation": {
+                "pyramid": {
+                    "wood": [0.403041, 0.374874, 0.169568],
+                    "plastic": [0.405253, 0.375113, 0.171423]
+                },
+                "tribase": {
+                    "wood": [0.390056, 0.374062, 0.030673],
+                    "plastic": [0.386422, 0.373865, 0.030480]
+                },
+                "ground": {
+                    "wood": [0, 0, 0.005673],
+                    "plastic": [0, 0, 0.005480]
+                }
+            },
+            "orientation": {
+                "pyramid": {
+                    "wood": [-10, 10, 0],
+                    "plastic": [-10, 10, 0]
+                },
+                "tribase": {
+                    "wood": [0, 0, 0],
+                    "plastic": [0, 0, 0]
+                }
+            },
+            "fixed": {
+                "pyramid": false,
+                "tribase": true
+            },
+            "kinematic": {
+                "pyramid": false,
+                "tribase": false
+            },
+            "record": {
+                "assets": ["pyramid"],
+                "dim": ["x", "y", "z"],
+                "fps": 30
+            }
+        },
+        "task-5": {
+            "assets": ["wedge", "tribase"],
+            "translation": {
+                "wedge": {
+                    "wood": [0.402296, 0.374206, 0.169536],
+                    "plastic": [0.401995, 0.373761, 0.170778]
+                },
+                "tribase": {
+                    "wood": [0.390030, 0.374022, 0.030529],
+                    "plastic": [0.389799, 0.375095, 0.030643]
+                },
+                "ground": {
+                    "wood": [0, 0, 0.005529],
+                    "plastic": [0, 0, 0.005643]
+                }
+            },
+            "orientation": {
+                "wedge": {
+                    "wood": [-5, 5, 0],
+                    "plastic": [-5, 5, 0]
+                },
+                "tribase": {
+                    "wood": [0, 0, 0],
+                    "plastic": [0, 0, 0]
+                }
+            },
+            "fixed": {
+                "wedge": false,
+                "tribase": true
+            },
+            "kinematic": {
+                "wedge": false,
+                "tribase": false
+            },
+            "record": {
+                "assets": ["wedge"],
+                "dim": ["x", "y", "z"],
+                "fps": 30
+            }
+        }
+    }
+    
+}
