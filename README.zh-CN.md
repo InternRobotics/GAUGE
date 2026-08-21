@@ -117,51 +117,36 @@ GAUGE 的目标是识别仿真器*为什么会失败*。
 评测维度包括轨迹误差、时间对齐、动量传递、振荡、力---运动一致性、方程形式一致性以及物理参数准确性。
 
 ---
-
 ## 🧪 基准任务
 
-GAUGE 包含 **22 个标准化任务族**。
+GAUGE 包含 **22 个受控任务族**，覆盖刚体、柔性绳索、织物以及三维体积可变形物体。
 
-### 刚体
+| 类别 | 任务 | 视频 | 描述 | 评测内容 | 子任务数 | 材料 |
+| --- | --- | --- | --- | --- | ---: | --- |
+| 刚体 | 斜面接触（Slope Contact） | <img src="./media/webp/slope_contact.webp" width="180" alt="Slope Contact"> | 三直角四面体的下落 | 斜面碰撞 | 1 | 木材、塑料 |
+| 刚体 | 非光滑接触（Nonsmooth Contact） | <img src="./media/webp/nonsmooth_contact.webp" width="180" alt="Nonsmooth Contact"> | 楔形体和棱锥体的下落 | 余维碰撞 | 3 | 木材、塑料 |
+| 刚体 | 斜面滑块（Slope Slider） | <img src="./media/webp/slope_slider.webp" width="180" alt="Slope Slider"> | 立方体在斜面上的滑动 | 静摩擦与动摩擦 | 3 | 木材、塑料、金属 |
+| 刚体 | 转盘（Turntable） | <img src="./media/webp/turntable.webp" width="180" alt="Turntable"> | 立方体在转盘上的滑动 | 非惯性参考系中的静摩擦与动摩擦 | 3 | 木材、塑料、金属 |
+| 刚体 | 弹跳球（Bouncing Ball） | <img src="./media/webp/bouncing_ball.webp" width="180" alt="Bouncing Ball"> | 球的下落与反弹 | 快速冲击 | 1 | 橡胶 |
+| 刚体 | 牛顿摆（Newton's Cradle） | <img src="./media/webp/newton_cradle.webp" width="180" alt="Newton's Cradle"> | 紧密排列小球之间的碰撞 | 动量传递 | 1 | 金属 |
+| 刚体 | 破墙（Wall Breaking） | <img src="./media/webp/wall_breaking.webp" width="180" alt="Wall Breaking"> | 破坏球与墙体的碰撞 | 大规模密集碰撞 | 1 | 木材 |
+| 刚体 | 单摆（Pendulum） | <img src="./media/webp/pendulum.webp" width="180" alt="Pendulum"> | 小球的摆动 | 周期运动 | 1 | 金属 |
+| 柔性绳索 | 绳索缠绕（Rope Winding） | <img src="./media/webp/rope_winding.webp" width="180" alt="Rope Winding"> | 绳索的缠绕运动 | 自碰撞与拉伸模量 | 1 | 橡胶 |
+| 织物 | 织物拉伸（Textile Stretching） | <img src="./media/webp/textile_stretching.webp" width="180" alt="Textile Stretching"> | 织物的拉伸形变 | 拉伸模量 | 1 | R、S、U、O、L、N |
+| 织物 | 织物弯曲（Textile Bending） | <img src="./media/webp/textile_bending.webp" width="180" alt="Textile Bending"> | 织物的自然下垂 | 弯曲模量 | 1 | R、S、U、O、L、N |
+| 织物 | 织物甩动（Textile Flinging） | <img src="./media/webp/textile_flinging.webp" width="180" alt="Textile Flinging"> | 织物的快速甩动 | 局部高加速度下的运动 | 1 | R、S、U、O、L、N |
+| 织物 | 漏斗（Funnel） | <img src="./media/webp/funnel.webp" width="180" alt="Funnel"> | 织物穿过孔洞 | 碰撞、摩擦 | 1 | R、S、U、O、L、N |
+| 织物 | 旋转球（Rotating Ball） | <img src="./media/webp/rotating_ball.webp" width="180" alt="Rotating Ball"> | 旋转球驱动织物运动 | 静摩擦与动摩擦 | 1 | R、S、U |
+| 织物 | 抽桌布（Tablecloth Pulling） | <img src="./media/webp/tablecloth_pulling.webp" width="180" alt="Tablecloth Pulling"> | 从刚体物体下方抽出织物 | 静摩擦与动摩擦 | 1 | 木材、塑料、金属 |
+| 体积可变形物体 | 海绵拉伸（Foam Stretching） | <img src="./media/webp/foam_stretching.webp" width="180" alt="Foam Stretching"> | 弹性长方体的拉伸 | 拉伸模量 | 1 | 软、硬 |
+| 体积可变形物体 | 海绵压缩（Foam Compression） | <img src="./media/webp/foam_compression.webp" width="180" alt="Foam Compression"> | 弹性长方体的压缩 | 压缩模量 | 1 | 软、硬 |
+| 体积可变形物体 | 海绵剪切（Foam Shearing） | <img src="./media/webp/foam_shearing.webp" width="180" alt="Foam Shearing"> | 弹性长方体的剪切 | 剪切模量 | 1 | 软、硬 |
+| 体积可变形物体 | 海绵扭转（Foam Twisting） | <img src="./media/webp/foam_twisting.webp" width="180" alt="Foam Twisting"> | 弹性长方体的扭转 | 扭转模量 | 1 | 软、硬 |
+| 体积可变形物体 | 海绵弯曲（Foam Bending） | <img src="./media/webp/foam_bending.webp" width="180" alt="Foam Bending"> | 弹性长方体的弯曲 | 弯曲模量 | 1 | 软、硬 |
+| 体积可变形物体 | 粘滞摩擦（Stick-Stack） | <img src="./media/webp/stick_stack.webp" width="180" alt="Stick-Stack"> | 弹性杆在平面上的滑动 | 静摩擦与动摩擦 | 1 | 软、硬 |
+| 体积可变形物体 | 悬臂梁（Cantilever Beam） | <img src="./media/webp/cantilever_beam.webp" width="180" alt="Cantilever Beam"> | 弹性悬臂梁的自由悬挂 | 大刚度比耦合 | 1 | 软、硬 |
 
-|任务                              | 物理属性          | 材料                |
-|--------------------------------- | ----------------- | ------------------ |
-|斜面接触（Slope Contact）         | 碰撞               | 木材、塑料       |
-|非光滑接触（Nonsmooth Contact）   | 余维碰撞           | 木材、塑料        |
-|斜面滑块（Slope Slider）          | 静摩擦与动摩擦     | 木材、塑料、金属   |
-|转盘（Turntable）                 | 非惯性系中的摩擦   | 木材、塑料、金属   |
-|弹跳球（Bouncing Ball）           | 快速冲击           | 橡胶             |
-|牛顿摆（Newton's Cradle）         | 动量传递           | 金属             |
-|撞墙（Wall Breaking）             | 大规模密集碰撞     | 木材             |
-|单摆（Pendulum）                  | 周期运动           | 金属            |
-
-### 柔性绳索与织物
-
-|任务                            | 物理属性              |
-|------------------------------- | -------------------- |
-|绳索缠绕（Rope Winding）        | 自碰撞与拉伸模量       |
-|织物拉伸（Textile Stretching）  | 拉伸模量               |
-|织物弯曲（Textile Bending）     | 弯曲模量               |
-|织物甩动（Textile Flinging）    | 高加速度形变           |
-|漏斗（Funnel）                  | 碰撞与摩擦             |
-|旋转球（Rotating Ball）         | 静摩擦与动摩擦          |
-|抽桌布（Tablecloth Pulling）    | 刚体-织物交互与摩擦   |
-
-织物材料包括人造棉（rayon）、色丁（satin）、制服呢（uniform
-cloth）、牛津布（Oxford fabric）、合成皮革（synthetic
-leather）和尼龙塔丝（nylon taslan）。
-
-### 三维体积可变形物体
-
-|任务                        |   物理属性
-|----------------------------| --------------
-|海绵拉伸（Foam Stretching）  |  拉伸模量
-|海绵压缩（Foam Compressing） |  压缩模量
-|海绵剪切（Foam Shearing）    | 剪切模量
-|海绵扭转（Foam Twisting）    | 扭转模量
-|海绵弯曲（Foam Bending）     | 弯曲模量
-|粘滞摩擦 (Stick-Stack)       | 静摩擦与动摩擦
-|悬臂梁（Cantilever Beam）    | 大刚度比耦合
+**织物材料缩写：** R = 人造丝（Rayon），S = 缎面（Satin），U = 制服呢（Uniform Cloth），O = 牛津布（Oxford Fabric），L = 合成皮革（Synthetic Leather），N = 尼龙塔丝隆（Nylon Taslan）。
 
 ---
 
