@@ -41,7 +41,7 @@ GAUGE provides:
 
 ## 🔥 News
 
-* **2026-09** — GAUGE code and evaluation toolkit released.
+* **2026-09** — GAUGE code and evaluation toolkit to be released.
 * **2026-08** — Real-world benchmark data released.
 * **2026-08** — Physics-engine and video-world-model baselines released.
 
